@@ -27,7 +27,7 @@ class Config:
         self.openai_key: str = ""
         self.selected_provider: str = "google"  # Default to google (cheaper)
         self.anthropic_model: str = "claude-3-5-sonnet-20241022"
-        self.google_model: str = "gemini-2.5-flash-lite"  # Primary model in hierarchy
+        self.google_model: str = "gemini-3-flash-preview"  # Primary model in hierarchy
         self.openai_model: str = "gpt-4o"
         self.ollama_model: str = "llama3"
         self.ollama_url: str = DEFAULT_OLLAMA_URL
@@ -59,7 +59,7 @@ class Config:
                     self.openai_key = data.get("openai_key", "")
                     self.selected_provider = data.get("selected_provider", "google")
                     self.anthropic_model = data.get("anthropic_model", "claude-3-5-sonnet-20241022")
-                    self.google_model = data.get("google_model", "gemini-2.5-flash-lite")
+                    self.google_model = data.get("google_model", "gemini-3-flash-preview")
                     self.openai_model = data.get("openai_model", "gpt-4o")
                     self.ollama_model = data.get("ollama_model", "llama3")
                     self.ollama_url = data.get("ollama_url", DEFAULT_OLLAMA_URL)

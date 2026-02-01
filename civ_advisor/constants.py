@@ -23,20 +23,20 @@ ANTHROPIC_MODELS = [
 # Google models with Flash hierarchy
 # Primary -> Secondary -> Failover
 GOOGLE_MODELS = [
-    ("Gemini 2.5 Flash Lite (Primary)", "gemini-2.5-flash-lite"),
-    ("Gemini 2.0 Flash (Secondary)", "gemini-2.0-flash"),
-    ("Gemma 2 9B (Failover)", "gemma-2-9b-it"),
+    ("Gemini 3 Flash (Primary)", "gemini-3-flash-preview"),
+    ("Gemini 2.5 Flash (Secondary)", "gemini-2.5-flash"),
+    ("Gemma 3 27B (Failover)", "gemma-3-27b-it"),
 ]
 
 # Fallback chain for Google models (Primary -> Secondary -> Failover)
 GOOGLE_FALLBACK_CHAIN = [
-    "gemini-2.5-flash-lite",  # Primary: Fastest/Cheapest
-    "gemini-2.0-flash",       # Secondary: Stronger reasoning
-    "gemma-2-9b-it",          # Failover: Free/Open (no system prompt!)
+    "gemini-3-flash-preview",  # Primary: Latest, in preview
+    "gemini-2.5-flash",        # Secondary: Stable, fast
+    "gemma-3-27b-it",          # Failover: Open model (no system prompt!)
 ]
 
 # Models that don't support system prompts
-NO_SYSTEM_PROMPT_MODELS = {"gemma-2-9b-it", "gemma-2-27b-it", "gemma-7b-it"}
+NO_SYSTEM_PROMPT_MODELS = {"gemma-2-9b-it", "gemma-2-27b-it", "gemma-3-27b-it", "gemma-7b-it"}
 
 # OpenAI models
 OPENAI_MODELS = [

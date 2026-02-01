@@ -300,6 +300,27 @@ local function DumpGameState()
 
     local gs = {} -- gameState
 
+    -- Get barbarian player ID (varies by game setup, NOT always 63)
+    local barbarianPlayerID = -1
+    local sBarbID, barbID = pcall(function()
+        return PlayerManager.GetAliveBarbariansID()
+    end)
+    if sBarbID and barbID and barbID >= 0 then
+        barbarianPlayerID = barbID
+    else
+        -- Fallback: scan players for barbarian civ type
+        for pid = 0, 63 do
+            local pConfig = PlayerConfigurations[pid]
+            if pConfig then
+                local sCiv, civType = pcall(function() return pConfig:GetCivilizationTypeName() end)
+                if sCiv and civType and civType == "CIVILIZATION_BARBARIAN" then
+                    barbarianPlayerID = pid
+                    break
+                end
+            end
+        end
+    end
+
     -- Basic Info
     local s1, turn = pcall(function() return Game.GetCurrentGameTurn() end)
     gs.turn = s1 and turn or 0
@@ -601,7 +622,7 @@ local function DumpGameState()
                                 if sUnit and unit then
                                     local sOwner, owner = pcall(function() return unit:GetOwner() end)
                                     if sOwner and owner then
-                                        local isBarbarian = (owner == 63) -- Barbarians are player 63
+                                        local isBarbarian = (owner == barbarianPlayerID)
                                         local isHostileMajor = atWarWith[owner] == true
                                         if isBarbarian or isHostileMajor then
                                             local sUT, unitType = pcall(function() return unit:GetType() end)

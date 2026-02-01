@@ -29,6 +29,8 @@ class CivOverlay:
         self.last_game_state: Optional[dict] = None
         self._debug_window: Optional[DebugWindow] = None
 
+        self._paused = False  # Pause toggle state
+
         self._create_window()
         self._show_victory_goal_dialog()
         self._create_widgets()
@@ -125,6 +127,21 @@ class CivOverlay:
             font=("Segoe UI", 9),
         )
         self.status_label.pack(side=tk.LEFT, padx=(5, 0))
+
+        # Pause toggle button
+        self.pause_btn = tk.Button(
+            status_frame,
+            text="\u25b6 Active",  # Play symbol + Active
+            command=self._toggle_pause,
+            bg=COLORS["success"],
+            fg=COLORS["bg"],
+            font=("Segoe UI", 8, "bold"),
+            relief=tk.FLAT,
+            padx=8,
+            pady=2,
+            cursor="hand2",
+        )
+        self.pause_btn.pack(side=tk.RIGHT)
 
         # Advice display area
         advice_frame = tk.Frame(content, bg=COLORS["border"], bd=1)
@@ -255,8 +272,11 @@ class CivOverlay:
     def _on_game_state(self, game_state: dict):
         """Handle new game state from log watcher."""
         self.last_game_state = game_state
-        self.root.after(0, self._update_status, "Game state received", COLORS["success"])
-        self.root.after(0, self._request_advice)
+        if self._paused:
+            self.root.after(0, self._update_status, "Game state received (paused)", COLORS["error"])
+        else:
+            self.root.after(0, self._update_status, "Game state received", COLORS["success"])
+            self.root.after(0, self._request_advice)
 
     def _update_status(self, text: str, color: str = None):
         """Update status label."""
@@ -276,6 +296,22 @@ class CivOverlay:
         self.config.victory_goal = self.goal_var.get()
         self.config.save()
 
+    def _toggle_pause(self):
+        """Toggle pause state for API requests."""
+        self._paused = not self._paused
+        if self._paused:
+            self.pause_btn.configure(
+                text="\u23f8 Paused",  # Pause symbol
+                bg=COLORS["error"],
+            )
+            self._update_status("Paused - requests disabled", COLORS["error"])
+        else:
+            self.pause_btn.configure(
+                text="\u25b6 Active",  # Play symbol
+                bg=COLORS["success"],
+            )
+            self._update_status("Active - ready for requests", COLORS["success"])
+
     def _clipboard_copy(self, text: str) -> bool:
         """Copy text to clipboard. Returns True on success."""
         try:
@@ -288,6 +324,11 @@ class CivOverlay:
 
     def _request_advice(self, user_question: str = ""):
         """Request advice from AI in background thread."""
+        # Check if paused
+        if self._paused:
+            self._set_advice("Advisor is paused.\n\nClick the 'Paused' button to resume.")
+            return
+
         # Always include full game state and system prompt with questions
         if not self.last_game_state:
             self._set_advice("No game data available yet. Start a game or load a save.")
@@ -317,7 +358,9 @@ class CivOverlay:
                 self.root.after(0, self._update_status, "Debug mode", COLORS["accent"])
             else:
                 self.root.after(0, self._set_advice, result)
-                self.root.after(0, self._update_status, "Ready", COLORS["success"])
+                # Show the model that actually responded (helps detect fallback)
+                model_used = self.advisor._last_used_model or "unknown"
+                self.root.after(0, self._update_status, f"Ready | {model_used}", COLORS["success"])
 
         thread = threading.Thread(target=get_advice_thread, daemon=True)
         thread.start()
@@ -328,7 +371,9 @@ class CivOverlay:
             def send_thread():
                 result = self.advisor.execute_debug_request(debug_info)
                 self.root.after(0, self._set_advice, result)
-                self.root.after(0, self._update_status, "Ready", COLORS["success"])
+                # Show the model that actually responded
+                model_used = self.advisor._last_used_model or "unknown"
+                self.root.after(0, self._update_status, f"Ready | {model_used}", COLORS["success"])
                 if self._debug_window:
                     self._debug_window.update_status("Request sent successfully!", COLORS["success"])
 
