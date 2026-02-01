@@ -1,0 +1,42 @@
+T_ROOSEVELT | Name: Teddy Roosevelt (Bull Moose) | Focus: Culture/Appeal | Strat: PACIFIST. Settle High Appeal (Woods/Mountains). Do NOT chop Woods. Rush "Eiffel Tower" and "Film Studio".
+T_ROOSEVELT_ROUGH_RIDER | Name: Teddy Roosevelt (Rough Rider) | Focus: Diplo/War | Strat: CONTINENTAL DEFENSE. +5 Combat Str on home continent. Trade with City-States for Envoys. UU: Rough Rider (Industrial).
+ABRAHAM_LINCOLN | Name: Abraham Lincoln | Focus: Industry/Loyalty | Strat: IND. ZONE RUSH. Build Industrial Zones ASAP for free Melee units. Avoid Plantations (-Loyalty). Overwhelm with free maintenance-free units.
+HAMMURABI | Name: Hammurabi | Focus: Science/Eureka | Strat: EUREKA RUSH. -50% Science yield, but Eurekas grant 100% of tech. Do not hard research! Build specific units to trigger boosts.
+CATHERINE_DE_MEDICI | Name: Catherine de Medici (Black Queen) | Focus: Espionage | Strat: SPYMASTER. Free Spy at Castles. +1 Diplo Visibility (+Combat Str). Use Spies to steal tech/gold and neutralize Governors.
+CATHERINE_DE_MEDICI_ALT | Name: Catherine (Magnificence) | Focus: Luxury/Culture | Strat: LUXURY HOARDING. Collect duplicate luxuries. Run "Court Festival" project to turn Luxuries into massive Tourism burst.
+ELEANOR_FRANCE | Name: Eleanor (France) | Focus: Loyalty Flip | Strat: PEACEFUL DOMINATION. Move Great Works to border cities. -1 Loyalty to neighbors per Great Work. Flip cities without war. Use Chateaus for culture.
+ELEANOR_ENGLAND | Name: Eleanor (England) | Focus: Loyalty/Naval | Strat: LOYALTY DOCKYARDS. Same loyalty flipping strategy as France, but backed by Royal Navy Dockyards for gold and mobility.
+VICTORIA | Name: Victoria (Age of Empire) | Focus: Naval/Expansion | Strat: COLONIALISM. Free Melee unit when settling other continents. Rush "Military Science" for Redcoats. Dominate the seas.
+VICTORIA_ALT | Name: Victoria (Age of Steam) | Focus: Production | Strat: INDUSTRIAL REVOLUTION. +10% Production per Industrial Zone building. Strategic Resources boost production. Mass produce units.
+ELIZABETH | Name: Elizabeth I | Focus: Gold/Trade | Strat: TRADE TYCOON. +2 Trade Routes after first Admiral. Trade with City-States gives massive Gold. Use Gold to buy victory.
+HARALD_HADRADA | Name: Harald (Konge) | Focus: Naval Raiding | Strat: PILLAGE ECONOMY. 50% cheaper naval melee. Pillage mines/faith for science/faith. Keep a standing navy to raid coasts.
+HARALD_ALT | Name: Harald (Varangian) | Focus: City-States/Levy | Strat: LEVY WARFARE. 75% Discount on Levying City-States. Kills by levied units generate Faith/Science/Culture.
+KRISTINA | Name: Kristina | Focus: Culture/Diplo | Strat: GREAT WORKS. Auto-theming of all Great Works. Build Queen's Bibliotheque in Gov Plaza. Focus heavily on Great People points.
+MANSA_MUSA | Name: Mansa Musa | Focus: Gold/Faith | Strat: BUY EVERYTHING. -30% Production toward units/buildings. Settle Desert for Faith/Food. Use massive Gold/Faith income to buy your empire.
+PACHACUTI | Name: Pachacuti | Focus: Food/Production | Strat: MOUNTAIN KING. Work mountain tiles. Build Terrace Farms everywhere. Use "Qhapaq Nan" to move through mountains. Massive population growth.
+SULEIMAN | Name: Suleiman (Kanuni) | Focus: Domination/Siege | Strat: JANISSARY RUSH. Use Governor Ibrahim to secure alliances or buff offense. Siege units thrive. Unique Unit: Janissary (build in captured cities to avoid pop loss).
+SULEIMAN_ALT | Name: Suleiman (Magnificent) | Focus: Golden Ages | Strat: GOLDEN AGE WAR. +15% Science/Culture in Golden Ages. +4 Combat Str outside them. Manage Era Score carefully to chain Golden Ages.
+DIDO | Name: Dido | Focus: Naval/Settling | Strat: COASTAL SPAM. Move Capital project unlocks loyalty immunity. Settle nearly every coastal tile. Cothon district allows rapid naval production.
+KUPE | Name: Kupe | Focus: Culture/Nature | Strat: OCEAN START. Settle late (Turn 3-5) for free pop/culture. Do NOT remove Woods/Rainforest/Marsh (yield bonuses). Cultural victory via nature.
+MATTHIAS_CORVINUS | Name: Matthias Corvinus | Focus: Domination/Levy | Strat: RAVEN KING. Levied units get +2 Move/+5 Str. Upgrade levied units for free. Chain levy City-States to dominate neighbors.
+WILFRID_LAURIER | Name: Wilfrid Laurier | Focus: Diplo/Culture | Strat: TUNDRA EMPIRE. Buy Tundra tiles cheap. Build Farms/Mines on Tundra. 100% Diplo Favor from Emergencies. Aim for Diplomatic Victory.
+NZINGA_MBANDE | Name: Nzinga Mbande | Focus: Yields/Isolation | Strat: HOME CONTINENT. +10% Yields to cities on home continent. -15% on foreign. Stay tall and compact on your starting landmass.
+SALADIN | Name: Saladin (Vizier) | Focus: Religion/Science | Strat: RELIGIOUS SCIENCE. Guaranteed Prophet. Madrasa building gives Science equal to Faith adjacency.
+SALADIN_ALT | Name: Sultan Saladin | Focus: Combat | Strat: FLANKING BONUSES. +100% Flanking/Support bonus. Be aggressive with units. Religion serves the army.
+TOKUGAWA | Name: Tokugawa | Focus: Internal Trade | Strat: ISOLATIONIST. International trade is weak. Internal trade gives Science/Culture/Gold. Clusters of cities (6 tiles from capital) get amenities.
+NADER_SHAH | Name: Nader Shah | Focus: Domination | Strat: MOMENTUM. +5 Combat Str attacking full health units. Internal trade routes give Faith/Gold. Keep the offensive momentum high.
+YONGLE | Name: Yongle | Focus: Population/Projects | Strat: LIJIA PROJECTS. At 10 Pop, Gold/Science/Culture explodes. Use "Lijia" projects to convert production directly to Faith/Food/Gold when needed.
+QIN | Name: Qin Shi Huang (Mandate) | Focus: Wonders | Strat: WONDER BUILDER. Builders can spend charge to rush Ancient/Classical wonders. Build Great Wall for defense and gold.
+QIN_ALT | Name: Qin Shi Huang (Unifier) | Focus: Barbarians | Strat: BARB CLANS. Melee units have "Convert Barbarian" charge. Do not kill barbs; farm them for a free army.
+WU_ZETIAN | Name: Wu Zetian | Focus: Spies | Strat: EARLY ESPIONAGE. Free Spy at Defensive Tactics. Spies operate at 1 level higher. Use spies to disrupt neighbors early.
+RAMSES | Name: Ramses II | Focus: Culture/Building | Strat: BUILDING BOOM. Gain Culture equal to 15-30% of construction costs. Spam buildings and Wonders to fly through Civics tree.
+CLEOPATRA | Name: Cleopatra | Focus: Trade/Alliances | Strat: TRADE BAIT. Internal trade gives food; external gives gold. Alliances yield extra points.
+CLEOPATRA_ALT | Name: Ptolemaic Cleopatra | Focus: Floodplains | Strat: NILE FARMING. Floodplains give +1 Food/Culture. Appeal is High on floodplains. Culture victory via high-appeal synergy.
+SUNDIATA_KEITA | Name: Sundiata Keita | Focus: Great Works/Gold | Strat: LION KING. Markets hold Great Works of Writing. Writing gives Gold/Production. Recruit Great Writers with gold.
+THEODORA | Name: Theodora | Focus: Faith/Culture | Strat: HOLY CULTURE. Holy Sites give Culture equal to adjacency. Farms boost Hippodromes. Rush Religion -> Divine Right for knight spam.
+SEJONG | Name: Sejong | Focus: Science | Strat: TECH SPIKE. +Culture equal to double Science when unlocking new Era tech. Focus on high science output to trigger massive culture bursts.
+LUDWIG | Name: Ludwig II | Focus: Culture/Wonders | Strat: WONDER TOURISM. Wonders give Tourism to adjacent districts. Place Wonders *between* districts (Hansa/Theater), not isolated.
+JULIUS_CAESAR | Name: Julius Caesar | Focus: Gold/Domination | Strat: VENI VIDI VICI. +200 Gold when conquering a city (scales with speed). Farm Barbarian camps for Gold. Constant war for income.
+TRAJAN | Name: Trajan | Focus: Expansion | Strat: FREE MONUMENTS. All cities start with a Monument. Settle wide and fast. Build Legions to chop forests and build roads.
+PERICLES | Name: Pericles | Focus: Culture/City-States | Strat: ENVOY FARMING. +5% Culture per City-State you are Suzerain of. Focus purely on Diplomatic policy cards and Envoys.
+GORGO | Name: Gorgo | Focus: War/Culture | Strat: SPARTAN CULTURE. Gain Culture from killing units (50% of Strength). Never make peace. War is your source of culture.

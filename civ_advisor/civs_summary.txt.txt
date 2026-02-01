@@ -1,0 +1,20 @@
+America | UU: P-51 Mustang (Atomic, Air, +Attack vs Fighters) | UI: Film Studio (Modern, +100% Tourism) | Bias: Late-game Culture/Tourism.
+Arabia | UU: Mamluk (Medieval, Heals every turn) | UI: Madrasa (Faith = Science adjacency) | Bias: Religion/Science hybrid. Guaranteed Great Prophet.
+Australia | UU: Digger (Modern, +Combat on Coast/Foreign) | UI: Outback Station (Food/Prod) | Bias: High Appeal settlement. Defensive/Liberation wars.
+Aztec | UU: Eagle Warrior (Ancient, Captures Builders) | UI: Tlachtli (Arena, +Faith/General) | Bias: Early War. Luxury resources = Combat Strength.
+Babylon | UU: Sabum Kibittum (Ancient, 3 Move, High Sight) | UI: Palgum (Ancient, +Food/Prod) | Bias: Science Rush via Eurekas.
+Brazil | UU: Minas Geraes (Industrial, Naval, High Defense) | UI: Street Carnival (Amenity) | Bias: Rainforest adjacency. Great People recruiting.
+China | UU: Crouching Tiger (Medieval, Ranged, High Str, 1 Range) | UI: Great Wall (Gold/Culture/Defense) | Bias: Builder rush (Wonder construction). Defensive.
+Egypt | UU: Maryannu Chariot Archer (Ancient, Fast on clear terrain) | UI: Sphinx (Faith/Culture) | Bias: Wonder/District construction on Rivers.
+England | UU: Sea Dog (Renaissance, Captures ships) | UI: Royal Navy Dockyard (Gold/Movement) | Bias: Naval Domination. Expansion to other continents.
+France | UU: Garde Impériale (Industrial, +Combat on Home Continent) | UI: Château (Culture/Gold next to Wonders) | Bias: Culture/Wonder spam.
+Germany | UU: U-Boat (Modern, Stealth, Cheap) | UI: Hansa (Ind. Zone, High Adjacency) | Bias: Production Powerhouse. District planning (Hansa+Hub).
+Greece | UU: Hoplite (Ancient, +Combat if adjacent to Hoplite) | UI: Acropolis (Culture, Hill only) | Bias: Culture/Envoy farming.
+India | UU: Varu (Classical, -5 Str to adjacent enemies) | UI: Stepwell (Food/Housing/Faith) | Bias: Religion/Growth. Peaceful (usually).
+Japan | UU: Samurai (Medieval, No combat penalty when damaged) | UI: Electronics Factory (Production/Culture) | Bias: Compact cities (District adjacency bonuses).
+Kongo | UU: Ngao Mbeba (Classical, Defends vs Ranged) | UI: Mbanza (Neighborhood, Early, +Gold/Food) | Bias: Culture/Growth. Cannot build Holy Sites.
+Rome | UU: Legion (Classical, Can build Fort/Road) | UI: Bath (Aqueduct, +Amenity) | Bias: Rapid Expansion. Free Monuments.
+Russia | UU: Cossack (Industrial, Move after attacking) | UI: Lavra (Holy Site, +Great People) | Bias: Religion/Culture. Tundra benefits.
+Scythia | UU: Saka Horse Archer (Classical, Range 1) | UI: Kurgan (Faith/Gold) | Bias: Early War. Light Cavalry spam (Build 1 get 1 free).
+Spain | UU: Conquistador (Renaissance, +10 Str w/ Religious unit) | UI: Mission (Faith/Science) | Bias: Religion/Domination. Intercontinental Trade.
+Sumeria | UU: War Cart (Ancient, No penalty vs Spears) | UI: Ziggurat (Science/Culture) | Bias: Turn 1 Rush. Ally quickly for shared XP.

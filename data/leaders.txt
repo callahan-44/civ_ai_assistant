@@ -1,0 +1,394 @@
+# Leader Data File
+# Format: === LEADER_ID === followed by content (without LEADER_ prefix)
+# Used by the AI Advisor to understand leader-specific abilities and strategies
+
+=== GILGAMESH ===
+Leader Ability: Adventures with Enkidu
+- When at war with a common foe, share combat experience with allied units within 5 tiles.
+- Levy city-state units at 50% cost.
+Strategy: Form early alliances and coordinate attacks. War Cart rush remains devastating. Use alliance combat bonuses for quick domination.
+
+=== TRAJAN ===
+Leader Ability: Trajan's Column
+- All cities start with an additional building in the City Center (Monument at start).
+Strategy: Expand rapidly to maximize free Monument value. Legion timing push in Classical Era. Use free buildings to snowball culture/gold early.
+
+=== PERICLES ===
+Leader Ability: Surrounded by Glory
+- +5% Culture for each city-state you are Suzerain of.
+Strategy: Focus on becoming Suzerain of cultural city-states. Hoplite defensive play while building Acropolis districts. Massive culture output mid-game.
+
+=== GORGO ===
+Leader Ability: Thermopylae
+- Earn Culture equal to 50% of defeated unit's combat strength.
+Strategy: Aggressive early wars for culture. Combine Hoplite combat bonuses with culture rewards. Military victories accelerate civic tree.
+
+=== CLEOPATRA ===
+Leader Ability: Mediterranean's Bride
+- Trade Routes from other civs provide +4 Gold. Your trade routes to other civs provide +4 Gold.
+- Alliance Points accumulate +50% faster.
+Strategy: Be an attractive trade partner. Rush Commercial Hubs. Use increased gold for purchases and rapid expansion.
+
+=== QIN_SHI_HUANG ===
+Leader Ability: The First Emperor
+- Builders receive +1 build charge. Can use Builder charges to complete 15% of a Wonder's production.
+Strategy: Rush early Wonders using Builder charges. Prioritize Builders over other units. Great Wall improvements for tourism victory.
+
+=== QIN_SHI_HUANG_UNIFIER ===
+Leader Ability: Unifier
+- Upon completing a Wonder, Builders and Settlers in cities without a Governor gain +1 charge.
+Strategy: Chain Wonder building with expansion. Time Wonder completions for maximum Builder/Settler efficiency.
+
+=== HAMMURABI ===
+Leader Ability: Ninu Ilu Sirum
+- Constructing a building for the first time in your civ immediately grants that building's Eureka/Inspiration, if any.
+- First specialty building in each city is free.
+Strategy: NEVER research techs until building triggers Eureka. Build one of each building type across cities. Science victory through construction, not research.
+
+=== HOJO_TOKIMUNE ===
+Leader Ability: Divine Wind
+- +5 combat strength for land units in coastal tiles and naval units in shallow water.
+- Encampment, Holy Site, and Theater Square districts build 50% faster.
+Strategy: Coastal maps strongly favor Japan. Build all three discounted districts in every city. Samurai timing attack when damaged doesn't matter.
+
+=== VICTORIA ===
+Leader Ability: Pax Britannica
+- When settling on a continent other than your home continent, receive a free melee unit.
+- Royal Navy Dockyard provides bonus to cities on other continents.
+Strategy: Rush to foreign continents for free units. Colonial expansion is key. Naval dominance secures cross-continental trade.
+
+=== VICTORIA_AGE_OF_STEAM ===
+Leader Ability: Workshop of the World
+- +10% Production toward Industrial Zone buildings.
+- +2 Great Engineer points per turn.
+- Iron and Coal accumulate +2 per turn.
+- Powered buildings provide +4 Production and +2 Gold.
+Strategy: Industrial revolution powerhouse. Prioritize coal power. Great Engineer accumulation for late-game production dominance.
+
+=== CATHERINE_DE_MEDICI ===
+Leader Ability: Catherine's Flying Squadron
+- +1 level of Diplomatic Visibility with all civs.
+- Free Spy with Castles.
+- Extra Spy capacity +1.
+Strategy: Information is power. Know enemy plans through superior visibility. Espionage-focused gameplay. Combines well with Diplomatic Victory.
+
+=== CATHERINE_DE_MEDICI_MAGNIFICENCE ===
+Leader Ability: Magnificence of the Court
+- Luxuries within 9 tiles of a French city provide +2 Culture.
+- Improvements over Luxury resources gain +2 Culture at Flight.
+Strategy: Luxury-focused expansion. Claim all nearby luxuries. Culture victory through amenity management.
+
+=== FREDERICK_BARBAROSSA ===
+Leader Ability: Holy Roman Emperor
+- +7 combat strength against city-state units.
+- +1 Military policy slot.
+Strategy: Conquer city-states early for free settlers/workers. Extra Military slot allows aggressive policies. Production-focused domination.
+
+=== PETER ===
+Leader Ability: The Grand Embassy
+- Trade Routes to more advanced civilizations grant Russia +1 Science/Culture for every 3 techs/civics they are ahead.
+Strategy: Trade with more advanced civs. Catch up quickly through trade. Use Lavra district for Great People generation.
+
+=== PEDRO_II ===
+Leader Ability: Magnanimous
+- After recruiting or patronizing a Great Person, 20% of their Great Person point cost is refunded.
+Strategy: Focus on Great People generation. Build appropriate districts in every city. Street Carnival for cheaper entertainment.
+
+=== GANDHI ===
+Leader Ability: Satyagraha
+- +5 Faith for each civilization met who has founded a Religion and is not at war.
+- Enemies receive double war weariness when fighting Gandhi.
+Strategy: Religious victory through peace. Stay out of wars for faith bonuses. Enemies tire of fighting you quickly.
+
+=== CHANDRAGUPTA ===
+Leader Ability: Arthashastra
+- Can declare a War of Territorial Expansion after Military Training.
+- +2 Movement and +5 Combat Strength for 10 turns after declaring a War of Territorial Expansion.
+Strategy: Aggressive expansion through war. Time wars carefully for movement bonus. Varu elephant rush after declaring territorial war.
+
+=== SALADIN ===
+Leader Ability: Righteousness of the Faith
+- Worship building provides +10% combat strength for units within its city.
+- 90% discount on Faith purchases of worship buildings.
+Strategy: Build worship buildings everywhere cheaply. Religious/Domination hybrid. Madrasa provides Science while generating Faith.
+
+=== SALADIN_VIZIER ===
+Leader Ability: Sultan of Egypt
+- The first Great Prophet, Great Scientist, Great Engineer, and Great Merchant you recruit is 100% cheaper.
+- +15% Science and +15% Culture during Golden Ages.
+Strategy: Rush to claim cheap Great People. Golden Age timing is crucial. Science/Culture hybrid victory.
+
+=== MVEMBA_A_NZINGA ===
+Leader Ability: Religious Convert
+- Cannot build Holy Sites or found a religion.
+- Gains all beliefs of any religion established in a majority of cities.
+- +50% Production and +2 Food for cities with established religion.
+Strategy: Let others found religions, then convert to the best one. Massive production bonuses once converted. Focus on culture/domination.
+
+=== PHILIP_II ===
+Leader Ability: El Escorial
+- Inquisitors can remove heresy one additional time.
+- Combat and Religious units gain +4 combat/religious strength against civs following other religions.
+Strategy: Defend your religion aggressively. Inquisitors keep your empire pure. Crusade-style conquest with religious combat bonuses.
+
+=== MONTEZUMA ===
+Leader Ability: Gifts for the Tlatoani
+- Luxuries in your territory provide +1 Amenity to 2 extra cities.
+- Combat units gain +1 combat strength for each different luxury resource improved in Aztec lands.
+Strategy: Collect ALL luxury resources. Each unique luxury = permanent combat bonus. Builder rushes to improve luxuries.
+
+=== TOMYRIS ===
+Leader Ability: Killer of Cyrus
+- +5 Combat Strength when attacking wounded units.
+- All units heal +30 HP upon defeating an enemy unit.
+Strategy: Focus-fire wounded enemies. Saka Horse Archer swarms that heal on kills. Never lose momentum in combat.
+
+=== HARALD_HARDRADA ===
+Leader Ability: Thunderbolt of the North
+- +50% Production toward naval melee units.
+- Naval melee units gain +7 combat strength against other naval units.
+Strategy: Naval domination through Longship swarms. Coastal raiding for gold/pillaging. Viking rushes devastate coastal civs.
+
+=== HARALD_HARDRADA_VARANGIAN ===
+Leader Ability: Varangian Guard
+- +50% Production toward melee and anti-cavalry land units.
+- Pillaging yields 100% more yields.
+Strategy: Pillage everything. Berserker raids for yields. Land-based domination rather than naval focus.
+
+=== AMANITORE ===
+Leader Ability: Kandake of Meroe
+- +20% Production toward districts.
+- +40% Production toward districts if a Nubian Pyramid is adjacent.
+Strategy: Rush Nubian Pyramids next to planned district locations. Fastest district building in the game. Production powerhouse.
+
+=== ALEXANDER ===
+Leader Ability: To the World's End
+- Macedonian units never suffer war weariness.
+- All military units heal completely upon capturing a city with a Wonder.
+Strategy: Never stop attacking. Chain city captures to keep army healed. Basilikoi Paides provides science from kills.
+
+=== CYRUS ===
+Leader Ability: Fall of Babylon
+- +2 Movement for all units for 10 turns after declaring a Surprise War.
+- Declaring a Surprise War counts as a Formal War for purposes of grievances and war weariness.
+Strategy: Always Surprise War. +2 Movement is devastatingly powerful. Immortals rush with superior mobility.
+
+=== JOHN_CURTIN ===
+Leader Ability: Citadel of Civilization
+- +100% Production in all cities for 10 turns when war is declared on Australia.
+- +100% Production in all cities for 20 turns when liberating a city.
+Strategy: Defensive player. Let enemies declare war on you for massive production boost. Liberation wars are highly rewarded.
+
+=== JADWIGA ===
+Leader Ability: Lithuanian Union
+- Taking over a city grants your religion to all citizens, instead of only converting them based on the strength of pressure.
+- Holy Sites receive +2 Faith from adjacent districts.
+Strategy: Military conversion of cities. Holy Site adjacency focus. Build compact city clusters for faith bonus stacking.
+
+=== GITARJA ===
+Leader Ability: Exalted Goddess of the Three Worlds
+- Can purchase naval units with Faith.
+- Religious units pay no movement cost to embark/disembark.
+Strategy: Faith-based naval power. Build Holy Sites near coast. Religious/Naval hybrid domination.
+
+=== POUNDMAKER ===
+Leader Ability: Favorable Terms
+- All Alliance types provide shared visibility.
+- Trade Routes generate +1 Food in the sending city and +1 Gold in both cities.
+Strategy: Alliance-focused expansion. Trade routes feed your cities. Diplomatic victory through economic cooperation.
+
+=== TAMAR ===
+Leader Ability: Glory of the World, Kingdom and Faith
+- +100% Faith for 10 turns after declaring a Protectorate War.
+- Can only earn Era Score from building/converting religious buildings and from a Victor in an enemy city.
+Strategy: Defend city-states to trigger Protectorate Wars. Faith explosion timing. Golden Ages through religious achievements.
+
+=== SEONDEOK ===
+Leader Ability: Hwarang
+- +3% Culture and Science in cities with an established Governor for each promotion that Governor has.
+Strategy: Stack promotions on Governors. Pingala for science/culture bonuses. Seowon adjacency still applies.
+
+=== GENGHIS_KHAN ===
+Leader Ability: Mongol Horde
+- +3 Combat Strength for all cavalry class units for each level of Diplomatic Visibility above the opponent.
+- Capture a defeated cavalry class enemy unit.
+Strategy: Maximize diplomatic visibility. Keshig formations dominate. Capture enemy cavalry to grow your horde.
+
+=== WILHELMINA ===
+Leader Ability: Radio Oranje
+- +2 Culture to your trade routes to your own cities.
+- +4 Culture to trade routes to or from foreign cities.
+Strategy: Trade route network for culture. Polders for coastal expansion. Cultural victory through trade.
+
+=== ROBERT_THE_BRUCE ===
+Leader Ability: Bannockburn
+- Can declare a War of Liberation after gaining Defensive Tactics.
+- +100% Production and +2 Movement for 10 turns after declaring a War of Liberation.
+Strategy: Liberate cities for massive bonuses. Wait for opportunities to free conquered cities. Production/mobility surge timing.
+
+=== SHAKA ===
+Leader Ability: Amabutho
+- Corps and Armies gain +5 combat strength.
+- Corps can be formed after Mercenaries, Armies after Nationalism.
+Strategy: Rush Corps/Armies. Ikanda district accelerates formation. Impi Corps dominate the battlefield.
+
+=== WILFRID_LAURIER ===
+Leader Ability: The Last Best West
+- Can build Farms on Tundra.
+- Resources on Tundra and Tundra Hills cost 50% less to purchase and improve.
+- +100% extraction of strategic resources from Tundra.
+Strategy: Tundra expansion is viable. Northern cities can farm. Strategic resource stockpiling.
+
+=== MATTHIAS_CORVINUS ===
+Leader Ability: Raven King
+- Levied units gain +5 combat strength.
+- Levied units gain +2 Movement.
+- Levy cost is reduced 50%.
+Strategy: Become Suzerain of military city-states. Levy armies constantly at half cost. Let city-states build your army.
+
+=== PACHACUTI ===
+Leader Ability: Qhapaq Nan
+- Domestic Trade Routes gain +1 Food for each mountain tile in the destination city.
+- Can build mountain tunnels.
+Strategy: Mountain adjacency cities. Internal trade routes for food. Terrace Farms + mountains = massive yields.
+
+=== MANSA_MUSA ===
+Leader Ability: Sahel Merchants
+- International Trade Routes gain +1 Gold per flat desert tile in the sending city.
+- -30% Gold cost for purchasing units, buildings, and districts.
+Strategy: Desert expansion. Massive gold generation. Purchase everything at discount. Suguba in every city.
+
+=== KUPE ===
+Leader Ability: Kupe's Voyage
+- Starts in Ocean. +2 Science and +2 Culture per turn before settling first city.
+- Palace provides +3 Housing and +1 Amenity.
+- +2 Production for Fishing Boats.
+Strategy: Delay settling for free science/culture. Find perfect coastal start location. Marae makes forests/features valuable.
+
+=== SULEIMAN ===
+Leader Ability: Grand Vizier
+- Unlocks Ibrahim (unique Governor) with special abilities.
+- +4 Combat Strength for all units in sieges.
+Strategy: Ibrahim Governor provides massive bonuses. Siege warfare with Ottoman bonuses. Janissaries + siege = city destruction.
+
+=== SULEIMAN_MAGNIFICENT ===
+Leader Ability: Lawgiver
+- All governors with at least 3 promotions provide +15% all yields in their city.
+- Ibrahim gains additional abilities.
+Strategy: Stack governor promotions. High-yield capital with promoted Pingala. Administrative efficiency.
+
+=== KRISTINA ===
+Leader Ability: Minerva of the North
+- Buildings with Great Work slots auto-theme when filled.
+- Can build the Queen's Bibliotheque unique building in Government Plaza.
+Strategy: Great Work collection. Auto-theming saves time. Bibliotheque provides free Great Works.
+
+=== DIDO ===
+Leader Ability: Founder of Carthage
+- Can move Capital by completing a Cothon in another city.
+- +50% Production toward districts in cities not on Capital's continent.
+Strategy: Settle foreign continents first. Move capital to safest location. Colonial production bonuses stack.
+
+=== MENELIK_II ===
+Leader Ability: Council of Ministers
+- +4% Culture and +4% Science for each resource type improved.
+- Cities on hills get +4 combat strength.
+Strategy: Improve diverse resources. Hill cities are defensive fortresses. Resource variety drives science/culture.
+
+=== LADY_SIX_SKY ===
+Leader Ability: Ix Mutal Ajaw
+- Non-capital cities within 6 tiles of capital gain +10% all yields.
+- Non-capital cities outside 6 tiles gain -15% all yields.
+Strategy: Compact empire around capital. All cities within 6 tiles mandatory. Observatory adjacency matters more.
+
+=== SIMON_BOLIVAR ===
+Leader Ability: Ejercito Patriota
+- Earn a Comandante General each time you enter a new era.
+Strategy: Era timing matters. Each era = free super Great General. Stack Comandantes for army-wide bonuses.
+
+=== BASIL_II ===
+Leader Ability: Porphyrogennetos
+- Heavy and light cavalry deal full damage against cities.
+- Killing a unit heals that unit's combat strength as HP.
+Strategy: Cavalry city sieges. Tagma knights devastate cities. Heal through kills.
+
+=== AMBIORIX ===
+Leader Ability: King of the Eburones
+- Melee, anti-cavalry, and ranged units gain +2 combat strength per adjacent military unit.
+- Culture bomb adjacent unowned tiles when completing a non-specialty district.
+Strategy: Stack units for combat bonuses. Culture bomb expansion. Gaesatae rush with adjacency bonuses.
+
+=== BA_TRIEU ===
+Leader Ability: Drive Out the Aggressors
+- +5 combat strength when fighting in Rainforest, Marsh, or Woods.
+- +1 Movement in those features.
+- All features provide +2 Culture.
+Strategy: Never chop features. Forest/jungle/marsh = terrain advantage. Culture through preservation.
+
+=== JOAO_III ===
+Leader Ability: Porta do Cerco
+- +1 Sight for all units.
+- Trade Routes gain +50% toward Gold and +25% toward all other yields.
+Strategy: Superior scouting. Trade routes to coastal cities mandatory. Gold/yield multiplication.
+
+=== ABRAHAM_LINCOLN ===
+Leader Ability: Emancipation Proclamation
+- Melee and ranged units trained in Industrial/Modern era start with a free promotion.
+- +25% combat strength vs city-states.
+Strategy: Late-game unit quality. Free promotion = veteran army. City-state conquest for late expansion.
+
+=== TEDDY_ROOSEVELT ===
+Leader Ability: Roosevelt Corollary
+- +5 Combat Strength for units on your home continent.
+- +1 Appeal to all tiles in a city with a National Park.
+- Envoys to city-states on your home continent grant +2.
+Strategy: Defend home continent aggressively. National Parks for appeal/tourism. City-state dominance on your continent.
+
+=== TEDDY_ROOSEVELT_ROUGHRIDER ===
+Leader Ability: Big Stick Policy
+- +1 Culture to all tiles in a city with a National Park.
+- Gain 1 Envoy whenever you recruit a Great Person.
+Strategy: Great Person generation = city-state control. National Parks for culture victory. Rough Rider unit synergy.
+
+=== TEDDY_ROOSEVELT_BULL_MOOSE ===
+Leader Ability: Antiquities and Parks
+- +2 Science to all tiles with Breathtaking Appeal.
+- +2 Culture to all tiles in a city with a National Park.
+- +1 Appeal to all tiles in a city with a Preserve or National Park.
+Strategy: Preserve district focus. Breathtaking tiles = science. Appeal stacking for yield multiplication.
+
+=== NZINGA_MBANDE ===
+Leader Ability: Njinga Mbandi
+- +50% Production toward units when at war with a major civ.
+- Defeated enemy units grant Gold.
+Strategy: War economy. More war = more production = more gold. Continuous warfare sustains the empire.
+
+=== RAMSES_II ===
+Leader Ability: Abu Simbel
+- Completing a Wonder grants a free random relic.
+- +2 Gold and +2 Culture from resources.
+Strategy: Wonder rush + relic collection. Relics provide early tourism. Resource improvements are stronger.
+
+=== WU_ZETIAN ===
+Leader Ability: Sage Empress
+- +50% Production toward Builders.
+- Buildings and Districts can be rushed by Builders (15% of total cost per charge).
+Strategy: Builder rush completion. Build everything faster. Chain Builder production for rapid development.
+
+=== YONGLE ===
+Leader Ability: Mandate of Heaven
+- Projects in cities with a Governor provide +20% of their yields.
+- Governors gain +1 Movement Range.
+Strategy: Governor placement matters more. Projects have better payoff. Governor synergy focus.
+
+=== LUDWIG_II ===
+Leader Ability: Swan King
+- +2 Culture from Wonders in cities with a Castle.
+- Wonders built by Germany provide +1 Great Person point of the appropriate type.
+Strategy: Wonder collection. Hansa production enables wonder racing. Castle + Wonder synergy.
+
+=== FREDERICK_III ===
+Leader Ability: Patron of the Free Cities
+- +2 Production to all specialty districts from Suzerainty bonuses.
+- +1 Favor for each Suzerain bonus.
+Strategy: City-state dominance. Production stacking from Suzerainty. Diplomatic favor generation.

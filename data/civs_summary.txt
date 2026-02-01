@@ -1,0 +1,260 @@
+# Civilization Summary Data
+# Format: === CIV_NAME === followed by content
+# Used by the AI Advisor to understand civilization-specific units, infrastructure, and biases
+
+=== AMERICA ===
+Unique Unit: P-51 Mustang (Modern Era fighter with extended range and bonus vs fighters)
+Unique Unit: Rough Rider (Industrial Era cavalry, gains culture from kills on home continent)
+Unique Building: Film Studio (Broadcast Center replacement, +100% tourism pressure to other civs in Modern Era)
+Bias: Culture/Diplomacy. Strong late-game tourism. Founding Father ability grants legacy bonuses.
+
+=== SUMERIA ===
+Unique Unit: War Cart (Ancient Era heavy cavalry, no penalty vs anti-cavalry, doesn't require horses)
+Unique Improvement: Ziggurat (+2 Science, +1 Culture if adjacent to river)
+Bias: Early Domination/Science. War Carts are extremely powerful early rush units. Ziggurats provide strong early science.
+
+=== ROME ===
+Unique Unit: Legion (Classical Era swordsman, can build forts and roads)
+Unique Building: Baths (Aqueduct replacement, +2 Housing, +1 Amenity)
+Bias: Expansion/Domination. All cities start with a Trading Post. Free roads to capital within trade route range.
+
+=== GREECE ===
+Unique Unit: Hoplite (Ancient Era anti-cavalry, +10 combat when adjacent to other Hoplites)
+Unique District: Acropolis (Theater Square replacement, must be built on hills, +1 Culture from adjacent districts)
+Bias: Culture/Diplomacy. One extra Wildcard policy slot. Strong early defense with Hoplites.
+
+=== EGYPT ===
+Unique Unit: Maryannu Chariot Archer (Ancient Era ranged cavalry)
+Unique Improvement: Sphinx (+1 Faith, +1 Culture, +2 Appeal, bonus adjacent to Wonders)
+Bias: Wonder Building. +15% Production toward Wonders. Floodplains don't block districts.
+
+=== CHINA ===
+Unique Unit: Crouching Tiger (Medieval Era ranged unit, no resource requirement)
+Unique Improvement: Great Wall (provides Gold, Culture, and Tourism, must be built along borders)
+Bias: Wonder/Culture. Eurekas and Inspirations grant 60% progress instead of 50%.
+
+=== BABYLON ===
+Unique Unit: Sabum Kibittum (Ancient Era melee, +17 combat vs heavy/light cavalry)
+Unique Building: Palgum (Water Mill replacement, +2 Food, +1 Housing, freshwater bonus to farms)
+Bias: Science Victory. Eurekas grant full tech completion. Reduced base science per turn to compensate.
+
+=== JAPAN ===
+Unique Unit: Samurai (Medieval Era melee, no combat penalty when damaged)
+Unique Building: Electronics Factory (Factory replacement, +4 Production, +4 Culture to all cities within 6 tiles)
+Bias: Flexible/Domination. Districts receive +1 adjacency from other districts. Half-cost Encampment, Holy Site, Theater.
+
+=== ENGLAND ===
+Unique Unit: Sea Dog (Renaissance Era naval raider, can capture enemy ships)
+Unique Unit: Redcoat (Industrial Era melee, +10 combat on foreign continent)
+Unique District: Royal Navy Dockyard (Harbor replacement, +1 Movement for naval units, +2 Gold per Dockyard elsewhere)
+Bias: Naval/Expansion. Extra Archaeological Museum slots. Strong colonial gameplay.
+
+=== FRANCE ===
+Unique Unit: Garde Imperiale (Industrial Era melee, +10 combat near capital, Great General bonus)
+Unique Improvement: Chateau (+2 Culture, +1 Gold, must be adjacent to river)
+Bias: Culture/Tourism. +20% Production toward Medieval+ Wonders. Double tourism from Wonders.
+
+=== GERMANY ===
+Unique Unit: U-Boat (Modern Era submarine, cheaper, +10 combat in ocean, can see other subs)
+Unique District: Hansa (Industrial Zone replacement, +2 Production from adjacent Commercial Hub, resources)
+Bias: Production/Domination. +1 Military policy slot. Cities can build one extra district beyond population limit.
+
+=== RUSSIA ===
+Unique Unit: Cossack (Industrial Era cavalry, +5 combat in/near home territory, can move after attacking)
+Unique District: Lavra (Holy Site replacement, +1 Great Prophet/Writer/Artist/Musician point per turn)
+Bias: Religion/Expansion. Extra territory when founding cities. +1 Faith and +1 Production from Tundra.
+
+=== BRAZIL ===
+Unique Unit: Minas Geraes (Industrial Era battleship, improved defense)
+Unique District: Street Carnival (Entertainment Complex replacement, cheaper)
+Bias: Culture/Religion. Rainforests provide +1 adjacency to all districts. Great People points +20% during Golden Ages.
+
+=== INDIA ===
+Unique Unit: Varu (Classical Era heavy cavalry, adjacent enemies get -5 combat)
+Unique Improvement: Stepwell (+1 Food, +1 Housing, Faith if adjacent to Holy Site)
+Bias: Religion/Faith. +2 Spread Religion charges for Missionaries. +100% Religious pressure from Trade Routes.
+
+=== ARABIA ===
+Unique Unit: Mamluk (Medieval Era cavalry, heals at end of every turn)
+Unique Building: Madrasa (University replacement, +5 Science, generates Faith equal to campus adjacency)
+Bias: Religion/Science. Automatically gains last Great Prophet. +1 Science per foreign city following your religion.
+
+=== KONGO ===
+Unique Unit: Ngao Mbeba (Swordsman replacement, +10 vs ranged, no iron required)
+Unique District: Mbanza (Neighborhood replacement, available earlier, +5 Housing, +2 Food, +4 Gold)
+Bias: Culture/Relics. Cannot found religion but gains bonuses from others' religions. Double Great Writer/Artist/Musician points.
+
+=== SPAIN ===
+Unique Unit: Conquistador (Musketman replacement, +10 combat if Missionary/Apostle adjacent)
+Unique Improvement: Mission (+2 Faith, +1 Science if on foreign continent)
+Bias: Religion/Expansion. Trade Routes between continents grant bonus yields. Inquisitors can remove heresy.
+
+=== AZTEC ===
+Unique Unit: Eagle Warrior (Warrior replacement, can capture defeated units as Builders)
+Unique Building: Tlachtli (Arena replacement, +2 Faith, +1 Great General point)
+Bias: Domination/Production. Builders can speed district construction. Luxury resources provide +1 Amenity to additional cities.
+
+=== SCYTHIA ===
+Unique Unit: Saka Horse Archer (Classical Era ranged cavalry, cheap, fast)
+Unique Improvement: Kurgan (+1 Faith, +1 Gold, +1 Faith for adjacent Pastures)
+Bias: Domination/Cavalry. Build two light cavalry/Saka for the price of one. +5 combat vs wounded units.
+
+=== NORWAY ===
+Unique Unit: Berserker (Medieval Era melee, +10 attack, -5 defense, bonus movement after attacking)
+Unique Unit: Longship (Ancient Era naval melee, can heal in neutral territory, coastal raids)
+Unique Building: Stave Church (Temple replacement, +1 Faith for adjacent woods)
+Bias: Naval/Domination. All naval melee units can coastal raid. Embarked units have ocean capability early.
+
+=== NUBIA ===
+Unique Unit: Pitati Archer (Ancient Era ranged, +1 Movement, replaces Archer)
+Unique Improvement: Nubian Pyramid (+2 Faith, +2 Food/Production/Gold/Science depending on adjacent districts)
+Bias: Ranged Units/Production. +50% Production toward ranged units. Mines over strategic resources provide +1 Production.
+
+=== MACEDONIA ===
+Unique Unit: Hypaspist (Swordsman replacement, +5 vs districts, +50% support bonus)
+Unique Unit: Hetairoi (Horseman replacement, +5 Great General points from kills, free promotion)
+Unique Building: Basilikoi Paides (Barracks replacement, +25% combat XP, science from kills)
+Bias: Domination. Cities don't war weariness. Eurekas for killing units. Siege units siege without setup.
+
+=== PERSIA ===
+Unique Unit: Immortal (Swordsman replacement, +2 Movement, ranged attack capability)
+Unique Improvement: Pairidaeza (+1 Culture, +2 Gold, +2 Appeal, +1 Culture per adjacent Holy Site/Theater)
+Bias: Culture/Domination. +1 Movement during Golden Age. Surprise Wars have no penalty, declaring normal wars has no penalty in Golden Age.
+
+=== AUSTRALIA ===
+Unique Unit: Digger (Infantry replacement, +10 combat outside Australian territory, +5 adjacent to water)
+Unique Improvement: Outback Station (+1 Food, +1 Production, +0.5 Housing, bonus for adjacent Pastures)
+Bias: Flexible. +100% Production when war declared on Australia. +3 Housing in coastal cities. +1 Production from Pastures.
+
+=== POLAND ===
+Unique Unit: Winged Hussar (Cavalry replacement, pushes back defenders on attack if it does more damage)
+Unique Building: Sukiennice (Market replacement, +4 Gold, +2 Production from international Trade Routes)
+Bias: Religion/Domination. Military unit converts adjacent city when capturing with a Relic. Relics provide +4 Gold, +2 Faith, +2 Culture.
+
+=== INDONESIA ===
+Unique Unit: Jong (Frigate replacement, +5 combat, forms formations with naval)
+Unique Improvement: Kampung (+1 Housing, +1 Production, +1 Food for adjacent Fishing Boats)
+Bias: Naval/Faith. Coast tiles provide +0.5 Faith. Entertainment Complexes give +1 Amenity if adjacent to coast.
+
+=== CREE ===
+Unique Unit: Okihtcitaw (Scout replacement, free promotion, +5 combat strength)
+Unique Improvement: Mekewap (+1 Housing, +2 Gold, +1 Production/Food for adjacent Bonus/Luxury)
+Bias: Trade/Expansion. First trade route to a city shares vision and claims tiles. Alliance points gained faster.
+
+=== GEORGIA ===
+Unique Unit: Khevsur (Swordsman replacement, +7 combat in hills)
+Unique Building: Tsikhe (Renaissance Walls replacement, cheaper, +3 Faith, higher walls in Golden Age)
+Bias: Religion/Defense. +50% Faith and +100% envoys in Golden/Heroic Ages. Dedications also give bonuses in Normal Ages.
+
+=== KOREA ===
+Unique Unit: Hwacha (Field Cannon replacement, can't move and attack same turn, +10 combat)
+Unique District: Seowon (Campus replacement, +4 Science, loses adjacency bonus from other districts)
+Bias: Science Victory. Mines receive +1 Science if adjacent to Seowon. Farms receive +1 Food if adjacent to Seowon.
+
+=== MONGOLIA ===
+Unique Unit: Keshig (Medieval Era ranged cavalry, other units in formation move at Keshig speed)
+Unique Building: Ordu (Stable replacement, +1 Movement for cavalry class units)
+Bias: Domination/Cavalry. +3 combat strength per level of Diplomatic Visibility. Sending Trade Route grants +1 Visibility.
+
+=== NETHERLANDS ===
+Unique Unit: De Zeven Provincien (Frigate replacement, +7 against defensible districts)
+Unique Improvement: Polder (+1 Food, +1 Production, +0.5 Housing, +2 Gold, +1 Culture, +1 Food for adjacent Polders)
+Bias: Trade/Production. Major adjacency from rivers. +2 Culture from domestic Trade Routes, +1 from international.
+
+=== SCOTLAND ===
+Unique Unit: Highlander (Ranger replacement, +5 in woods/hills, no movement penalty)
+Unique Improvement: Golf Course (+2 Gold, +1 Amenity, +1 Culture if adjacent to City Center, +1 Culture if Entertainment)
+Bias: Science/Production. +5% Science and +5% Production during Happy. +15% during Ecstatic.
+
+=== ZULU ===
+Unique Unit: Impi (Pikeman replacement, faster, cheaper, flanking bonus, +25% XP)
+Unique District: Ikanda (Encampment replacement, provides Corps/Army earlier, faster training)
+Bias: Domination. Garrisons provide +3 Loyalty and +2 Gold. Corps/Armies unlocked with Mercenaries/Nationalism.
+
+=== CANADA ===
+Unique Unit: Mountie (Light cavalry, can create National Parks, +5 near National Parks)
+Unique Improvement: Ice Hockey Rink (+1 Amenity, +1 Culture, +2 Culture if adjacent to Stadium, +4 Culture/Tourism at Flight)
+Bias: Diplomacy/Culture. Cannot declare or be target of Surprise Wars. +1 Diplomatic Favor per 100 Tourism.
+
+=== HUNGARY ===
+Unique Unit: Huszar (Cavalry replacement, +3 combat per active alliance)
+Unique Unit: Black Army (Courser replacement, +3 combat per adjacent levied unit)
+Unique Building: Thermal Bath (Zoo replacement, +2 Amenity, +2 Production if adjacent to Geothermal Fissure)
+Bias: City-States/Domination. Levied units gain +5 combat and +2 Movement. Can levy at 50% cost.
+
+=== INCA ===
+Unique Unit: Warakaq (Skirmisher replacement, +10 combat if attacked)
+Unique Improvement: Terrace Farm (+1 Food, +1 Production, +2 Food if adjacent to Aqueduct, +1 Food per adjacent Mountain)
+Bias: Production/Expansion. Citizens can work mountain tiles. +1 Production from mountains. +2 Production from Terrace Farms next to mountains.
+
+=== MALI ===
+Unique Unit: Mandekalu Cavalry (Knight replacement, no combat penalty vs anti-cavalry, Trade routes are immune to raiding)
+Unique District: Suguba (Commercial Hub replacement, cheaper, purchases in city -20%)
+Bias: Gold/Faith. Mines provide -1 Production, +4 Gold. -30% Production toward buildings/units, +20% Production from Holy Site districts.
+
+=== MAORI ===
+Unique Unit: Toa (Swordsman replacement, can construct Pa improvements, enemies adjacent get -5 combat)
+Unique Building: Marae (Amphitheater replacement, no Great Work slots, +2 Culture/Faith to all tiles with passable features)
+Bias: Naval/Culture. Start with Sailing/Shipbuilding. Unimproved woods/rainforests provide +1 Production/+1 Gold. +2 Food from Fishing Boats.
+
+=== OTTOMAN ===
+Unique Unit: Barbary Corsair (Privateer replacement, free coastal raiding, no movement cost to raid)
+Unique Unit: Janissary (Musketman replacement, free, +10 strength, -1 Population when trained)
+Unique Building: Grand Bazaar (Bank replacement, +1 Amenity, extra Strategic resource accumulation)
+Bias: Domination. Conquered cities don't lose population. +3 Loyalty in cities with Governor. +50% Production toward Siege units.
+
+=== SWEDEN ===
+Unique Unit: Carolean (Pike and Shot replacement, +3 combat for each unused Movement point)
+Unique Building: Open-Air Museum (+2 Culture and +2 Tourism for each type of terrain in your empire)
+Bias: Diplomacy/Culture. +50 Diplomatic Favor when earning Great Person. Auto-themed Great Works of same type.
+
+=== PHOENICIA ===
+Unique Unit: Bireme (Galley replacement, +4 combat, +1 Movement for Settlers embarked in water)
+Unique Building: Cothon (Harbor replacement, +50% Production toward naval units, +100% heal rate in city)
+Bias: Naval/Settlers. Settlers have +3 Movement while embarked and are immune to being captured. Can move Capital.
+
+=== ETHIOPIA ===
+Unique Unit: Oromo Cavalry (Courser replacement, +4 combat, no terrain movement penalties)
+Unique Improvement: Rock-Hewn Church (can only be built on hills/volcanic soil, +1 Faith, +1 Faith per adjacent mountain/hill)
+Bias: Religion/Defense. Cities on hills get +4 combat. +15% Faith when at war with civilization with more cities.
+
+=== MAYA ===
+Unique Unit: Hulche (Archer replacement, +5 combat vs wounded)
+Unique District: Observatory (Campus replacement, +2 Science per adjacent Plantation, +1 per adjacent Farm)
+Bias: Science. +5% to all yields within 6 tiles of Capital. -15% to yields outside 6 tiles. Fresh water and coast don't provide Housing.
+
+=== GRAN_COLOMBIA ===
+Unique Unit: Llanero (Cavalry replacement, low maintenance, +4 combat per adjacent Llanero, full heal on kill)
+Unique Unit: Comandante General (Great General replacement, +5 combat bonus, passive ability, +1 Movement to units)
+Bias: Domination. +1 Movement to all units. Promoting unit does not end turn.
+
+=== BYZANTIUM ===
+Unique Unit: Dromon (Quadrireme replacement, +10 vs units, ranged attack range 2)
+Unique Unit: Tagma (Knight replacement, +4 combat or +4 Religious strength to adjacent units if Holy Site district)
+Unique District: Hippodrome (Entertainment Complex replacement, cheaper, free heavy cavalry unit when built/when buildings)
+Bias: Religion/Domination. +3 combat vs civs following different religion. Holy Cities convert when captured.
+
+=== GAUL ===
+Unique Unit: Gaesatae (Warrior replacement, +10 combat vs higher combat units, +5 vs districts)
+Unique District: Oppidum (Industrial Zone replacement, cheaper, unlocks at Iron Working, +2 adjacency from Quarries/strategic)
+Bias: Production/Domination. Mines provide +1 Culture, -1 adjacency. Specialty districts cannot be adjacent to City Center.
+
+=== BABYLON ===
+Unique Unit: Sabum Kibittum (Ancient Era melee, +17 combat vs heavy/light cavalry)
+Unique Building: Palgum (Water Mill replacement, +2 Food, +1 Housing, freshwater bonus to farms)
+Bias: Science Victory. Eurekas grant full tech completion. Reduced base science per turn (-50%) to compensate.
+
+=== VIETNAM ===
+Unique Unit: Voi Chien (Crossbowman replacement, +5 combat, +1 Movement, can move after attacking)
+Unique District: Thanh (Encampment replacement, doesn't require population, provides +2 Culture per adjacent district)
+Bias: Culture/Defense. Land specialty districts can only be built on features. Woods/Rainforest/Marsh provide +2 Production/Culture/Science.
+
+=== PORTUGAL ===
+Unique Unit: Nau (Caravel replacement, starts with free promotion, +50 Gold when discovering natural wonders, cheaper)
+Unique Building: Navigation School (University replacement, +25% Production toward naval units, +2 Science per 2 coast)
+Bias: Naval/Trade. International Trade Routes can only go to coastal cities or cities with a Harbor. +50% Trade Route yields.
+
+=== EGYPT ===
+Unique Unit: Maryannu Chariot Archer (Ancient Era ranged cavalry)
+Unique Improvement: Sphinx (+1 Faith, +1 Culture, +2 Appeal, bonus adjacent to Wonders)
+Bias: Wonder Building. +15% Production toward Wonders. Floodplains don't block districts.

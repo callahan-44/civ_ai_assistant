@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="CivAI_Bridge" version="1.0">
+    <Properties>
+        <Name>CivAI Bridge - Game State Logger</Name>
+        <Description>Logs game state data for external AI advisor integration.</Description>
+        <Teaser>AI Advisor Bridge</Teaser>
+        <Authors>CivAI</Authors>
+        <CompatibleVersions>2.0</CompatibleVersions>
+    </Properties>
+    <InGameActions>
+        <AddGameplayScripts id="CivAI_GameStateDump">
+            <File>GameStateDump.lua</File>
+        </AddGameplayScripts>
+    </InGameActions>
+    <Files>
+        <File>GameStateDump.lua</File>
+    </Files>
+</Mod>
