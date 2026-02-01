@@ -259,7 +259,7 @@ class GameStateEnricher:
             "raw": game_state,
             "decisions": self._extract_decisions(game_state),
             "mini_map": self.map_generator.generate_mini_map(game_state),
-            "civ_context": self._get_civ_context(game_state) if self.is_first_turn else "",
+            "civ_context": self._get_civ_context(game_state),  # Always compute, let build_prompt decide
             "changes_summary": delta_info["summary"],
             "delta": delta_info,
             "victory_goal": victory_goal,
@@ -669,14 +669,35 @@ class GameStateEnricher:
         delta["summary"] = " | ".join(changes)
         return delta
 
-    def build_prompt(self, enriched: dict, user_question: str = "") -> str:
-        """Build the final prompt for the AI using delta tracking."""
+    def build_prompt(self, enriched: dict, user_question: str = "", force_full_state: bool = False) -> str:
+        """
+        Build the final prompt for the AI.
+
+        Args:
+            enriched: Enriched game state from enrich()
+            user_question: Optional player question
+            force_full_state: If True (API mode), always send full state and civ context.
+                             If False (Clipboard mode), use delta tracking to save tokens.
+
+        Prompt Structure:
+            - Player Question (if any) - HIGH PRIORITY at top
+            - Immediate Decisions/Alerts
+            - Civ/Leader Strategy (always if force_full_state, else only first turn)
+            - Full Game State
+        """
         sections = []
         gs = enriched["raw"]
         delta = enriched["delta"]
         is_first = enriched["is_first_turn"]
 
-        # 0. DECISIONS FIRST (highest priority at top)
+        # Determine if we should show full data or use delta optimization
+        show_full = force_full_state or is_first
+
+        # 0. PLAYER QUESTION - Highest priority, at the very top
+        if user_question:
+            sections.append(f"=== PLAYER QUESTION (PRIORITY) ===\n{user_question}")
+
+        # 1. IMMEDIATE DECISIONS/ALERTS
         decisions = enriched["decisions"]
         decision_lines = ["=== IMMEDIATE DECISIONS REQUIRED ==="]
 
@@ -705,24 +726,27 @@ class GameStateEnricher:
 
         sections.append("\n".join(decision_lines))
 
-        # 1. Changes since last turn
-        sections.append(f"=== CHANGES SINCE LAST TURN ===\n{enriched['changes_summary']}")
+        # 2. CIV/LEADER STRATEGY CONTEXT
+        # API mode: Always include (AI has no memory)
+        # Clipboard mode: Only on first turn (web UI maintains context)
+        if enriched["civ_context"] and (force_full_state or is_first):
+            sections.append(enriched["civ_context"])
 
-        # 2. Civ context - ONLY on first turn
-        if is_first and enriched["civ_context"]:
-            sections.append(f"=== CIVILIZATION STRATEGY ===\n{enriched['civ_context']}")
+        # 3. Changes since last turn (only for clipboard/delta mode)
+        if not force_full_state:
+            sections.append(f"=== CHANGES SINCE LAST TURN ===\n{enriched['changes_summary']}")
 
-        # 3. Mini-map (with Fog Trimmer)
+        # 4. Mini-map (with Fog Trimmer)
         sections.append(f"=== TACTICAL VIEW ===\n{enriched['mini_map']}")
 
-        # 3.5 Tile details (with filtering)
+        # 5. Tile details (with filtering)
         tile_details = self._generate_tile_details(gs)
         if tile_details:
             sections.append(tile_details)
 
-        # 4. Current state summary
+        # 6. Current state summary - Always include civ name in API mode
         state_lines = ["=== CURRENT STATE ==="]
-        if is_first:
+        if show_full:
             state_lines.append(f"Turn {gs.get('turn', '?')} | Era: {get_era_name(gs.get('era'))} | Civ: {clean_game_string(gs.get('civ', '?'))}")
         else:
             state_lines.append(f"Turn {gs.get('turn', '?')} | Era: {get_era_name(gs.get('era'))}")
@@ -739,7 +763,7 @@ class GameStateEnricher:
 
         sections.append("\n".join(state_lines))
 
-        # 5. Cities - ALWAYS show city list with production status
+        # 7. CITIES - Full details in API mode, delta-optimized in clipboard mode
         cities = gs.get("cities", [])
         if cities:
             # Get capital coordinates for relative position display
@@ -766,10 +790,10 @@ class GameStateEnricher:
                 else:
                     city_lines.append(f"  {name} (pop {pop}): Building {bld} ({turns}t) | Growth in {grow}t")
 
-                # Show full details for cities needing production OR on first turn OR when changed
-                show_full_details = needs_production or is_first or delta["cities_changed"]
+                # Show full details: always in API mode, or when needed in clipboard mode
+                show_city_details = force_full_state or needs_production or is_first or delta["cities_changed"]
 
-                if show_full_details:
+                if show_city_details:
                     # Show city location relative to capital
                     city_xy = city.get("xy", "")
                     if city_xy and city_xy != capital_xy:
@@ -785,18 +809,17 @@ class GameStateEnricher:
                         district_str = ", ".join(clean_game_list(districts))
                         city_lines.append(f"    Districts: {district_str}")
 
-                    # Show buildings if present (! = wonder)
+                    # Show buildings if present
                     buildings = city.get("buildings", [])
                     if buildings:
                         building_str = ", ".join(clean_game_list(buildings))
                         city_lines.append(f"    Buildings: {building_str}")
 
-                    # Show wonders with their precise locations (for adjacency planning)
+                    # Show wonders with their precise locations
                     wonders = city.get("wonders", [])
                     if wonders:
                         wonder_lines = []
                         for wonder_str in wonders:
-                            # Parse "Colosseum 18,20" format and convert to relative coords
                             match = re.match(r"(.+?)\s+(\d+),(\d+)$", wonder_str)
                             if match:
                                 wonder_name = clean_game_string(match.group(1))
@@ -809,87 +832,83 @@ class GameStateEnricher:
 
             sections.append("\n".join(city_lines))
 
-        # 6. Units
+        # 8. UNITS - Full list in API mode, delta-optimized in clipboard mode
         units = clean_game_list(gs.get("units", []))
-        if units and (is_first or delta["units_changed"]):
-            sections.append(f"=== UNITS ({len(units)}) ===\n  " + " | ".join(units[:10]))
-            if len(units) > 10:
-                sections[-1] += f"\n  ... and {len(units) - 10} more"
-        elif units and not is_first:
-            sections.append(f"=== UNITS ({len(units)}) === [unchanged]")
+        if units:
+            if force_full_state or is_first or delta["units_changed"]:
+                sections.append(f"=== UNITS ({len(units)}) ===\n  " + " | ".join(units[:15]))
+                if len(units) > 15:
+                    sections[-1] += f"\n  ... and {len(units) - 15} more"
+            elif not force_full_state:
+                sections.append(f"=== UNITS ({len(units)}) === [unchanged]")
 
-        # 7. Threats - ALWAYS send if present
+        # 9. THREATS - Always send if present (critical info)
         threats = clean_game_list(gs.get("threats", []))
         if threats:
             sections.append(f"=== THREATS ({len(threats)}) ===\n  " + "\n  ".join(threats))
 
-        # 8. Diplomacy (now includes rich stats from scoreboard)
+        # 10. DIPLOMACY - Full in API mode, delta in clipboard mode
         diplo = gs.get("diplo", [])
-        if diplo and (is_first or delta["diplo_changed"]):
-            diplo_lines = []
-            for entry in diplo:
-                if isinstance(entry, dict):
-                    # Rich format: {civ, leader, status, score, military, culture_pt, science_pt, tourism, gold}
-                    civ = entry.get("civ", "?")
-                    leader = entry.get("leader", "").replace("LEADER_", "").replace("_", " ").title()
-                    status = entry.get("status", "?")
-                    parts = [f"{civ} ({leader}): {status}"]
+        if diplo:
+            if force_full_state or is_first or delta["diplo_changed"]:
+                diplo_lines = []
+                for entry in diplo:
+                    if isinstance(entry, dict):
+                        civ = entry.get("civ", "?")
+                        leader = entry.get("leader", "").replace("LEADER_", "").replace("_", " ").title()
+                        status = entry.get("status", "?")
+                        parts = [f"{civ} ({leader}): {status}"]
 
-                    stats = []
-                    if "score" in entry:
-                        stats.append(f"Score:{entry['score']}")
-                    if "military" in entry:
-                        stats.append(f"Mil:{entry['military']}")
-                    if "science_pt" in entry:
-                        stats.append(f"Sci/t:{entry['science_pt']}")
-                    if "culture_pt" in entry:
-                        stats.append(f"Cul/t:{entry['culture_pt']}")
-                    if "tourism" in entry:
-                        stats.append(f"Tourism:{entry['tourism']}")
-                    if "gold" in entry:
-                        stats.append(f"Gold:{entry['gold']}")
+                        stats = []
+                        if "score" in entry:
+                            stats.append(f"Score:{entry['score']}")
+                        if "military" in entry:
+                            stats.append(f"Mil:{entry['military']}")
+                        if "science_pt" in entry:
+                            stats.append(f"Sci/t:{entry['science_pt']}")
+                        if "culture_pt" in entry:
+                            stats.append(f"Cul/t:{entry['culture_pt']}")
+                        if "tourism" in entry:
+                            stats.append(f"Tourism:{entry['tourism']}")
+                        if "gold" in entry:
+                            stats.append(f"Gold:{entry['gold']}")
 
-                    if stats:
-                        parts.append(" | ".join(stats))
-                    diplo_lines.append("  " + " - ".join(parts))
-                else:
-                    # Legacy simple format: "CivName:Status"
-                    diplo_lines.append(f"  {entry}")
+                        if stats:
+                            parts.append(" | ".join(stats))
+                        diplo_lines.append("  " + " - ".join(parts))
+                    else:
+                        diplo_lines.append(f"  {entry}")
 
-            sections.append(f"=== DIPLOMACY ({len(diplo)} civs) ===\n" + "\n".join(diplo_lines))
-        elif diplo and delta.get("diplo_changes"):
-            sections.append(f"=== DIPLOMACY CHANGES ===\n  " + " | ".join(clean_game_list(delta["diplo_changes"])))
+                sections.append(f"=== DIPLOMACY ({len(diplo)} civs) ===\n" + "\n".join(diplo_lines))
+            elif delta.get("diplo_changes"):
+                sections.append(f"=== DIPLOMACY CHANGES ===\n  " + " | ".join(clean_game_list(delta["diplo_changes"])))
 
-        # 8b. Foreign Cities (city centers and encampments of known civs)
+        # 11. FOREIGN CITIES - Full in API mode, first turn only in clipboard mode
         foreign_cities = clean_game_list(gs.get("foreign_cities", []))
-        if foreign_cities and is_first:
+        if foreign_cities and (force_full_state or is_first):
             sections.append(f"=== FOREIGN CITIES ({len(foreign_cities)}) ===\n  " + "\n  ".join(foreign_cities[:20]))
             if len(foreign_cities) > 20:
                 sections[-1] += f"\n  ... and {len(foreign_cities) - 20} more"
 
-        # 8c. Foreign Tiles (discovered tiles owned by other civs with districts/improvements)
+        # 12. FOREIGN TILES - Full in API mode, first turn only in clipboard mode
         foreign_tiles = clean_game_list(gs.get("foreign_tiles", []))
-        if foreign_tiles and is_first:
+        if foreign_tiles and (force_full_state or is_first):
             sections.append(f"=== FOREIGN TERRITORY ({len(foreign_tiles)} notable tiles) ===\n  " + "\n  ".join(foreign_tiles[:30]))
             if len(foreign_tiles) > 30:
                 sections[-1] += f"\n  ... and {len(foreign_tiles) - 30} more"
 
-        # 9. City States
+        # 13. CITY STATES - Full in API mode, delta in clipboard mode
         cs = clean_game_list(gs.get("cs", []))
-        if cs and (is_first or delta["cs_changed"]):
+        if cs and (force_full_state or is_first or delta["cs_changed"]):
             sections.append(f"=== CITY STATES ===\n  " + " | ".join(cs))
 
-        # 10. Trade Routes
+        # 14. TRADE ROUTES - Full in API mode, delta in clipboard mode
         trade = clean_game_list(gs.get("trade", []))
-        if trade and (is_first or delta["trade_changed"]):
+        if trade and (force_full_state or is_first or delta["trade_changed"]):
             sections.append(f"=== TRADE ROUTES ===\n  " + " | ".join(trade))
 
-        # 11. Victory goal
+        # 15. VICTORY GOAL
         if enriched["victory_goal"]:
             sections.append(f"=== VICTORY GOAL: {enriched['victory_goal'].upper()} ===")
-
-        # 12. User question
-        if user_question:
-            sections.append(f"=== PLAYER QUESTION ===\n{user_question}")
 
         return "\n\n".join(sections)

@@ -46,8 +46,6 @@ class Config:
         self.victory_goal: str = "Domination"
         # UI settings
         self.always_on_top: bool = True
-        # Question behavior
-        self.include_context_with_questions: bool = False
         self.load()
 
     def load(self):
@@ -79,7 +77,6 @@ class Config:
                     self.system_prompt_extended = data.get("system_prompt_extended", DEFAULT_SYSTEM_PROMPT_EXTENDED)
                     self.victory_goal = data.get("victory_goal", "Domination")
                     self.always_on_top = data.get("always_on_top", True)
-                    self.include_context_with_questions = data.get("include_context_with_questions", False)
             except Exception as e:
                 print(f"Error loading config: {e}")
 
@@ -105,7 +102,6 @@ class Config:
                 "system_prompt_extended": self.system_prompt_extended,
                 "victory_goal": self.victory_goal,
                 "always_on_top": self.always_on_top,
-                "include_context_with_questions": self.include_context_with_questions,
             }
             with open(CONFIG_FILE, "w") as f:
                 json.dump(data, f, indent=2)

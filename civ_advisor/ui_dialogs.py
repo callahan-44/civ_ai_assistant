@@ -407,36 +407,6 @@ class SettingsDialog:
         )
         debug_cb.pack(anchor="w")
 
-        # Question Context
-        tk.Label(
-            behavior_frame,
-            text="Question Behavior",
-            fg=COLORS["accent"],
-            bg=COLORS["bg"],
-            font=("Segoe UI", 11, "bold"),
-        ).pack(anchor="w", pady=(20, 10))
-
-        self.include_context_var = tk.BooleanVar(value=self.config.include_context_with_questions)
-        context_cb = tk.Checkbutton(
-            behavior_frame,
-            text="Include game state with manual questions",
-            variable=self.include_context_var,
-            fg=COLORS["text"],
-            bg=COLORS["bg"],
-            selectcolor=COLORS["bg_secondary"],
-            activebackground=COLORS["bg"],
-            font=("Segoe UI", 10),
-        )
-        context_cb.pack(anchor="w")
-
-        tk.Label(
-            behavior_frame,
-            text="(When unchecked, 'Ask Advisor' sends only your question text)",
-            fg=COLORS["text_secondary"],
-            bg=COLORS["bg"],
-            font=("Segoe UI", 8),
-        ).pack(anchor="w", padx=(20, 0))
-
         # Log folder
         tk.Label(
             behavior_frame,
@@ -637,7 +607,6 @@ class SettingsDialog:
             self.config.min_request_interval = DEFAULT_MIN_REQUEST_INTERVAL
 
         self.config.debug_mode = self.debug_var.get()
-        self.config.include_context_with_questions = self.include_context_var.get()
         self.config.log_folder = self.log_folder_entry.get()
 
         # Interface

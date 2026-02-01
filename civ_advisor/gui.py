@@ -288,37 +288,7 @@ class CivOverlay:
 
     def _request_advice(self, user_question: str = ""):
         """Request advice from AI in background thread."""
-        # If user typed a question and context is disabled, send question only
-        if user_question and not self.config.include_context_with_questions:
-            self._set_advice("Sending question...")
-            self._update_status("Consulting AI...", COLORS["accent"])
-
-            def question_only_thread():
-                result = self.advisor.send_question_only(
-                    user_question,
-                    clipboard_copy_func=self._clipboard_copy,
-                )
-
-                # Check if it's a debug request
-                if isinstance(result, DebugRequest):
-                    self.root.after(0, lambda: self._show_debug_window(result))
-                    self.root.after(0, self._set_advice,
-                        f"DEBUG MODE\n\nRequest prepared but NOT sent.\n"
-                        f"Check debug popup for details.\n"
-                        f"Click 'Send to API' to transmit.\n\n"
-                        f"Provider: {result.provider}\n"
-                        f"Model: {result.model}\n"
-                        f"Estimated tokens: ~{result.token_estimate}")
-                    self.root.after(0, self._update_status, "Debug mode", COLORS["accent"])
-                else:
-                    self.root.after(0, self._set_advice, result)
-                    self.root.after(0, self._update_status, "Ready", COLORS["success"])
-
-            thread = threading.Thread(target=question_only_thread, daemon=True)
-            thread.start()
-            return
-
-        # Otherwise, send with full game state context
+        # Always include full game state and system prompt with questions
         if not self.last_game_state:
             self._set_advice("No game data available yet. Start a game or load a save.")
             return
