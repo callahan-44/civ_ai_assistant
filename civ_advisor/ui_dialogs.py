@@ -22,6 +22,7 @@ from .constants import (
     DEFAULT_SYSTEM_PROMPT_CORE,
     DEFAULT_SYSTEM_PROMPT_EXTENDED,
     NO_SYSTEM_PROMPT_MODELS,
+    MODEL_CONTEXT_WINDOWS,
 )
 
 
@@ -169,10 +170,21 @@ class SettingsDialog:
         )
 
     def _center_window(self, parent):
-        """Center dialog over parent window."""
+        """Center dialog over parent window, clamped to screen bounds."""
         self.dialog.update_idletasks()
-        x = parent.winfo_x() + (parent.winfo_width() // 2) - (self.dialog.winfo_width() // 2)
-        y = parent.winfo_y() + (parent.winfo_height() // 2) - (self.dialog.winfo_height() // 2)
+        screen_width = self.dialog.winfo_screenwidth()
+        screen_height = self.dialog.winfo_screenheight()
+        dialog_width = self.dialog.winfo_width()
+        dialog_height = self.dialog.winfo_height()
+
+        # Calculate centered position
+        x = parent.winfo_x() + (parent.winfo_width() // 2) - (dialog_width // 2)
+        y = parent.winfo_y() + (parent.winfo_height() // 2) - (dialog_height // 2)
+
+        # Clamp to screen bounds (leave some margin for taskbar)
+        x = max(0, min(x, screen_width - dialog_width))
+        y = max(0, min(y, screen_height - dialog_height - 40))
+
         self.dialog.geometry(f"+{x}+{y}")
 
     def _create_widgets(self):
@@ -385,6 +397,43 @@ class SettingsDialog:
         self.interval_entry.pack(side=tk.LEFT, padx=(10, 0))
         self.interval_entry.insert(0, str(self.config.min_request_interval))
 
+        # Suggested Context Windows section
+        tk.Label(
+            behavior_frame,
+            text="Suggested Max Tokens by Model",
+            fg=COLORS["accent"],
+            bg=COLORS["bg"],
+            font=("Segoe UI", 11, "bold"),
+        ).pack(anchor="w", pady=(20, 5))
+
+        tk.Label(
+            behavior_frame,
+            text="(Model context window minus 5,000 tokens for responses)",
+            fg=COLORS["text_secondary"],
+            bg=COLORS["bg"],
+            font=("Segoe UI", 8),
+        ).pack(anchor="w", pady=(0, 5))
+
+        # Frame to hold the suggestions (will be updated based on provider)
+        self.context_suggestions_frame = tk.Frame(behavior_frame, bg=COLORS["bg"])
+        self.context_suggestions_frame.pack(fill=tk.X, pady=(0, 5))
+
+        self.context_suggestions_label = tk.Label(
+            self.context_suggestions_frame,
+            text="",
+            fg=COLORS["text"],
+            bg=COLORS["bg"],
+            font=("Segoe UI", 9),
+            justify=tk.LEFT,
+        )
+        self.context_suggestions_label.pack(anchor="w")
+
+        # Store behavior_frame reference for updating suggestions
+        self._behavior_frame = behavior_frame
+
+        # Initial update of context suggestions
+        self._update_context_suggestions()
+
         # Debug mode
         tk.Label(
             behavior_frame,
@@ -541,6 +590,46 @@ class SettingsDialog:
     def _on_provider_changed(self, event=None):
         """Handle provider selection change."""
         self._update_provider_visibility()
+        self._update_context_suggestions()
+
+    def _update_context_suggestions(self):
+        """Update the suggested context windows based on selected provider."""
+        selected_display = self.provider_combo.get()
+        selected_key = None
+        for key, display in PROVIDERS:
+            if display == selected_display:
+                selected_key = key
+                break
+
+        # Get models for the selected provider
+        if selected_key == "google":
+            models = GOOGLE_MODELS
+        elif selected_key == "anthropic":
+            models = ANTHROPIC_MODELS
+        elif selected_key == "openai":
+            models = OPENAI_MODELS
+        elif selected_key == "ollama":
+            models = OLLAMA_MODELS
+        else:
+            # Clipboard mode - no suggestions needed
+            self.context_suggestions_label.configure(text="N/A - Clipboard mode has no token limit")
+            return
+
+        # Build suggestion text
+        suggestions = []
+        for display_name, model_id in models:
+            context_window = MODEL_CONTEXT_WINDOWS.get(model_id, 0)
+            if context_window >= 1000000:
+                # 1M+ context - effectively unlimited for game state
+                suggested = "Unlimited"
+                suggestions.append(f"  {display_name}: {suggested} (1M+ context)")
+            elif context_window > 0:
+                suggested = context_window - 5000
+                suggestions.append(f"  {display_name}: {suggested:,} ({context_window:,} context)")
+            else:
+                suggestions.append(f"  {display_name}: Unknown context window")
+
+        self.context_suggestions_label.configure(text="\n".join(suggestions))
 
     def _update_provider_visibility(self):
         """Show/hide API sections based on selected provider."""
@@ -665,6 +754,7 @@ class DebugWindow:
         prompt = self.debug_info.get("prompt", "")
         system_prompt = self.debug_info.get("system_prompt", "")
         token_estimate = self.debug_info.get("token_estimate", 0)
+        tiles_trimmed = self.debug_info.get("tiles_trimmed", 0)
 
         header = tk.Frame(self.dialog, bg=COLORS["bg_secondary"], padx=10, pady=10)
         header.pack(fill=tk.X)
@@ -677,9 +767,12 @@ class DebugWindow:
             font=("Segoe UI", 11, "bold"),
         ).pack(anchor="w")
 
+        token_text = f"Estimated tokens: ~{token_estimate}"
+        if tiles_trimmed > 0:
+            token_text += f" | Tiles trimmed: {tiles_trimmed} (closest to center)"
         tk.Label(
             header,
-            text=f"Estimated tokens: ~{token_estimate}",
+            text=token_text,
             fg=COLORS["text_secondary"],
             bg=COLORS["bg_secondary"],
             font=("Segoe UI", 9),

@@ -45,35 +45,80 @@ class LogWatcher:
             game_states.append((match.start(), match.group(1).strip()))
 
         # Now find chunked game states
-        # Look for complete chunk sets that end with <<<END<<<
-        chunk_sets = re.findall(
-            r">>>GAMESTATE:1/(\d+)>>>(.*?)<<<END<<<",
-            content, re.DOTALL
-        )
+        # Each chunk looks like: >>>GAMESTATE:N/M>>>content
+        # Chunks may span multiple log lines, and content continues until next chunk marker or <<<END<<<
 
-        for total_chunks_str, chunk_content in chunk_sets:
-            total_chunks = int(total_chunks_str)
-            # Extract the start position for sorting
-            start_match = re.search(r">>>GAMESTATE:1/" + total_chunks_str + ">>>", content)
-            start_pos = start_match.start() if start_match else 0
+        # Find all chunk markers with their positions
+        chunk_marker_pattern = re.compile(r">>>GAMESTATE:(\d+)/(\d+)>>>")
+        markers = [(m.start(), m.end(), int(m.group(1)), int(m.group(2))) for m in chunk_marker_pattern.finditer(content)]
 
-            # Find all chunks for this set
+        if not markers:
+            game_states.sort(key=lambda x: x[0])
+            return [gs[1] for gs in game_states]
+
+        # Group markers into complete sets (1/N through N/N ending with <<<END<<<)
+        i = 0
+        while i < len(markers):
+            start_pos, content_start, chunk_num, total_chunks = markers[i]
+
+            # Check if this is chunk 1 of a set
+            if chunk_num != 1:
+                i += 1
+                continue
+
+            # Try to collect all chunks for this set
             chunks = {}
-            # Re-search within this specific chunk set area
-            chunk_area = content[start_pos:]
-            end_pos = chunk_area.find("<<<END<<<")
-            if end_pos > 0:
-                chunk_area = chunk_area[:end_pos + len("<<<END<<<")]
+            set_complete = False
+            j = i
 
-            for chunk_match in re.finditer(r">>>GAMESTATE:(\d+)/" + total_chunks_str + r">>>(.*?)(?=>>>GAMESTATE:|<<<END<<<|$)", chunk_area, re.DOTALL):
-                chunk_num = int(chunk_match.group(1))
-                chunk_data = chunk_match.group(2)
-                chunks[chunk_num] = chunk_data
+            while j < len(markers):
+                m_start, c_start, c_num, c_total = markers[j]
 
-            # Reassemble if we have all chunks
-            if len(chunks) == total_chunks:
-                full_json = "".join(chunks[i] for i in range(1, total_chunks + 1))
+                # Check if this is a new set (chunk 1 appearing after we already started)
+                if c_num == 1 and j > i:
+                    break
+
+                # Check if this marker belongs to the same set (same total)
+                if c_total != total_chunks:
+                    break
+
+                # Find where this chunk's content ends
+                if j + 1 < len(markers):
+                    # Content ends at the next marker
+                    next_marker_pos = markers[j + 1][0]
+                    chunk_content = content[c_start:next_marker_pos]
+                else:
+                    # Last marker - content goes to end or <<<END<<<
+                    chunk_content = content[c_start:]
+
+                # Clean up: remove any trailing newlines and log prefixes
+                # The content should stop at newline (unless it's the last chunk with <<<END<<<)
+                if c_num < total_chunks:
+                    # Not the last chunk - content ends at newline
+                    newline_pos = chunk_content.find('\n')
+                    if newline_pos >= 0:
+                        chunk_content = chunk_content[:newline_pos]
+                else:
+                    # Last chunk - should end with <<<END<<<
+                    end_marker_pos = chunk_content.find('<<<END<<<')
+                    if end_marker_pos >= 0:
+                        chunk_content = chunk_content[:end_marker_pos]
+                        set_complete = True
+
+                chunks[c_num] = chunk_content
+                j += 1
+
+                # If we've collected all chunks and the set is complete, stop
+                if c_num == total_chunks:
+                    break
+
+            # If we have all chunks and the set is complete, reassemble
+            if set_complete and len(chunks) == total_chunks:
+                full_json = "".join(chunks[k] for k in range(1, total_chunks + 1))
                 game_states.append((start_pos, full_json.strip()))
+
+            # Move to the next potential set
+            i = j if j > i else i + 1
 
         # Sort by position and return just the JSON strings
         game_states.sort(key=lambda x: x[0])

@@ -2,6 +2,16 @@
 -- Dumps compact, actionable game state to Lua.log for external AI advisor
 
 -- ============================================================================
+-- YIELD TYPE CONSTANTS (fallbacks if YieldTypes global is unavailable)
+-- ============================================================================
+local YIELD_FOOD = (YieldTypes and YieldTypes.YIELD_FOOD) or 0
+local YIELD_PRODUCTION = (YieldTypes and YieldTypes.YIELD_PRODUCTION) or 1
+local YIELD_GOLD = (YieldTypes and YieldTypes.YIELD_GOLD) or 2
+local YIELD_SCIENCE = (YieldTypes and YieldTypes.YIELD_SCIENCE) or 3
+local YIELD_CULTURE = (YieldTypes and YieldTypes.YIELD_CULTURE) or 4
+local YIELD_FAITH = (YieldTypes and YieldTypes.YIELD_FAITH) or 5
+
+-- ============================================================================
 -- HELPER FUNCTIONS
 -- ============================================================================
 
@@ -147,9 +157,8 @@ local function GetProductionInfo(city)
                 local s5, prodProgress = pcall(function() return buildQueue:GetProductionProgress() end)
                 local s6, prodCost = pcall(function() return buildQueue:GetProductionCost() end)
 
-                -- Verify YieldTypes exists, otherwise fallback to index 1 (Production usually)
-                local prodYieldType = (YieldTypes and YieldTypes.YIELD_PRODUCTION) or 1
-                local s7, cityProd = pcall(function() return city:GetYield(prodYieldType) end)
+                -- Use the local YIELD_PRODUCTION constant (defined at top with fallback)
+                local s7, cityProd = pcall(function() return city:GetYield(YIELD_PRODUCTION) end)
 
                 if s6 and prodCost and prodCost > 0 and s7 and cityProd and cityProd > 0 then
                     local remaining = prodCost - (prodProgress or 0)
@@ -999,13 +1008,13 @@ local function DumpGameState()
                             featureName = cleanFeatureTerrain(featureName, terrainName)
                         end
 
-                        -- Get yields
-                        local s6, food = pcall(function() return plot:GetYield(YieldTypes.YIELD_FOOD) end)
-                        local s7, prod = pcall(function() return plot:GetYield(YieldTypes.YIELD_PRODUCTION) end)
-                        local s8, gold = pcall(function() return plot:GetYield(YieldTypes.YIELD_GOLD) end)
-                        local s9, science = pcall(function() return plot:GetYield(YieldTypes.YIELD_SCIENCE) end)
-                        local s10, culture = pcall(function() return plot:GetYield(YieldTypes.YIELD_CULTURE) end)
-                        local s11, faith = pcall(function() return plot:GetYield(YieldTypes.YIELD_FAITH) end)
+                        -- Get yields (using local constants with fallbacks)
+                        local s6, food = pcall(function() return plot:GetYield(YIELD_FOOD) end)
+                        local s7, prod = pcall(function() return plot:GetYield(YIELD_PRODUCTION) end)
+                        local s8, gold = pcall(function() return plot:GetYield(YIELD_GOLD) end)
+                        local s9, science = pcall(function() return plot:GetYield(YIELD_SCIENCE) end)
+                        local s10, culture = pcall(function() return plot:GetYield(YIELD_CULTURE) end)
+                        local s11, faith = pcall(function() return plot:GetYield(YIELD_FAITH) end)
 
                         food = s6 and food or 0
                         prod = s7 and prod or 0

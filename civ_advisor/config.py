@@ -44,8 +44,8 @@ class Config:
         # System prompts (customizable)
         self.system_prompt_core: str = DEFAULT_SYSTEM_PROMPT_CORE
         self.system_prompt_extended: str = DEFAULT_SYSTEM_PROMPT_EXTENDED
-        # Victory goal (persisted)
-        self.victory_goal: str = "Domination"
+        # Victory goal (persisted) - empty string means "to be determined"
+        self.victory_goal: str = ""
         # UI settings
         self.always_on_top: bool = True
         self.load()
@@ -79,7 +79,7 @@ class Config:
                     # Use default if key is missing OR if value is empty string
                     self.system_prompt_core = data.get("system_prompt_core") or DEFAULT_SYSTEM_PROMPT_CORE
                     self.system_prompt_extended = data.get("system_prompt_extended") or DEFAULT_SYSTEM_PROMPT_EXTENDED
-                    self.victory_goal = data.get("victory_goal", "Domination")
+                    self.victory_goal = data.get("victory_goal", "")
                     self.always_on_top = data.get("always_on_top", True)
             except Exception as e:
                 print(f"Error loading config: {e}")

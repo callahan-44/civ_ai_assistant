@@ -73,6 +73,29 @@ DEFAULT_TOKEN_LIMIT = 1000
 DEFAULT_RATE_LIMIT_SECONDS = 60
 DEFAULT_MIN_REQUEST_INTERVAL = 10
 
+# Model context window sizes (in tokens)
+# Used to suggest appropriate token limits in settings
+MODEL_CONTEXT_WINDOWS = {
+    # Anthropic models
+    "claude-3-5-sonnet-20241022": 200000,
+    "claude-sonnet-4-20250514": 200000,  # 1M available for tier 4 users
+    # Google models
+    "gemini-3-flash-preview": 1000000,
+    "gemini-2.5-flash": 1000000,
+    "gemma-3-27b-it": 128000,
+    # OpenAI models
+    "gpt-4o": 128000,
+    "gpt-4o-mini": 128000,
+    "gpt-4-turbo": 128000,
+    "gpt-3.5-turbo": 16000,
+    # Ollama models (typical defaults, hardware-dependent)
+    "llama3": 8000,
+    "llama3.1:8b": 128000,
+    "mistral": 128000,
+    "gemma2": 8000,
+    "phi3": 128000,
+}
+
 # Default system prompts (split into core and extended)
 DEFAULT_SYSTEM_PROMPT_CORE = """You are an expert Advisor in Civilization VI. You help players win.
 
@@ -90,7 +113,6 @@ OUTPUT FORMAT:
 DEFAULT_SYSTEM_PROMPT_EXTENDED = """
 Consider the civilization's unique strengths when advising.
 Only base recommendations on provided game data.
-If you must assume something not in the data, label it as [ASSUMPTION] and provide alternatives.
 Always address war if it seems likely."""
 
 # UI Colors matching Civ VI aesthetic
@@ -458,4 +480,8 @@ VICTORY_GOALS = [
     ("Religious", "Convert the majority of cities in all civilizations to your religion."),
     ("Diplomatic", "Earn diplomatic victory points through World Congress and emergencies."),
     ("Score", "Have the highest score after 500 turns (balanced approach)."),
+    ("Custom Goal", "Enter your own victory condition or strategy."),
 ]
+
+# Default text when no victory goal is selected
+DEFAULT_VICTORY_GOAL_TEXT = "Victory condition to be determined"

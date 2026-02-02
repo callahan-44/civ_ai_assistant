@@ -23,13 +23,14 @@ class DebugRequest:
     """Container for debug mode request info."""
 
     def __init__(self, provider: str, model: str, prompt: str, system_prompt: str,
-                 api_key: str, token_estimate: int):
+                 api_key: str, token_estimate: int, tiles_trimmed: int = 0):
         self.provider = provider
         self.model = model
         self.prompt = prompt
         self.system_prompt = system_prompt
         self.api_key = api_key
         self.token_estimate = token_estimate
+        self.tiles_trimmed = tiles_trimmed
         self.is_debug_request = True
 
     def to_dict(self) -> dict:
@@ -40,6 +41,7 @@ class DebugRequest:
             "system_prompt": self.system_prompt,
             "api_key": self.api_key,
             "token_estimate": self.token_estimate,
+            "tiles_trimmed": self.tiles_trimmed,
         }
 
 
@@ -53,6 +55,7 @@ class AIAdvisor:
         self._extended_prompt_sent: bool = False
         self._last_used_model: str = ""
         self._last_token_estimate: int = 0  # Track tokens for display
+        self._last_tiles_trimmed: int = 0  # Track tiles trimmed for context management
 
     def _build_system_prompt(self, is_first_turn: bool, force_full: bool = False) -> str:
         """
@@ -168,23 +171,30 @@ class AIAdvisor:
         enriched = self.enricher.enrich(game_state, victory_goal)
         is_first_turn = enriched.get("is_first_turn", False)
 
-        # Build prompt with appropriate mode
-        # API Mode: force_full_state=True (send everything, AI has no memory)
-        # Clipboard Mode: force_full_state=False (use deltas, web UI maintains context)
-        prompt = self.enricher.build_prompt(enriched, user_question, force_full_state=force_full_state)
-
         # Build system prompt with appropriate mode
         # API Mode: Always send full system prompt (Core + Extended)
         # Clipboard Mode: Only send extended on first turn
         system_prompt = self._build_system_prompt(is_first_turn, force_full=force_full_state)
+
+        # Build prompt with appropriate mode and intelligent context trimming
+        # API Mode: force_full_state=True (send everything, AI has no memory)
+        # Clipboard Mode: force_full_state=False (use deltas, web UI maintains context)
+        self._last_tiles_trimmed = 0
+        if is_clipboard_mode:
+            # Clipboard mode: no token limit enforcement
+            prompt = self.enricher.build_prompt(enriched, user_question, force_full_state=force_full_state)
+        else:
+            # API mode: use intelligent context trimming to fit token limit
+            prompt, self._last_tiles_trimmed = self.enricher.build_prompt_with_limit(
+                enriched, user_question, force_full_state,
+                system_prompt, self.config.token_limit
+            )
 
         # Apply rate limiting if enabled (not for clipboard)
         if not is_clipboard_mode and self.config.rate_limit_enabled:
             if elapsed < DEFAULT_RATE_LIMIT_SECONDS and self.last_request_time > 0:
                 wait_time = int(DEFAULT_RATE_LIMIT_SECONDS - elapsed)
                 return f"Rate limited. Next request in {wait_time} seconds.\n\n(1 request per minute, {self.config.token_limit} token limit)"
-
-            prompt = self._truncate_to_tokens(prompt, self.config.token_limit)
 
         # Get model for current provider
         model = self._get_model_for_provider(provider)
@@ -205,6 +215,7 @@ class AIAdvisor:
                 system_prompt=system_prompt,
                 api_key=api_key,
                 token_estimate=self._last_token_estimate,
+                tiles_trimmed=self._last_tiles_trimmed,
             )
 
         try:
@@ -225,7 +236,10 @@ class AIAdvisor:
             self._log_debug(provider, self._last_used_model, system_prompt, prompt, response)
 
             # Append token info to response
-            return f"{response}\n\n---\n[Request: ~{self._last_token_estimate} tokens | Model: {self._last_used_model}]"
+            info_parts = [f"Request: ~{self._last_token_estimate} tokens", f"Model: {self._last_used_model}"]
+            if self._last_tiles_trimmed > 0:
+                info_parts.append(f"Tiles trimmed: {self._last_tiles_trimmed}")
+            return f"{response}\n\n---\n[{' | '.join(info_parts)}]"
         except Exception as e:
             return f"API Error: {str(e)}"
 
@@ -336,14 +350,15 @@ class AIAdvisor:
         return response.content[0].text
 
     def _call_google_with_fallback(self, api_key: str, context: str, system_prompt: str) -> str:
-        """Call Google API with automatic model fallback."""
+        """Call Google API with automatic model fallback using google-genai SDK."""
         try:
-            import google.generativeai as genai
-            from google.api_core import exceptions as google_exceptions
+            from google import genai
+            from google.genai import types, errors
         except ImportError:
-            return "Error: 'google-generativeai' package not installed. Run: pip install google-generativeai"
+            return "Error: 'google-genai' package not installed. Run: pip install google-genai"
 
-        genai.configure(api_key=api_key)
+        # Create client with API key
+        client = genai.Client(api_key=api_key)
 
         # Build fallback chain starting with configured model
         models_to_try = [self.config.google_model]
@@ -358,28 +373,35 @@ class AIAdvisor:
                 if model_name in NO_SYSTEM_PROMPT_MODELS:
                     # Merge system prompt into user content
                     merged_prompt = f"{system_prompt}\n\n---\n\n{context}"
-                    model = genai.GenerativeModel(model_name)
-                    response = model.generate_content(merged_prompt)
-                else:
-                    model = genai.GenerativeModel(
-                        model_name,
-                        system_instruction=system_prompt
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=merged_prompt,
                     )
-                    response = model.generate_content(context)
+                else:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=context,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system_prompt,
+                        ),
+                    )
 
                 self._last_used_model = model_name
                 return response.text
 
-            except google_exceptions.ResourceExhausted as e:
-                last_error = e
-                continue
-            except google_exceptions.InvalidArgument as e:
-                if "system_instruction is not supported" in str(e):
-                    # Retry with merged prompt
+            except errors.APIError as e:
+                # Handle rate limiting (429) and other API errors
+                if e.code == 429:  # Resource exhausted / rate limited
+                    last_error = e
+                    continue
+                elif e.code == 400 and "system_instruction is not supported" in str(e.message):
+                    # Retry with merged prompt for models that don't support system instructions
                     try:
                         merged_prompt = f"{system_prompt}\n\n---\n\n{context}"
-                        model = genai.GenerativeModel(model_name)
-                        response = model.generate_content(merged_prompt)
+                        response = client.models.generate_content(
+                            model=model_name,
+                            contents=merged_prompt,
+                        )
                         self._last_used_model = model_name
                         return response.text
                     except Exception:

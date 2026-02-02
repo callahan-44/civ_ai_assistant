@@ -11,9 +11,8 @@ from typing import Optional
 from .config import Config
 from .llm_client import AIAdvisor, DebugRequest
 from .log_watcher import LogWatcher
-from .constants import COLORS, VICTORY_GOALS
+from .constants import COLORS, VICTORY_GOALS, DEFAULT_VICTORY_GOAL_TEXT
 from .ui_dialogs import (
-    VictoryGoalDialog,
     SettingsDialog,
     DebugWindow,
 )
@@ -32,16 +31,9 @@ class CivOverlay:
         self._paused = False  # Pause toggle state
 
         self._create_window()
-        self._show_victory_goal_dialog()
         self._create_widgets()
         self._position_window()
         self._start_log_watcher()
-
-    def _show_victory_goal_dialog(self):
-        """Show dialog to select victory goal on startup."""
-        self.root.withdraw()
-        VictoryGoalDialog(self.root, self.config)
-        self.root.deiconify()
 
     def _create_window(self):
         """Create the main overlay window."""
@@ -83,19 +75,6 @@ class CivOverlay:
             cursor="hand2",
         )
         settings_btn.pack(side=tk.RIGHT, padx=5)
-
-        close_btn = tk.Button(
-            title_bar,
-            text="\u2715",
-            command=self._on_close,
-            bg=COLORS["bg_secondary"],
-            fg=COLORS["text"],
-            font=("Segoe UI", 10),
-            relief=tk.FLAT,
-            bd=0,
-            cursor="hand2",
-        )
-        close_btn.pack(side=tk.RIGHT, padx=5)
 
         title_bar.bind("<Button-1>", self._start_drag)
         title_bar.bind("<B1-Motion>", self._on_drag)
@@ -174,16 +153,51 @@ class CivOverlay:
             font=("Segoe UI", 9),
         ).pack(anchor="w")
 
-        self.goal_var = tk.StringVar(value=self.config.victory_goal)
-        goal_combo = ttk.Combobox(
+        # Determine initial dropdown value
+        predefined_goals = [g[0] for g in VICTORY_GOALS]
+        saved_goal = self.config.victory_goal
+        if saved_goal in predefined_goals:
+            initial_dropdown = saved_goal
+            initial_custom = ""
+        elif saved_goal:
+            # Custom goal was saved
+            initial_dropdown = "Custom Goal"
+            initial_custom = saved_goal
+        else:
+            # No goal set
+            initial_dropdown = ""
+            initial_custom = ""
+
+        self.goal_var = tk.StringVar(value=initial_dropdown)
+        self.goal_combo = ttk.Combobox(
             goal_frame,
             textvariable=self.goal_var,
-            values=[g[0] for g in VICTORY_GOALS],
+            values=[""] + predefined_goals,  # Empty option first
             state="readonly",
             width=35,
         )
-        goal_combo.pack(fill=tk.X, pady=(3, 0))
-        goal_combo.bind("<<ComboboxSelected>>", self._on_goal_changed)
+        self.goal_combo.pack(fill=tk.X, pady=(3, 0))
+        self.goal_combo.bind("<<ComboboxSelected>>", self._on_goal_changed)
+
+        # Custom goal entry (hidden by default)
+        self.custom_goal_var = tk.StringVar(value=initial_custom)
+        self.custom_goal_entry = tk.Entry(
+            goal_frame,
+            textvariable=self.custom_goal_var,
+            bg=COLORS["bg_secondary"],
+            fg=COLORS["text"],
+            insertbackground=COLORS["text"],
+            font=("Segoe UI", 10),
+            relief=tk.FLAT,
+            highlightthickness=1,
+            highlightbackground=COLORS["border"],
+            highlightcolor=COLORS["accent"],
+        )
+        # Show custom entry if a custom goal was loaded
+        if initial_dropdown == "Custom Goal":
+            self.custom_goal_entry.pack(fill=tk.X, pady=(3, 0), ipady=3)
+        self.custom_goal_entry.bind("<FocusOut>", self._on_custom_goal_changed)
+        self.custom_goal_entry.bind("<Return>", self._on_custom_goal_changed)
 
         # Question input
         question_frame = tk.Frame(content, bg=COLORS["bg"])
@@ -292,9 +306,39 @@ class CivOverlay:
         self.advice_text.configure(state=tk.DISABLED)
 
     def _on_goal_changed(self, event=None):
-        """Handle victory goal change."""
-        self.config.victory_goal = self.goal_var.get()
-        self.config.save()
+        """Handle victory goal change from dropdown."""
+        selected = self.goal_var.get()
+
+        if selected == "Custom Goal":
+            # Show custom entry field
+            self.custom_goal_entry.pack(fill=tk.X, pady=(3, 0), ipady=3)
+            self.custom_goal_entry.focus_set()
+            # Don't save yet - wait for custom text
+        else:
+            # Hide custom entry field
+            self.custom_goal_entry.pack_forget()
+            self.custom_goal_var.set("")
+            # Save the selected predefined goal (or empty string)
+            self.config.victory_goal = selected
+            self.config.save()
+
+    def _on_custom_goal_changed(self, event=None):
+        """Handle custom goal text entry."""
+        custom_text = self.custom_goal_var.get().strip()
+        if custom_text:
+            self.config.victory_goal = custom_text
+            self.config.save()
+
+    def _get_effective_victory_goal(self) -> str:
+        """Get the victory goal to use in prompts."""
+        selected = self.goal_var.get()
+        if selected == "Custom Goal":
+            custom = self.custom_goal_var.get().strip()
+            return custom if custom else DEFAULT_VICTORY_GOAL_TEXT
+        elif selected:
+            return selected
+        else:
+            return DEFAULT_VICTORY_GOAL_TEXT
 
     def _toggle_pause(self):
         """Toggle pause state for API requests."""
@@ -346,26 +390,31 @@ class CivOverlay:
             result = self.advisor.get_advice(
                 self.last_game_state,
                 user_question,
-                self.goal_var.get(),
+                self._get_effective_victory_goal(),
                 clipboard_copy_func=self._clipboard_copy,
             )
 
             # Check if it's a debug request
             if isinstance(result, DebugRequest):
                 self.root.after(0, lambda: self._show_debug_window(result))
-                self.root.after(0, self._set_advice,
+                debug_msg = (
                     f"DEBUG MODE\n\nRequest prepared but NOT sent.\n"
                     f"Check debug popup for details.\n"
                     f"Click 'Send to API' to transmit.\n\n"
                     f"Provider: {result.provider}\n"
                     f"Model: {result.model}\n"
-                    f"Estimated tokens: ~{result.token_estimate}")
+                    f"Estimated tokens: ~{result.token_estimate}"
+                )
+                if result.tiles_trimmed > 0:
+                    debug_msg += f"\nTiles trimmed: {result.tiles_trimmed} (closest to center)"
+                self.root.after(0, self._set_advice, debug_msg)
                 self.root.after(0, self._update_status, "Debug mode", COLORS["accent"])
             else:
                 self.root.after(0, self._set_advice, result)
                 # Show the model that actually responded (helps detect fallback)
                 model_used = self.advisor._last_used_model or "unknown"
-                self.root.after(0, self._update_status, f"Ready | {model_used}", COLORS["success"])
+                turn = self.last_game_state.get("turn", "?") if self.last_game_state else "?"
+                self.root.after(0, self._update_status, f"Ready | {model_used} | Turn {turn}", COLORS["success"])
 
         thread = threading.Thread(target=get_advice_thread, daemon=True)
         thread.start()
@@ -380,7 +429,8 @@ class CivOverlay:
                 self.root.after(0, self._set_advice, result)
                 # Show the model that actually responded
                 model_used = self.advisor._last_used_model or "unknown"
-                self.root.after(0, self._update_status, f"Ready | {model_used}", COLORS["success"])
+                turn = self.last_game_state.get("turn", "?") if self.last_game_state else "?"
+                self.root.after(0, self._update_status, f"Ready | {model_used} | Turn {turn}", COLORS["success"])
                 if self._debug_window:
                     self._debug_window.update_status("Request sent successfully!", COLORS["success"])
 

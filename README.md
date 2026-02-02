@@ -40,7 +40,22 @@ python -m civ_advisor.main
      └── GameStateDump.lua
      ```
 
-3. **Enable the mod in-game:**
+3. **Enable logging in Civ VI:**
+
+   The mod requires Civ VI's logging to be enabled. Add these lines to your `AppOptions.txt` file:
+
+   **Windows:** `C:\Users\<YourUsername>\Documents\My Games\Sid Meier's Civilization VI\AppOptions.txt`
+
+   ```ini
+   ;Logging settings
+   GenerateLogFiles 1
+   EnableLogging 1
+   LoggingEnabled 1
+   ```
+
+   If the file doesn't exist, create it. If it exists, add these lines at the end.
+
+4. **Enable the mod in-game:**
    - Launch Civilization VI
    - Go to **Additional Content** from the main menu
    - Find **"CivAI Bridge - Game State Logger"** and enable it
@@ -63,7 +78,7 @@ python -m civ_advisor.main
    pip install requests
 
    # For Google Gemini
-   pip install google-generativeai
+   pip install google-genai
 
    # For Anthropic Claude
    pip install anthropic
@@ -91,7 +106,7 @@ The advisor supports multiple AI providers. Configure them in Settings > Model S
 
 | Provider | API Key Required | Cost | Notes |
 |----------|-----------------|------|-------|
-| **Google (Gemini)** | Yes | Free tier available | Auto-fallback: Flash Lite → Flash → Gemma 2 |
+| **Google (Gemini)** | Yes | Free tier available | Auto-fallback: Gemini 3 Flash → 2.5 Flash → Gemma 3 |
 | **Anthropic (Claude)** | Yes | Paid | High quality responses |
 | **OpenAI (GPT)** | Yes | Paid | GPT-4o recommended |
 | **Ollama (Local)** | No | Free | Requires local Ollama server |
@@ -136,7 +151,10 @@ For users with paid web subscriptions (ChatGPT Plus, Claude Pro, Gemini Advanced
 - **Victory-focused advice** - Tailored recommendations for your chosen victory type
 - **Capital-centered mini-map** - Tactical view with your capital at (0,0)
 - **Fog trimmer** - Reduces token usage by trimming unexplored areas
+- **Intelligent context management** - Auto-trims tile data when exceeding token limits
 - **Custom questions** - Ask specific questions about your situation
+- **Pause/Resume** - Toggle API requests on/off without closing the overlay
+- **Turn indicator** - Shows current game turn in the status bar
 - **Always-on-top** - Optional setting to keep overlay visible over the game
 - **Draggable window** - Position anywhere on screen
 - **Civ VI themed UI** - Dark theme with gold accents
@@ -177,12 +195,14 @@ Events.LocalPlayerTurnBegin → DumpGameState() → Lua.log
 civ_advisor/
 ├── __init__.py      # Package init
 ├── main.py          # Entry point
-├── constants.py     # Models, colors, civ strategies
+├── constants.py     # Models, colors, civ strategies, context windows
 ├── config.py        # Settings management (saved to config.json)
 ├── log_watcher.py   # Monitors Lua.log for new game state
 ├── game_state.py    # Enriches raw data, generates mini-map
+├── map_processor.py # ASCII map generation
 ├── llm_client.py    # Handles API calls to all providers
-└── gui.py           # Tkinter overlay interface
+├── gui.py           # Tkinter overlay interface
+└── ui_dialogs.py    # Settings and debug dialogs
 ```
 
 **Processing pipeline:**
@@ -229,16 +249,16 @@ Access settings via the gear icon. Settings are organized into tabs:
 
 ### API Behavior
 - **Rate limiting:** Enable 1 request/minute limit with token cap
-- **Request throttle:** Minimum seconds between requests (default: 20s)
+- **Max tokens:** Context limit for requests (triggers intelligent tile trimming when exceeded)
+- **Request throttle:** Minimum seconds between requests (default: 10s)
+- **Suggested context windows:** Shows recommended max tokens for each model based on their context window size
+- **Debug mode:** Preview prompts before sending to API
+- **Debug logging:** Save all prompts/responses to `debug.log` for troubleshooting
+- **Logs Folder:** Path to Civ VI's Logs directory
 
 ### Interface
 - **Always on Top:** Keep overlay above other windows
-- **Debug Mode:** Preview prompts before sending
-- **Logs Folder:** Path to Civ VI's Logs directory
-
-### System Prompts
-- **Core prompt:** Sent with every request (rules, format)
-- **Extended prompt:** Sent only on first turn (Civ VI context)
+- **System Prompts:** Customize the core and extended prompts sent to the AI
 
 ---
 
@@ -252,12 +272,17 @@ civ_llm/
 ├── civ_advisor/
 │   ├── __init__.py
 │   ├── main.py                 # Entry point
-│   ├── constants.py            # Static data
+│   ├── constants.py            # Static data, models, context windows
 │   ├── config.py               # Configuration management
 │   ├── log_watcher.py          # Log file monitoring
-│   ├── game_state.py           # Data enrichment & mini-map
+│   ├── game_state.py           # Data enrichment & prompt building
+│   ├── map_processor.py        # ASCII mini-map generation
 │   ├── llm_client.py           # AI provider integrations
-│   └── gui.py                  # Tkinter interface
+│   ├── gui.py                  # Main Tkinter overlay
+│   └── ui_dialogs.py           # Settings, victory goal, debug dialogs
+├── data/
+│   ├── civs_summary.txt        # Civilization strategy data
+│   └── leaders.txt             # Leader-specific strategy data
 ├── requirements.txt            # Python dependencies
 ├── config.json                 # User settings (auto-created, git-ignored)
 └── README.md                   # This file
@@ -268,10 +293,20 @@ civ_llm/
 ## Troubleshooting
 
 ### "Waiting for game data..."
+- Ensure logging is enabled in `AppOptions.txt` (see Installation step 3)
 - Ensure the mod is enabled in Civ VI's Additional Content
 - Start a new turn to trigger data logging
 - Verify the Logs folder path in Settings matches your installation
 - Check that `Lua.log` exists and contains `>>>GAMESTATE>>>` entries
+
+### Lua.log is empty or doesn't exist
+- Add the logging settings to `AppOptions.txt`:
+  ```ini
+  GenerateLogFiles 1
+  EnableLogging 1
+  LoggingEnabled 1
+  ```
+- Restart Civilization VI completely after editing AppOptions.txt
 
 ### API Errors
 - Verify your API key is correct
@@ -301,26 +336,26 @@ sudo pacman -S tk
 ## Available Models
 
 ### Google (Gemini)
-- Gemini 2.5 Flash Lite (Primary - fastest)
-- Gemini 2.0 Flash (Secondary)
-- Gemma 2 9B (Failover - free, no system prompt support)
+- Gemini 3 Flash Preview (Primary - 1M context)
+- Gemini 2.5 Flash (Secondary - 1M context)
+- Gemma 3 27B (Failover - 128K context, no system prompt support)
 
 ### Anthropic (Claude)
-- Claude 3.5 Sonnet
-- Claude Sonnet 4
+- Claude 3.5 Sonnet (200K context)
+- Claude Sonnet 4 (200K context)
 
 ### OpenAI (GPT)
-- GPT-4o (Recommended)
-- GPT-4o Mini
-- GPT-4 Turbo
-- GPT-3.5 Turbo
+- GPT-4o (Recommended - 128K context)
+- GPT-4o Mini (128K context)
+- GPT-4 Turbo (128K context)
+- GPT-3.5 Turbo (16K context)
 
 ### Ollama (Local)
-- Llama 3 (Default)
-- Llama 3.1 8B
-- Mistral
-- Gemma 2
-- Phi-3
+- Llama 3 (Default - 8K context)
+- Llama 3.1 8B (128K context)
+- Mistral (128K context)
+- Gemma 2 (8K context)
+- Phi-3 (128K context)
 
 ---
 
@@ -331,6 +366,7 @@ sudo pacman -S tk
 - Gemma models don't support system prompts - they're merged into user content
 - The overlay trims Lua.log when it exceeds 5MB
 - Advice is limited to ~5 sentences for quick, actionable recommendations
+- **Intelligent context trimming:** When requests exceed the max token limit, the advisor automatically trims tile details starting from tiles closest to your city center (since these are most likely already developed)
 
 ## License
 

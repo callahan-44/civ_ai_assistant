@@ -350,7 +350,7 @@ class GameStateEnricher:
 
         return decisions
 
-    def _generate_tile_details(self, gs: dict) -> str:
+    def _generate_tile_details(self, gs: dict, skip_closest: int = 0) -> str:
         """
         Generate detailed tile information with relative coordinates.
 
@@ -360,6 +360,10 @@ class GameStateEnricher:
         - Tiles with Improvements (marked with 'i' flag)
         - Tiles with total yield > 4
         - Tiles adjacent to reference point (within distance 2)
+
+        Args:
+            gs: Game state dict
+            skip_closest: Number of closest tiles to skip (for context trimming)
         """
         tiles = gs.get("tiles", [])
 
@@ -472,11 +476,21 @@ class GameStateEnricher:
         if not filtered_tiles:
             return ""
 
-        # Sort by distance from reference point
+        # Sort by distance from reference point (closest first)
         filtered_tiles.sort(key=lambda x: x[0])
 
+        # Skip closest tiles if requested (for context window trimming)
+        if skip_closest > 0:
+            filtered_tiles = filtered_tiles[skip_closest:]
+
+        if not filtered_tiles:
+            return ""
+
         lines = ["=== VISIBLE TILE DETAILS ==="]
-        lines.append(f"({len(filtered_tiles)} notable tiles, coordinates relative to {ref_label} at 0,0)")
+        if skip_closest > 0:
+            lines.append(f"({len(filtered_tiles)} notable tiles shown, {skip_closest} nearby tiles trimmed for context)")
+        else:
+            lines.append(f"({len(filtered_tiles)} notable tiles, coordinates relative to {ref_label} at 0,0)")
         for _, tile_line in filtered_tiles:
             lines.append(f"  {tile_line}")
 
@@ -735,7 +749,8 @@ class GameStateEnricher:
 
         return techs_str, civics_str
 
-    def build_prompt(self, enriched: dict, user_question: str = "", force_full_state: bool = False) -> str:
+    def build_prompt(self, enriched: dict, user_question: str = "", force_full_state: bool = False,
+                     skip_closest_tiles: int = 0) -> str:
         """
         Build the final prompt for the AI.
 
@@ -744,6 +759,7 @@ class GameStateEnricher:
             user_question: Optional player question
             force_full_state: If True (API mode), always send full state and civ context.
                              If False (Clipboard mode), use delta tracking to save tokens.
+            skip_closest_tiles: Number of closest tiles to skip in tile details (for context trimming)
 
         Prompt Structure:
             - Player Question (if any) - HIGH PRIORITY at top
@@ -805,8 +821,8 @@ class GameStateEnricher:
         # 4. Mini-map (with Fog Trimmer)
         sections.append(f"=== TACTICAL VIEW ===\n{enriched['mini_map']}")
 
-        # 5. Tile details (with filtering)
-        tile_details = self._generate_tile_details(gs)
+        # 5. Tile details (with filtering, supports context trimming)
+        tile_details = self._generate_tile_details(gs, skip_closest=skip_closest_tiles)
         if tile_details:
             sections.append(tile_details)
 
@@ -987,3 +1003,47 @@ class GameStateEnricher:
             sections.append(f"=== VICTORY GOAL: {enriched['victory_goal'].upper()} ===")
 
         return "\n\n".join(sections)
+
+    def build_prompt_with_limit(self, enriched: dict, user_question: str, force_full_state: bool,
+                                system_prompt: str, max_tokens: int) -> tuple[str, int]:
+        """
+        Build prompt with intelligent context trimming to fit within token limit.
+
+        When the prompt exceeds max_tokens, trims tile details starting from tiles
+        CLOSEST to the city center (rationale: these are most likely already developed).
+
+        Args:
+            enriched: Enriched game state from enrich()
+            user_question: Optional player question
+            force_full_state: If True (API mode), always send full state
+            system_prompt: The system prompt (included in token count)
+            max_tokens: Maximum tokens allowed
+
+        Returns:
+            Tuple of (prompt, tiles_trimmed) where tiles_trimmed is the number of
+            closest tiles that were removed to fit the context window.
+        """
+        # Rough token estimation: ~4 chars per token
+        def estimate_tokens(text: str) -> int:
+            return len(text) // 4
+
+        # Start with no trimming
+        skip_closest = 0
+        max_skip = 100  # Safety limit to prevent infinite loop
+
+        while skip_closest < max_skip:
+            prompt = self.build_prompt(enriched, user_question, force_full_state,
+                                       skip_closest_tiles=skip_closest)
+
+            total_tokens = estimate_tokens(prompt) + estimate_tokens(system_prompt)
+
+            if total_tokens <= max_tokens:
+                return prompt, skip_closest
+
+            # Still over limit, trim more tiles (5 at a time for efficiency)
+            skip_closest += 5
+
+        # Fallback: return the most trimmed version we have
+        prompt = self.build_prompt(enriched, user_question, force_full_state,
+                                   skip_closest_tiles=max_skip)
+        return prompt, max_skip
