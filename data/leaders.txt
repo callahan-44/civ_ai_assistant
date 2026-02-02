@@ -6,56 +6,74 @@
 Leader Ability: Adventures with Enkidu
 - When at war with a common foe, share combat experience with allied units within 5 tiles.
 - Levy city-state units at 50% cost.
-Strategy: Form early alliances and coordinate attacks. War Cart rush remains devastating. Use alliance combat bonuses for quick domination.
+Strategy: Form early alliances and coordinate attacks. War Cart rush remains devastating.
+Use alliance combat bonuses for quick domination.
+Pro-strat: IGNORE SCIENCE. Spam War Carts from turn 1. They have no counter in the Ancient Era. Declare war on your nearest neighbor immediately. Pillage mines/farms to fund more carts. Do not build a Campus until you have conquered at least 2 neighbors.
 
 === TRAJAN ===
 Leader Ability: Trajan's Column
 - All cities start with an additional building in the City Center (Monument at start).
-Strategy: Expand rapidly to maximize free Monument value. Legion timing push in Classical Era. Use free buildings to snowball culture/gold early.
+Strategy: Expand rapidly to maximize free Monument value. Legion timing push in Classical Era.
+Use free buildings to snowball culture/gold early.
+Pro-strat: The "Legion Chop." Beeline Iron Working. Pre-build Warriors. Upgrade to Legions immediately. Legions have a "Build" charge—use it to CHOP DOWN FORESTS to instantly print *more* Legions. Chain-chop a massive army to swarm the map before enemies have Walls.
 
 === PERICLES ===
 Leader Ability: Surrounded by Glory
 - +5% Culture for each city-state you are Suzerain of.
 Strategy: Focus on becoming Suzerain of cultural city-states. Hoplite defensive play while building Acropolis districts. Massive culture output mid-game.
+Pro-strat: "Kilwa Stacking." Rush the Kilwa Kisiwani wonder. The 5% culture bonus stacks *multiplicatively* with Kilwa's percentage boosts. Do not conquer City-States; protect them at all costs. Use spies to fabricate scandals and remove enemy envoys.
 
 === GORGO ===
 Leader Ability: Thermopylae
 - Earn Culture equal to 50% of defeated unit's combat strength.
 Strategy: Aggressive early wars for culture. Combine Hoplite combat bonuses with culture rewards. Military victories accelerate civic tree.
+Pro-strat: "Barbarian Culture Farm." Do not clear Barbarian outposts near your borders. Let them spawn units and kill them endlessly with Hoplites to farm Culture. This unlocks political governments (Oligarchy) far faster than building monuments.
 
 === CLEOPATRA ===
 Leader Ability: Mediterranean's Bride
-- Trade Routes from other civs provide +4 Gold. Your trade routes to other civs provide +4 Gold.
+- Trade Routes from other civs provide +4 Gold.
+Your trade routes to other civs provide +4 Gold.
 - Alliance Points accumulate +50% faster.
 Strategy: Be an attractive trade partner. Rush Commercial Hubs. Use increased gold for purchases and rapid expansion.
+Pro-strat: "Disaster Proofing." Settle directly on floodplains. Rush the "Etemenanki" wonder if possible for massive Science/Production on marsh/floodplains. Use Food trade routes to internal cities to grow population rapidly, then switch to international gold routes once alliances are level 2 (immune to pillaging).
 
 === QIN_SHI_HUANG ===
 Leader Ability: The First Emperor
-- Builders receive +1 build charge. Can use Builder charges to complete 15% of a Wonder's production.
-Strategy: Rush early Wonders using Builder charges. Prioritize Builders over other units. Great Wall improvements for tourism victory.
+- Builders receive +1 build charge.
+Can use Builder charges to complete 15% of a Wonder's production.
+Strategy: Rush early Wonders using Builder charges.
+Prioritize Builders over other units. Great Wall improvements for tourism victory.
+Pro-strat: "Wonder Sniping." Do not hard-build Ancient/Classical wonders. Chop forests to print Builders, then use Builders to finish the Wonder. You can complete Stonehenge or Pyramids in 5 turns. The Pyramids are mandatory: they give free Builders to build *more* Wonders.
 
 === QIN_SHI_HUANG_UNIFIER ===
 Leader Ability: Unifier
 - Upon completing a Wonder, Builders and Settlers in cities without a Governor gain +1 charge.
 Strategy: Chain Wonder building with expansion. Time Wonder completions for maximum Builder/Settler efficiency.
+Pro-strat: "Zombie Army." Use the "Convert Barbarians" melee action on your units. Find a Barbarian clan, let them spawn high-tech units, converts them, and turn them against your enemies. It effectively lets you buy an army for the cost of a few melee units.
 
 === HAMMURABI ===
 Leader Ability: Ninu Ilu Sirum
 - Constructing a building for the first time in your civ immediately grants that building's Eureka/Inspiration, if any.
 - First specialty building in each city is free.
-Strategy: NEVER research techs until building triggers Eureka. Build one of each building type across cities. Science victory through construction, not research.
+Strategy: NEVER research techs until building triggers Eureka.
+Build one of each building type across cities. Science victory through construction, not research.
+Pro-strat: "Biplane Rush." Do not build Campuses. Build 3 Mines (Apprenticeship) -> 2 Workshops (Industrialization) -> Coal Power Plant (Refining/Oil). You can unlock Biplanes in the Medieval Era. Kill a unit with a Slinger -> 3 Archers -> 2 Crossbows -> Bombards. Use the Great Library to steal all other techs from AI scientists.
 
 === HOJO_TOKIMUNE ===
 Leader Ability: Divine Wind
 - +5 combat strength for land units in coastal tiles and naval units in shallow water.
 - Encampment, Holy Site, and Theater Square districts build 50% faster.
-Strategy: Coastal maps strongly favor Japan. Build all three discounted districts in every city. Samurai timing attack when damaged doesn't matter.
+Strategy: Coastal maps strongly favor Japan.
+Build all three discounted districts in every city. Samurai timing attack when damaged doesn't matter.
+Pro-strat: "The Adjacency Ball." Ignore terrain logic. Pack cities as close as possible (3-4 tiles apart). Build districts in a tight cluster where 3 cities meet. Meiji Restoration gives +1 adjacency for *every* district adjacent to another. You can easily get +6 Campuses and Holy Sites without mountains.
 
 === VICTORIA ===
 Leader Ability: Pax Britannica
 - When settling on a continent other than your home continent, receive a free melee unit.
 - Royal Navy Dockyard provides bonus to cities on other continents.
-Strategy: Rush to foreign continents for free units. Colonial expansion is key. Naval dominance secures cross-continental trade.
+Strategy: Rush to foreign continents for free units.
+Colonial expansion is key. Naval dominance secures cross-continental trade.
+Pro-strat: "Free Army Printing." Settle aggressively on continent splits. The free melee unit is the *strongest* unit you have unlocked. Research "Apprenticeship" (Man-at-Arms) or "Military Science" (Line Infantry) before settling a wave of island cities to instantly spawn a modern army for free.
 
 === VICTORIA_AGE_OF_STEAM ===
 Leader Ability: Workshop of the World
@@ -63,60 +81,76 @@ Leader Ability: Workshop of the World
 - +2 Great Engineer points per turn.
 - Iron and Coal accumulate +2 per turn.
 - Powered buildings provide +4 Production and +2 Gold.
-Strategy: Industrial revolution powerhouse. Prioritize coal power. Great Engineer accumulation for late-game production dominance.
+Strategy: Industrial revolution powerhouse. Prioritize coal power.
+Great Engineer accumulation for late-game production dominance.
+Pro-strat: "Production Overkill." Rush Industrial Zones and *Coal Power Plants* (not Oil/Nuclear). The production bonus is massive. Slot the "Craftsmen" policy card (+100% IZ adjacency). With Magnus in the city, you can achieve 100+ Production per turn in the Medieval/Renaissance era, allowing you to print armies in 1 turn.
 
 === CATHERINE_DE_MEDICI ===
 Leader Ability: Catherine's Flying Squadron
 - +1 level of Diplomatic Visibility with all civs.
 - Free Spy with Castles.
 - Extra Spy capacity +1.
-Strategy: Information is power. Know enemy plans through superior visibility. Espionage-focused gameplay. Combines well with Diplomatic Victory.
+Strategy: Information is power. Know enemy plans through superior visibility.
+Espionage-focused gameplay. Combines well with Diplomatic Victory.
+Pro-strat: "Mongolian Synergy." Diplomatic Visibility grants Combat Strength (+3 per level higher than enemy). Send a Trade Route to your target + send a Spy (Listening Post mission). This grants +6 to +9 Combat Strength to ALL your units. Your Garde Impériale will be unkillable.
 
 === CATHERINE_DE_MEDICI_MAGNIFICENCE ===
 Leader Ability: Magnificence of the Court
 - Luxuries within 9 tiles of a French city provide +2 Culture.
 - Improvements over Luxury resources gain +2 Culture at Flight.
-Strategy: Luxury-focused expansion. Claim all nearby luxuries. Culture victory through amenity management.
+Strategy: Luxury-focused expansion. Claim all nearby luxuries.
+Culture victory through amenity management.
+Pro-strat: "The Court Festival Nuke." Your only goal is to hoard Luxury resources (buy them from AI for cheap). Once you have 15-20 copies, run the "Court Festival" project in ALL cities on the same turn. This generates massive bursts of Tourism instantly. You can win a Culture Victory in a single turn by chopping woods to finish all projects simultaneously.
 
 === FREDERICK_BARBAROSSA ===
 Leader Ability: Holy Roman Emperor
 - +7 combat strength against city-state units.
 - +1 Military policy slot.
 Strategy: Conquer city-states early for free settlers/workers. Extra Military slot allows aggressive policies. Production-focused domination.
+Pro-strat: "Hansa Diamond." Place a Commercial Hub, then a Hansa next to it. Do this for two cities so the districts form a diamond shape. This guarantees massive adjacency bonuses. Conquer nearby City-States immediately—the +7 Combat Strength means your Warriors kill their Warriors in two hits.
 
 === PETER ===
 Leader Ability: The Grand Embassy
 - Trade Routes to more advanced civilizations grant Russia +1 Science/Culture for every 3 techs/civics they are ahead.
 Strategy: Trade with more advanced civs. Catch up quickly through trade. Use Lavra district for Great People generation.
+Pro-strat: "Aurora Work Ethic." This is non-negotiable. Pick "Dance of the Aurora" Pantheon (+Adj from Tundra) and "Work Ethic" Religion (Adjacency = Production). Place Lavras in Tundra for +6 to +8 Faith/Production. Slot the "Scripture" card to double it to +16. You effectively win the game in the Classical Era.
 
 === PEDRO_II ===
 Leader Ability: Magnanimous
 - After recruiting or patronizing a Great Person, 20% of their Great Person point cost is refunded.
 Strategy: Focus on Great People generation. Build appropriate districts in every city. Street Carnival for cheaper entertainment.
+Pro-strat: "Carnival Projects." Ignore boring buildings. Once you have districts, run the "Carnival" project in the Street Carnival district repeatedly. It generates massive Great People Points. Combined with the refund, you can recruit almost every Great Person in the game.
 
 === GANDHI ===
 Leader Ability: Satyagraha
 - +5 Faith for each civilization met who has founded a Religion and is not at war.
 - Enemies receive double war weariness when fighting Gandhi.
-Strategy: Religious victory through peace. Stay out of wars for faith bonuses. Enemies tire of fighting you quickly.
+Strategy: Religious victory through peace.
+Stay out of wars for faith bonuses. Enemies tire of fighting you quickly.
+Pro-strat: "Nuclear deterrent?" No. "Varu Wall." Rush "Varu" (Elephants). They apply a -5 Combat Strength penalty to adjacent enemies. This stacks. Surround an enemy unit with 3 Varus (-15 CS) and they become useless. Use this to defend while you win a Religious victory.
 
 === CHANDRAGUPTA ===
 Leader Ability: Arthashastra
 - Can declare a War of Territorial Expansion after Military Training.
 - +2 Movement and +5 Combat Strength for 10 turns after declaring a War of Territorial Expansion.
 Strategy: Aggressive expansion through war. Time wars carefully for movement bonus. Varu elephant rush after declaring territorial war.
+Pro-strat: "Territorial Blitz." Pre-position your army on the border. Declare the Territorial War. Your Varu elephants now have movement 4. Rush down cities before the 10-turn timer expires. Peace out, wait for the timer to reset, and do it again.
 
 === SALADIN ===
 Leader Ability: Righteousness of the Faith
 - Worship building provides +10% combat strength for units within its city.
 - 90% discount on Faith purchases of worship buildings.
-Strategy: Build worship buildings everywhere cheaply. Religious/Domination hybrid. Madrasa provides Science while generating Faith.
+Strategy: Build worship buildings everywhere cheaply. Religious/Domination hybrid.
+Madrasa provides Science while generating Faith.
+Pro-strat: "Mamluk Heal Loop." Rush the "Mamluk" unit. It heals at the end of *every* turn, even if it moved or attacked. You can attack a city, take damage, and heal instantly. Rotate Mamluks in and out of combat for an infinite siege.
 
 === SALADIN_VIZIER ===
 Leader Ability: Sultan of Egypt
 - The first Great Prophet, Great Scientist, Great Engineer, and Great Merchant you recruit is 100% cheaper.
 - +15% Science and +15% Culture during Golden Ages.
-Strategy: Rush to claim cheap Great People. Golden Age timing is crucial. Science/Culture hybrid victory.
+Strategy: Rush to claim cheap Great People.
+Golden Age timing is crucial. Science/Culture hybrid victory.
+Pro-strat: "Prophet Guarantee." You don't need to rush Holy Site Prayers. As long as you have a Holy Site, you are guaranteed the *last* Great Prophet automatically if you haven't got one. Use early production for Science/War, let the Prophet come to you for free.
 
 === MVEMBA_A_NZINGA ===
 Leader Ability: Religious Convert
@@ -124,113 +158,142 @@ Leader Ability: Religious Convert
 - Gains all beliefs of any religion established in a majority of cities.
 - +50% Production and +2 Food for cities with established religion.
 Strategy: Let others found religions, then convert to the best one. Massive production bonuses once converted. Focus on culture/domination.
+Pro-strat: "Relic Hoarder." You can't build Holy Sites, but you have 5 wildcard slots in your capital. Buy "Apostles" from a city that has been converted by an enemy (like Spain) to launch an Inquisition or gain Relics (Martyr promotion). Fill your Palace with Relics for massive early Food/Production/Gold yields.
 
 === PHILIP_II ===
 Leader Ability: El Escorial
 - Inquisitors can remove heresy one additional time.
 - Combat and Religious units gain +4 combat/religious strength against civs following other religions.
-Strategy: Defend your religion aggressively. Inquisitors keep your empire pure. Crusade-style conquest with religious combat bonuses.
+Strategy: Defend your religion aggressively.
+Inquisitors keep your empire pure. Crusade-style conquest with religious combat bonuses.
+Pro-strat: "Conquistador Faith Wall." Rush "Gunpowder". Build Conquistadors. Always attach a generic Apostle or Inquisitor to the Conquistador unit. They get +10 Combat Strength when on the same tile as a religious unit. This makes them stronger than Infantry of the next era.
 
 === MONTEZUMA ===
 Leader Ability: Gifts for the Tlatoani
 - Luxuries in your territory provide +1 Amenity to 2 extra cities.
 - Combat units gain +1 combat strength for each different luxury resource improved in Aztec lands.
 Strategy: Collect ALL luxury resources. Each unique luxury = permanent combat bonus. Builder rushes to improve luxuries.
+Pro-strat: "Builder District Rush." Use your Eagle Warriors to kill enemy units. This turns them into Builders. Use those Builders to rush districts (Aztec ability). You can build a Campus/Spaceport in 5 turns by sacrificing enemy populations.
 
 === TOMYRIS ===
 Leader Ability: Killer of Cyrus
 - +5 Combat Strength when attacking wounded units.
 - All units heal +30 HP upon defeating an enemy unit.
-Strategy: Focus-fire wounded enemies. Saka Horse Archer swarms that heal on kills. Never lose momentum in combat.
+Strategy: Focus-fire wounded enemies.
+Saka Horse Archer swarms that heal on kills. Never lose momentum in combat.
+Pro-strat: "Vampire Scythia." If playing with Secret Societies, pick VAMPIRES. The healing on kill applies to Vampires. A Vampire that heals 30HP after every kill is practically immortal. Without modes: Build 2 Saka Horse Archers for the price of 1. Delete the extra ones for Gold if you need cash, or swarm the map.
 
 === HARALD_HARDRADA ===
 Leader Ability: Thunderbolt of the North
 - +50% Production toward naval melee units.
 - Naval melee units gain +7 combat strength against other naval units.
-Strategy: Naval domination through Longship swarms. Coastal raiding for gold/pillaging. Viking rushes devastate coastal civs.
+Strategy: Naval domination through Longship swarms.
+Coastal raiding for gold/pillaging. Viking rushes devastate coastal civs.
+Pro-strat: "The Pillage Economy." Do not build Campuses. Do not build Theater Squares. Build Longships. Declare war on distant civs you have no intention of conquering. Slot the "Raid" policy card. PILLAGE their coasts for Science, Culture, and Faith. You can buy your entire win condition with stolen gold.
 
 === HARALD_HARDRADA_VARANGIAN ===
 Leader Ability: Varangian Guard
 - +50% Production toward melee and anti-cavalry land units.
 - Pillaging yields 100% more yields.
 Strategy: Pillage everything. Berserker raids for yields. Land-based domination rather than naval focus.
+Pro-strat: "Levy Swarm." Suzerain every City-State you meet. Levy their military (cheaper with Foreign Ministry). These levied units get your Pillage bonus. Throw these expendable units at enemy lands to pillage them dry. The pillage rewards will pay for the levy cost instantly.
 
 === AMANITORE ===
 Leader Ability: Kandake of Meroe
 - +20% Production toward districts.
 - +40% Production toward districts if a Nubian Pyramid is adjacent.
-Strategy: Rush Nubian Pyramids next to planned district locations. Fastest district building in the game. Production powerhouse.
+Strategy: Rush Nubian Pyramids next to planned district locations.
+Fastest district building in the game. Production powerhouse.
+Pro-strat: "Pitati Archer Rush." The Pitati Archer replaces the Archer but has 3 Movement and higher strength. It is the best ancient unit in the game. Build 5-6 immediately. The +50% production to Ranged units means you can overrun a neighbor before they even research Masonry.
 
 === ALEXANDER ===
 Leader Ability: To the World's End
 - Macedonian units never suffer war weariness.
 - All military units heal completely upon capturing a city with a Wonder.
-Strategy: Never stop attacking. Chain city captures to keep army healed. Basilikoi Paides provides science from kills.
+Strategy: Never stop attacking.
+Chain city captures to keep army healed. Basilikoi Paides provides science from kills.
+Pro-strat: "Science via Murder." Don't build Campuses. Build the "Basilikoi Paides" (Barracks replacement). It generates Science equal to 25% of the production cost of units you build. Queue up heavy units continuously to generate Science. You research tanks by building tanks.
 
 === CYRUS ===
 Leader Ability: Fall of Babylon
 - +2 Movement for all units for 10 turns after declaring a Surprise War.
 - Declaring a Surprise War counts as a Formal War for purposes of grievances and war weariness.
 Strategy: Always Surprise War. +2 Movement is devastatingly powerful. Immortals rush with superior mobility.
+Pro-strat: "Surprise Movement." Declare a Surprise War on a useless City-State across the map just to trigger the +2 Movement for your army fighting a *different* war. Use the movement speed to surround enemies or escape bad situations.
 
 === JOHN_CURTIN ===
 Leader Ability: Citadel of Civilization
 - +100% Production in all cities for 10 turns when war is declared on Australia.
 - +100% Production in all cities for 20 turns when liberating a city.
-Strategy: Defensive player. Let enemies declare war on you for massive production boost. Liberation wars are highly rewarded.
+Strategy: Defensive player.
+Let enemies declare war on you for massive production boost. Liberation wars are highly rewarded.
+Pro-strat: "Bait and Switch." Denounce warmongers to bait them into declaring war on you. Enjoy the +100% Production. Alternatively, conquer a Free City (loyalty flipped) and "Liberate" it back to its owner. You can farm the same city over and over for endless +100% Production boosts.
 
 === JADWIGA ===
 Leader Ability: Lithuanian Union
 - Taking over a city grants your religion to all citizens, instead of only converting them based on the strength of pressure.
 - Holy Sites receive +2 Faith from adjacent districts.
-Strategy: Military conversion of cities. Holy Site adjacency focus. Build compact city clusters for faith bonus stacking.
+Strategy: Military conversion of cities. Holy Site adjacency focus.
+Build compact city clusters for faith bonus stacking.
+Pro-strat: "Obsolete Relic Cult." Build Mont St. Michel. Suicide your Apostles to get Relics. Jadwiga gets massive Gold/Culture/Faith boosts from Relics. Combine with "Reliquaries" belief for triple Tourism. It's a faster Culture win than rock bands.
 
 === GITARJA ===
 Leader Ability: Exalted Goddess of the Three Worlds
 - Can purchase naval units with Faith.
 - Religious units pay no movement cost to embark/disembark.
-Strategy: Faith-based naval power. Build Holy Sites near coast. Religious/Naval hybrid domination.
+Strategy: Faith-based naval power. Build Holy Sites near coast.
+Religious/Naval hybrid domination.
+Pro-strat: "Jong Rush." Beeline "Mercenaries" (Civic) and "Mass Production" (Tech). The "Jong" unit is insanely strong. Faith-buy a massive navy of Jongs instantly using accumulated Faith. Formation bonus: Jongs give movement speed to embarked land units. Escort slow siege units across the ocean at frigate speeds.
 
 === POUNDMAKER ===
 Leader Ability: Favorable Terms
 - All Alliance types provide shared visibility.
 - Trade Routes generate +1 Food in the sending city and +1 Gold in both cities.
-Strategy: Alliance-focused expansion. Trade routes feed your cities. Diplomatic victory through economic cooperation.
+Strategy: Alliance-focused expansion.
+Trade routes feed your cities. Diplomatic victory through economic cooperation.
+Pro-strat: "Scout Vision." Your Scouts are unique (Okihtcitaw) and have the strength of Warriors. Build 3 early. They explore fast and can kill enemy Warriors with a promotion. Rush alliances for visibility—knowing what the AI is researching helps you optimize your own tech path.
 
 === TAMAR ===
 Leader Ability: Glory of the World, Kingdom and Faith
 - +100% Faith for 10 turns after declaring a Protectorate War.
 - Can only earn Era Score from building/converting religious buildings and from a Victor in an enemy city.
 Strategy: Defend city-states to trigger Protectorate Wars. Faith explosion timing. Golden Ages through religious achievements.
+Pro-strat: "Wall Stacking." Rush "Divine Right" for the Monarchy government. Build maximum level Walls (Tsikhe). Tamar gets huge Faith from walls. While usually considered weak, she is unkillable in a defensive war. Turtle up, build walls, and win via Faith.
 
 === SEONDEOK ===
 Leader Ability: Hwarang
 - +3% Culture and Science in cities with an established Governor for each promotion that Governor has.
 Strategy: Stack promotions on Governors. Pingala for science/culture bonuses. Seowon adjacency still applies.
+Pro-strat: "Pingala Hyper-City." Put Pingala in your highest population city. Rush all his promotions. Seondeok adds +3% Science/Culture PER PROMOTION. A fully promoted Pingala + Seowon + Rationalism card makes one city produce more science than an entire enemy empire.
 
 === GENGHIS_KHAN ===
 Leader Ability: Mongol Horde
 - +3 Combat Strength for all cavalry class units for each level of Diplomatic Visibility above the opponent.
 - Capture a defeated cavalry class enemy unit.
-Strategy: Maximize diplomatic visibility. Keshig formations dominate. Capture enemy cavalry to grow your horde.
+Strategy: Maximize diplomatic visibility. Keshig formations dominate.
+Pro-strat: "The Spy Monger." Combat strength scales with Diplomatic Visibility. Send a Trade Route (+1 level) and a Spy doing "Listening Post" (+1 level) to your target. Use the "Printing" tech (+1 level). You now have +18 Combat Strength against that civ. Your Horsemen will hit like Tanks.
 
 === WILHELMINA ===
 Leader Ability: Radio Oranje
 - +2 Culture to your trade routes to your own cities.
 - +4 Culture to trade routes to or from foreign cities.
-Strategy: Trade route network for culture. Polders for coastal expansion. Cultural victory through trade.
+Strategy: Trade route network for culture.
+Polders for coastal expansion. Cultural victory through trade.
+Pro-strat: "River Adjacency." Industrial Zones get +2 adjacency from Rivers. Wilhelmina gets *another* +2. A river IZ is +4 base. Add an Aqueduct and Dam for a +8 or +10 IZ easily. Beeline "Industrialization" and "Coal Power" to flood the world with production.
 
 === ROBERT_THE_BRUCE ===
 Leader Ability: Bannockburn
 - Can declare a War of Liberation after gaining Defensive Tactics.
 - +100% Production and +2 Movement for 10 turns after declaring a War of Liberation.
 Strategy: Liberate cities for massive bonuses. Wait for opportunities to free conquered cities. Production/mobility surge timing.
+Pro-strat: "Happy Science." Keep your cities 'Ecstatic' (Amenities). Scotland gets +20% Production and +10% Science in Ecstatic cities. Build Entertainment Complexes earlier than usual. Buy all luxuries. The % modifiers outweigh the cost of the amenity districts.
 
 === SHAKA ===
 Leader Ability: Amabutho
 - Corps and Armies gain +5 combat strength.
 - Corps can be formed after Mercenaries, Armies after Nationalism.
-Strategy: Rush Corps/Armies. Ikanda district accelerates formation. Impi Corps dominate the battlefield.
+Strategy: Rush Corps/Armies. Ikanda district accelerates formation.
+Pro-strat: "Impi Timing." Rush "Mercenaries" civic ASAP. This unlocks Corps. Shaka unlocks Corps EARLIER than anyone else. Combine Impi Pikemen into Corps immediately. An Impi Corps in the Medieval era has the strength of an Industrial era unit. Steamroll the map before they get Muskets.
 
 === WILFRID_LAURIER ===
 Leader Ability: The Last Best West
@@ -238,157 +301,198 @@ Leader Ability: The Last Best West
 - Resources on Tundra and Tundra Hills cost 50% less to purchase and improve.
 - +100% extraction of strategic resources from Tundra.
 Strategy: Tundra expansion is viable. Northern cities can farm. Strategic resource stockpiling.
+Pro-strat: "Mountie National Parks." Don't just build farms. Rush "Conservation". Mounties can build National Parks. Canada can build farms on Tundra, but National Parks provide Tourism. Plant forests on Tundra, build Mounties, spam Parks. Use the "Hockey Rink" for Appeal.
 
 === MATTHIAS_CORVINUS ===
 Leader Ability: Raven King
 - Levied units gain +5 combat strength.
 - Levied units gain +2 Movement.
 - Levy cost is reduced 50%.
-Strategy: Become Suzerain of military city-states. Levy armies constantly at half cost. Let city-states build your army.
+Strategy: Become Suzerain of military city-states. Levy armies constantly at half cost.
+Pro-strat: "Upgrade the Rentals." Levy a City-State's units (Warriors/Archers). Upgrade them with *your* Gold and Strategic Resources into Swordsmen/Crossbows. When the levy expires, the City-State keeps the high-tech units. Levy them again later. You now command a superpower army for pennies.
 
 === PACHACUTI ===
 Leader Ability: Qhapaq Nan
 - Domestic Trade Routes gain +1 Food for each mountain tile in the destination city.
 - Can build mountain tunnels.
-Strategy: Mountain adjacency cities. Internal trade routes for food. Terrace Farms + mountains = massive yields.
+Strategy: Mountain adjacency cities. Internal trade routes for food.
+Pro-strat: "Preserve the Mountains." Build "Preserve" districts next to Mountains. Since you can work Mountain tiles (Inca only), the Preserve makes them yield insane Food/Culture/Faith. Rush "Qhapaq Nan" (Foreign Trade) to create trade tunnels early for movement hacks.
 
 === MANSA_MUSA ===
 Leader Ability: Sahel Merchants
 - International Trade Routes gain +1 Gold per flat desert tile in the sending city.
 - -30% Gold cost for purchasing units, buildings, and districts.
-Strategy: Desert expansion. Massive gold generation. Purchase everything at discount. Suguba in every city.
+Strategy: Desert expansion. Massive gold generation. Purchase everything at discount.
+Suguba in every city.
+Pro-strat: "Suguba-Holy Site Diamond." Pick "Desert Folklore" Pantheon (+Adj from Desert) + "Work Ethic" Religion. Place Holy Sites surrounded by Desert. Place Sugubas next to them. You get massive Gold discounts and massive Production from Faith. NEVER hard-build units. Buy everything.
 
 === KUPE ===
 Leader Ability: Kupe's Voyage
-- Starts in Ocean. +2 Science and +2 Culture per turn before settling first city.
+- Starts in Ocean.
++2 Science and +2 Culture per turn before settling first city.
 - Palace provides +3 Housing and +1 Amenity.
 - +2 Production for Fishing Boats.
-Strategy: Delay settling for free science/culture. Find perfect coastal start location. Marae makes forests/features valuable.
+Strategy: Delay settling for free science/culture. Find perfect coastal start location.
+Pro-strat: "No Chop." Do not remove Woods or Rainforests. Ever. The "Marae" (Theater Square building) gives Culture/Faith to features. Beeline "Flight" to convert that Culture into Tourism. You win by doing nothing but planting trees and ending your turn.
 
 === SULEIMAN ===
 Leader Ability: Grand Vizier
 - Unlocks Ibrahim (unique Governor) with special abilities.
 - +4 Combat Strength for all units in sieges.
-Strategy: Ibrahim Governor provides massive bonuses. Siege warfare with Ottoman bonuses. Janissaries + siege = city destruction.
+Strategy: Ibrahim Governor provides massive bonuses. Siege warfare with Ottoman bonuses.
+Pro-strat: "Janissary Print." Do not build Janissaries in your own cities (it costs population). Capture enemy cities. Build Janissaries there (no population cost). Upgrade Ibrahim to "Grand Vizier" and place him in the enemy capital you are attacking for +10 Combat Strength and no loyalty pressure.
 
 === SULEIMAN_MAGNIFICENT ===
 Leader Ability: Lawgiver
 - All governors with at least 3 promotions provide +15% all yields in their city.
 - Ibrahim gains additional abilities.
 Strategy: Stack governor promotions. High-yield capital with promoted Pingala. Administrative efficiency.
+Pro-strat: "Golden Age Science." Focus on getting a Golden Age in the Medieval Era ("Free Inquiry"). The +15% Science/Culture from Governors stacks with the Golden Age bonus. Your Science output will double instantly. Use this window to unlock Janissaries and cannons.
 
 === KRISTINA ===
 Leader Ability: Minerva of the North
 - Buildings with Great Work slots auto-theme when filled.
 - Can build the Queen's Bibliotheque unique building in Government Plaza.
-Strategy: Great Work collection. Auto-theming saves time. Bibliotheque provides free Great Works.
+Strategy: Great Work collection. Auto-theming saves time.
+Pro-strat: "Relic Theme Park." Auto-theming applies to EVERYTHING. Buy Relics from other civs. They are automatically themed for massive Tourism. Rush "Oracle" and "Pingala" (Grants) to hoard Great People. You don't need to think about placement, just fill the slots.
 
 === DIDO ===
 Leader Ability: Founder of Carthage
 - Can move Capital by completing a Cothon in another city.
 - +50% Production toward districts in cities not on Capital's continent.
-Strategy: Settle foreign continents first. Move capital to safest location. Colonial production bonuses stack.
+Strategy: Settle foreign continents first.
+Pro-strat: "Capital Hopping." Settle many cities on a different continent. Build "Cothon" (Harbor unique). Move your Capital to that continent. All your *original* cities now get the +25% Loyalty and Colonial Taxes cards bonuses because they are "foreign". Move capital back and forth to abuse loyalty mechanics.
 
 === MENELIK_II ===
 Leader Ability: Council of Ministers
 - +4% Culture and +4% Science for each resource type improved.
 - Cities on hills get +4 combat strength.
-Strategy: Improve diverse resources. Hill cities are defensive fortresses. Resource variety drives science/culture.
+Strategy: Improve diverse resources. Hill cities are defensive fortresses.
+Pro-strat: "Great Zimbabwe Abuse." Settle a city with a Cattle resource. Build Great Zimbabwe. Maximizing the number of *bonus* resources in your territory skyrockets your Science/Culture yields globally. Faith-buy "Rock Bands" later; Menelik's Faith output is unmatched on Hills.
 
 === LADY_SIX_SKY ===
 Leader Ability: Ix Mutal Ajaw
 - Non-capital cities within 6 tiles of capital gain +10% all yields.
 - Non-capital cities outside 6 tiles gain -15% all yields.
-Strategy: Compact empire around capital. All cities within 6 tiles mandatory. Observatory adjacency matters more.
+Strategy: Compact empire around capital.
+Pro-strat: "The Hexagon." Settle exactly 6 cities in a perfect ring around your capital (4 tiles away). Ignore fresh water if necessary; use Aqueducts. RUSH FARMS. Maya Farms give 1.5 Housing. You don't need rivers. Beeline "Toxicology" to boost farm yields.
 
 === SIMON_BOLIVAR ===
 Leader Ability: Ejercito Patriota
 - Earn a Comandante General each time you enter a new era.
 Strategy: Era timing matters. Each era = free super Great General. Stack Comandantes for army-wide bonuses.
+Pro-strat: "Llanero Speed." The Llanero unit gains strength for every adjacent Llanero. But the real trick is the Comandante General. They have active effects (like +Combat Strength). Stack a Great General AND a Comandante General. The passive aura bonuses STACK for +10 Movement/Strength.
 
 === BASIL_II ===
 Leader Ability: Porphyrogennetos
 - Heavy and light cavalry deal full damage against cities.
 - Killing a unit heals that unit's combat strength as HP.
-Strategy: Cavalry city sieges. Tagma knights devastate cities. Heal through kills.
+Strategy: Cavalry city sieges. Tagma knights devastate cities.
+Pro-strat: "Tagma Crusade." Found a Religion with "Crusade" (+10 CS near foreign cities of your religion). Rush "Divine Right" for Tagmas. Tagmas spread religion when they kill units. Kill a unit -> City converts -> Crusade activates -> Tagma hits city for full damage (no wall penalty). You melt walls like butter.
 
 === AMBIORIX ===
 Leader Ability: King of the Eburones
 - Melee, anti-cavalry, and ranged units gain +2 combat strength per adjacent military unit.
 - Culture bomb adjacent unowned tiles when completing a non-specialty district.
-Strategy: Stack units for combat bonuses. Culture bomb expansion. Gaesatae rush with adjacency bonuses.
+Strategy: Stack units for combat bonuses. Culture bomb expansion.
+Pro-strat: "Man-at-Arms Rush." Gaul unlocks "Apprenticeship" (Man-at-Arms) instantly upon building an Oppidum (Industrial Zone). Rush Mining -> Bronze Working -> Iron Working. Build Oppidum. You now have Medieval units in the Ancient Era. Kill everyone.
 
 === BA_TRIEU ===
 Leader Ability: Drive Out the Aggressors
 - +5 combat strength when fighting in Rainforest, Marsh, or Woods.
 - +1 Movement in those features.
 - All features provide +2 Culture.
-Strategy: Never chop features. Forest/jungle/marsh = terrain advantage. Culture through preservation.
+Strategy: Never chop features. Forest/jungle/marsh = terrain advantage.
+Pro-strat: "Thanh Turtle." The Thanh (Encampment) does not require population. Build one in EVERY city. Place them defensively. Plant Woods everywhere with "Medieval Faires" (Civic). Your units are unkillable in Woods (+5 CS). You can win a Culture Victory purely by planting trees and building districts.
 
 === JOAO_III ===
 Leader Ability: Porta do Cerco
 - +1 Sight for all units.
 - Trade Routes gain +50% toward Gold and +25% toward all other yields.
-Strategy: Superior scouting. Trade routes to coastal cities mandatory. Gold/yield multiplication.
+Strategy: Superior scouting.
+Pro-strat: "Trade Route Stacking." Play on "Archipelago" map. Meet every Civ. Build a Market/Lighthouse in every city. Stack all trade routes from your capital. Use "Kumasi" (City State) or "Chinguetti" for massive Culture/Faith per route. You can easily make 2000+ Gold per turn by the Medieval Era. Buy your way to victory.
 
 === ABRAHAM_LINCOLN ===
 Leader Ability: Emancipation Proclamation
 - Melee and ranged units trained in Industrial/Modern era start with a free promotion.
 - +25% combat strength vs city-states.
 Strategy: Late-game unit quality. Free promotion = veteran army. City-state conquest for late expansion.
+Pro-strat: "Industrial Zone Printer." Pre-build Industrial Zones in all cities until 1 turn remains. Research "Apprenticeship". Finish all IZs on the same turn. You instantly spawn a free Man-at-Arms in every city. These units cost NO maintenance and NO resources. Overwhelm the world with a free army.
 
 === TEDDY_ROOSEVELT ===
 Leader Ability: Roosevelt Corollary
 - +5 Combat Strength for units on your home continent.
 - +1 Appeal to all tiles in a city with a National Park.
 - Envoys to city-states on your home continent grant +2.
-Strategy: Defend home continent aggressively. National Parks for appeal/tourism. City-state dominance on your continent.
+Strategy: Defend home continent aggressively. National Parks for appeal/tourism.
+Pro-strat: "Early Bully." The +5 Combat Strength is massive in the Ancient Era. Rush "Archery" and "Bronze Working". Conquer your entire home continent immediately. The combat bonus makes your Warriors stronger than anything except unique units.
 
 === TEDDY_ROOSEVELT_ROUGHRIDER ===
 Leader Ability: Big Stick Policy
 - +1 Culture to all tiles in a city with a National Park.
 - Gain 1 Envoy whenever you recruit a Great Person.
-Strategy: Great Person generation = city-state control. National Parks for culture victory. Rough Rider unit synergy.
+Strategy: Great Person generation = city-state control.
+Pro-strat: "Rough Rider Trade." Rough Rider units gain Culture from kills on their home continent. But the real strat is trade. Send trade routes to City-States you Suzerain. The yields are massive. Use the "Diplomatic League" card to double envoys and control the World Congress.
 
 === TEDDY_ROOSEVELT_BULL_MOOSE ===
 Leader Ability: Antiquities and Parks
 - +2 Science to all tiles with Breathtaking Appeal.
 - +2 Culture to all tiles in a city with a National Park.
 - +1 Appeal to all tiles in a city with a Preserve or National Park.
-Strategy: Preserve district focus. Breathtaking tiles = science. Appeal stacking for yield multiplication.
+Strategy: Preserve district focus.
+Pro-strat: "Appeal Yields." Restart until you spawn near Mountains/Woods. Do not chop. Build "Preserve" districts. Rush "Eiffel Tower". Breathtaking tiles give Science/Culture immediately (Tech/Civic tree agnostic). You can have a Science victory without building a single Campus.
 
 === NZINGA_MBANDE ===
 Leader Ability: Njinga Mbandi
 - +50% Production toward units when at war with a major civ.
 - Defeated enemy units grant Gold.
-Strategy: War economy. More war = more production = more gold. Continuous warfare sustains the empire.
+Strategy: War economy. More war = more production = more gold.
+Pro-strat: "Forever War." Declare war on a distant Civ that cannot reach you. Stay at war for the entire game. Enjoy the permanent +10% Yields to your home continent cities (Leader Ability - check actual ability, often +10% yields on home continent). *Correction*: Leader ability is +10% Yields on home continent. Stay on your continent and boom.
 
 === RAMSES_II ===
 Leader Ability: Abu Simbel
 - Completing a Wonder grants a free random relic.
 - +2 Gold and +2 Culture from resources.
-Strategy: Wonder rush + relic collection. Relics provide early tourism. Resource improvements are stronger.
+Strategy: Wonder rush + relic collection. Relics provide early tourism.
+Pro-strat: "Monumentality Expansion." Build Pyramids and Oracle. The Culture from resources gets you to "Feudalism" fast. The Culture allows you to reach "Political Philosophy" fast. The real power is stacking Wonder-granted production. Focus on "Temple of Artemis" and "Hanging Gardens" to grow cities that can work more tiles.
 
 === WU_ZETIAN ===
 Leader Ability: Sage Empress
 - +50% Production toward Builders.
 - Buildings and Districts can be rushed by Builders (15% of total cost per charge).
-Strategy: Builder rush completion. Build everything faster. Chain Builder production for rapid development.
+Strategy: Builder rush completion.
+Pro-strat: "Spy Rush." Wu gets a spy early (Defensive Tactics). Use the spy to siphon funds or steal tech immediately. But mainly: Build Ancestral Hall. Spam Settlers. New cities get free Builders. Use those Builders to *rush the districts* in the new city. Instant infrastructure.
 
 === YONGLE ===
 Leader Ability: Mandate of Heaven
 - Projects in cities with a Governor provide +20% of their yields.
 - Governors gain +1 Movement Range.
 Strategy: Governor placement matters more. Projects have better payoff. Governor synergy focus.
+Pro-strat: "The Pop 10 Rush." Ignore districts in new cities. Immediately run the "Lijia (Food)" project. Grow the city to 10 Population ASAP. At 10 Pop, you get +20 Gold/Science/Culture per turn (Leader Ability). Use the Gold to *buy* the districts later. Faith-buy Settlers to repeat the loop.
 
 === LUDWIG_II ===
 Leader Ability: Swan King
 - +2 Culture from Wonders in cities with a Castle.
 - Wonders built by Germany provide +1 Great Person point of the appropriate type.
-Strategy: Wonder collection. Hansa production enables wonder racing. Castle + Wonder synergy.
+Strategy: Wonder collection.
+Pro-strat: "Unfinished Wonder Tourism." Place a Wonder foundation. Do not finish it immediately. It generates Tourism from adjacency instantly. Ludwig gains Culture from adjacencies. Plan massive Hansa/Commercial Hub clusters, but reserve spots for Wonders just for the culture yield, even if you finish them late.
 
 === FREDERICK_III ===
 Leader Ability: Patron of the Free Cities
 - +2 Production to all specialty districts from Suzerainty bonuses.
 - +1 Favor for each Suzerain bonus.
 Strategy: City-state dominance. Production stacking from Suzerainty. Diplomatic favor generation.
+Pro-strat: "District Spam." This leader is about quantity. Suzerain everything. Every district gets +Production. Build the cheapest district in every city (often Commercial Hub or Harbor). The production bonus stacks up to give you insane industrial output. Win via Science or War using your massive production base.
+
+=== ELEANOR_FRANCE ===
+Leader Ability: Court of Love
+- Great Works in Eleanor's cities cause -1 Loyalty per turn in foreign cities within 9 tiles.
+- A city that leaves another civilization due to Loyalty pressure and joins Eleanor skips the "Free City" phase and joins immediately.
+Strategy: Peaceful Domination. Forward settle opponents. Move Great Works to border cities to exert pressure.
+Pro-strat: "The Art Conveyor Belt." This is the only Civ that can conquer the world without declaring war. Move ALL Great Works to your border cities. Do not leave them in the Capital. As soon as an enemy city flips to you (instant flip), move the Great Works *into* that new city on the same turn. This resets the 9-tile range further into their territory. You create a rolling "death wave" of loyalty that consumes empires one city at a time.
+
+=== ELEANOR_ENGLAND ===
+Leader Ability: Court of Love (Same as France)
+- Inherits England's "Workshop of the World" (Production/Coal bonuses) and "Royal Navy Dockyard".
+Strategy: Use English production to build Theater Squares and Industrial Zones. High population cities exert more loyalty.
+Pro-strat: "Weaponized Capitalism." Unlike France, England has Gold and Production. Build Royal Navy Dockyards to generate massive Gold. Use that Gold to BUY Great Works from the AI (don't wait to earn them). Use England's massive Industrial Zone production to run the "Bread and Circuses" project non-stop in border cities. The combination of purchased Art + Bread and Circuses pressure allows you to flip cities even faster than the French version.

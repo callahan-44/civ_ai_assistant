@@ -92,11 +92,40 @@ def get_civs_data() -> dict:
     return _civs_data_cache
 
 
+def _load_leaders_file(filepath) -> dict:
+    """
+    Load leaders.txt with pipe-delimited format:
+    LEADER_KEY | Name: Display Name | Focus: X | Strat: Strategy text
+
+    Returns dict mapping leader keys (lowercase) to full line content.
+    """
+    data = {}
+    if not filepath.exists():
+        return data
+
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                # Split on first pipe to get leader key
+                parts = line.split('|', 1)
+                if len(parts) >= 2:
+                    leader_key = parts[0].strip().lower()
+                    # Store the full line content (everything after the key)
+                    data[leader_key] = parts[1].strip()
+    except Exception as e:
+        print(f"Error loading leaders file {filepath}: {e}")
+
+    return data
+
+
 def get_leaders_data() -> dict:
     """Load and cache leaders.txt data."""
     global _leaders_data_cache
     if _leaders_data_cache is None:
-        _leaders_data_cache = _load_data_file(LEADERS_FILE)
+        _leaders_data_cache = _load_leaders_file(LEADERS_FILE)
     return _leaders_data_cache
 
 

@@ -1063,13 +1063,14 @@ local function DumpGameState()
 
     -- Output the JSON (chunked if too long to avoid Lua.log truncation)
     local jsonOutput = ToJSON(gs)
-    local maxChunkSize = 3500  -- Safe limit for Civ 6 print()
+    -- Civ 6 print() has ~4000 char limit, use 2000 to be safe with headers
+    local maxChunkSize = 2000
 
     if #jsonOutput <= maxChunkSize then
         -- Short enough for single print
         print(">>>GAMESTATE>>>" .. jsonOutput .. "<<<END<<<")
     else
-        -- Split into chunks
+        -- Split into chunks - each print call must be under the limit
         local numChunks = math.ceil(#jsonOutput / maxChunkSize)
         for i = 1, numChunks do
             local startPos = (i - 1) * maxChunkSize + 1
