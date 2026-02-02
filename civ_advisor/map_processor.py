@@ -108,6 +108,9 @@ class AsciiMapGenerator:
             if match:
                 unit_type_raw = match.group(1)
                 unit_type = clean_game_string(unit_type_raw).lower().replace(" ", "_")
+                # Skip great people - not useful for tactical map
+                if unit_type.startswith("great_"):
+                    continue
                 x, y = int(match.group(2)), int(match.group(3))
                 coord = abs_coord_str(x, y)
                 symbol = MAP_SYMBOLS.get(unit_type, unit_type[:2].capitalize())
@@ -133,7 +136,13 @@ class AsciiMapGenerator:
                 coord = abs_coord_str(x, y)
                 content = match.group(3).lower()
 
-                if "mountain" in content:
+                # Check for district in brackets first (highest priority for map display)
+                district_match = re.search(r'\[([^\]]+)\]', content)
+                if district_match:
+                    district_name = district_match.group(1).lower().replace(" ", "_")
+                    # Look up district symbol, fall back to generic "Dt"
+                    symbol = MAP_SYMBOLS.get(district_name, "Dt")
+                elif "mountain" in content:
                     symbol = "^^"
                 elif "hill" in content:
                     symbol = "/\\"
@@ -147,8 +156,6 @@ class AsciiMapGenerator:
                     symbol = ".."
                 elif "ocean" in content or "coast" in content:
                     symbol = "::"
-                elif " i" in content:  # Improved
-                    symbol = "Im"
                 else:
                     symbol = "--"
                 tile_data[coord] = symbol
@@ -261,14 +268,30 @@ class AsciiMapGenerator:
             ("In", "Infantry"),
             ("Tk", "Tank"),
             ("Tr", "Trader"),
-            ("Ms", "Missionary"),
+            ("Mi", "Missionary"),
             ("Ap", "Apostle"),
-            ("GG", "Gr.General"),
-            ("GA", "Gr.Admiral"),
-            ("GP", "Gr.Prophet"),
-            ("GS", "Gr.Scientist"),
-            ("GE", "Gr.Engineer"),
-            ("GM", "Gr.Merchant"),
+            # Districts
+            ("Cc", "City Center"),
+            ("Cp", "Campus"),
+            ("CH", "CommercialHub"),
+            ("IZ", "IndustrialZone"),
+            ("TS", "TheaterSq"),
+            ("HS", "HolySite"),
+            ("En", "Encampment"),
+            ("Hb", "Harbor"),
+            ("EC", "Entertainment"),
+            ("WP", "WaterPark"),
+            ("Aq", "Aqueduct"),
+            ("Nb", "Neighborhood"),
+            ("Ae", "Aerodrome"),
+            ("Sx", "Spaceport"),
+            ("Gz", "Gov.Plaza"),
+            ("DQ", "DiplQuarter"),
+            ("Pv", "Preserve"),
+            ("Da", "Dam"),
+            ("Cl", "Canal"),
+            ("Dt", "District"),  # Fallback for unknown districts
+            # Terrain
             ("^^", "Mountain"),
             ("/\\", "Hills"),
             ("Fo", "Forest"),

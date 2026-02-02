@@ -310,7 +310,12 @@ class CivOverlay:
                 text="\u25b6 Active",  # Play symbol
                 bg=COLORS["success"],
             )
-            self._update_status("Active - ready for requests", COLORS["success"])
+            # When re-enabling, process the last game state if available
+            if self.last_game_state:
+                self._update_status("Resuming - processing last game state...", COLORS["accent"])
+                self._request_advice()
+            else:
+                self._update_status("Active - waiting for game data", COLORS["success"])
 
     def _clipboard_copy(self, text: str) -> bool:
         """Copy text to clipboard. Returns True on success."""
@@ -335,7 +340,7 @@ class CivOverlay:
             return
 
         self._set_advice("Consulting Advisor...")
-        self._update_status("Consulting AI...", COLORS["accent"])
+        self._update_status("Waiting on model...", COLORS["accent"])
 
         def get_advice_thread():
             result = self.advisor.get_advice(
@@ -368,6 +373,8 @@ class CivOverlay:
     def _show_debug_window(self, debug_request: DebugRequest):
         """Show debug window for a debug request."""
         def on_send(debug_info: dict):
+            self._update_status("Waiting on model...", COLORS["accent"])
+
             def send_thread():
                 result = self.advisor.execute_debug_request(debug_info)
                 self.root.after(0, self._set_advice, result)

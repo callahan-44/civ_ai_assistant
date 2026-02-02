@@ -6,6 +6,7 @@ Pure logic - no UI dependencies.
 
 import time
 import threading
+from datetime import datetime
 from typing import Optional, Callable, Any
 
 from .config import Config
@@ -14,6 +15,7 @@ from .constants import (
     GOOGLE_FALLBACK_CHAIN,
     NO_SYSTEM_PROMPT_MODELS,
     DEFAULT_RATE_LIMIT_SECONDS,
+    DEBUG_LOG_FILE,
 )
 
 
@@ -92,6 +94,35 @@ class AIAdvisor:
         if last_newline > max_chars // 2:
             truncated = truncated[:last_newline]
         return truncated + "\n\n[... TRUNCATED for rate limiting ...]"
+
+    def _log_debug(self, provider: str, model: str, system_prompt: str, user_prompt: str, response: str):
+        """Log prompt and response to debug.log if debug logging is enabled."""
+        if not self.config.debug_logging:
+            return
+
+        try:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            separator = "=" * 80
+
+            log_entry = f"""
+{separator}
+[{timestamp}] Provider: {provider} | Model: {model}
+{separator}
+
+=== SYSTEM PROMPT ===
+{system_prompt}
+
+=== USER PROMPT ===
+{user_prompt}
+
+=== RESPONSE ===
+{response}
+
+"""
+            with open(DEBUG_LOG_FILE, "a", encoding="utf-8") as f:
+                f.write(log_entry)
+        except Exception as e:
+            print(f"Error writing to debug log: {e}")
 
     def get_advice(self, game_state: dict, user_question: str = "", victory_goal: str = "",
                    clipboard_copy_func: Callable[[str], bool] = None) -> Any:
@@ -190,6 +221,9 @@ class AIAdvisor:
             else:
                 return f"Unknown provider: {provider}"
 
+            # Log to debug.log if enabled
+            self._log_debug(provider, self._last_used_model, system_prompt, prompt, response)
+
             # Append token info to response
             return f"{response}\n\n---\n[Request: ~{self._last_token_estimate} tokens | Model: {self._last_used_model}]"
         except Exception as e:
@@ -214,15 +248,19 @@ class AIAdvisor:
             self.last_request_time = time.time()
 
             if provider == "anthropic":
-                return self._call_anthropic_with_system(api_key, prompt, system_prompt)
+                response = self._call_anthropic_with_system(api_key, prompt, system_prompt)
             elif provider == "google":
-                return self._call_google_with_fallback(api_key, prompt, system_prompt)
+                response = self._call_google_with_fallback(api_key, prompt, system_prompt)
             elif provider == "openai":
-                return self._call_openai(api_key, prompt, system_prompt)
+                response = self._call_openai(api_key, prompt, system_prompt)
             elif provider == "ollama":
-                return self._call_ollama(prompt, system_prompt)
+                response = self._call_ollama(prompt, system_prompt)
             else:
                 return f"Unknown provider: {provider}"
+
+            # Log to debug.log if enabled
+            self._log_debug(provider, self._last_used_model, system_prompt, prompt, response)
+            return response
         except Exception as e:
             return f"API Error: {str(e)}"
 

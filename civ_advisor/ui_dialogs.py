@@ -407,6 +407,19 @@ class SettingsDialog:
         )
         debug_cb.pack(anchor="w")
 
+        self.debug_logging_var = tk.BooleanVar(value=self.config.debug_logging)
+        debug_logging_cb = tk.Checkbutton(
+            behavior_frame,
+            text="Enable debug logging (save prompts/responses to debug.log)",
+            variable=self.debug_logging_var,
+            fg=COLORS["text"],
+            bg=COLORS["bg"],
+            selectcolor=COLORS["bg_secondary"],
+            activebackground=COLORS["bg"],
+            font=("Segoe UI", 10),
+        )
+        debug_logging_cb.pack(anchor="w")
+
         # Log folder
         tk.Label(
             behavior_frame,
@@ -607,6 +620,7 @@ class SettingsDialog:
             self.config.min_request_interval = DEFAULT_MIN_REQUEST_INTERVAL
 
         self.config.debug_mode = self.debug_var.get()
+        self.config.debug_logging = self.debug_logging_var.get()
         self.config.log_folder = self.log_folder_entry.get()
 
         # Interface

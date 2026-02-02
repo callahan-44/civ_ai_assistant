@@ -39,6 +39,8 @@ class Config:
         self.token_limit: int = DEFAULT_TOKEN_LIMIT
         # Debug mode
         self.debug_mode: bool = False
+        # Debug logging (saves prompts/responses to debug.log)
+        self.debug_logging: bool = False
         # System prompts (customizable)
         self.system_prompt_core: str = DEFAULT_SYSTEM_PROMPT_CORE
         self.system_prompt_extended: str = DEFAULT_SYSTEM_PROMPT_EXTENDED
@@ -73,8 +75,10 @@ class Config:
                     self.rate_limit_enabled = data.get("rate_limit_enabled", False)
                     self.token_limit = data.get("token_limit", DEFAULT_TOKEN_LIMIT)
                     self.debug_mode = data.get("debug_mode", False)
-                    self.system_prompt_core = data.get("system_prompt_core", DEFAULT_SYSTEM_PROMPT_CORE)
-                    self.system_prompt_extended = data.get("system_prompt_extended", DEFAULT_SYSTEM_PROMPT_EXTENDED)
+                    self.debug_logging = data.get("debug_logging", False)
+                    # Use default if key is missing OR if value is empty string
+                    self.system_prompt_core = data.get("system_prompt_core") or DEFAULT_SYSTEM_PROMPT_CORE
+                    self.system_prompt_extended = data.get("system_prompt_extended") or DEFAULT_SYSTEM_PROMPT_EXTENDED
                     self.victory_goal = data.get("victory_goal", "Domination")
                     self.always_on_top = data.get("always_on_top", True)
             except Exception as e:
@@ -98,6 +102,7 @@ class Config:
                 "rate_limit_enabled": self.rate_limit_enabled,
                 "token_limit": self.token_limit,
                 "debug_mode": self.debug_mode,
+                "debug_logging": self.debug_logging,
                 "system_prompt_core": self.system_prompt_core,
                 "system_prompt_extended": self.system_prompt_extended,
                 "victory_goal": self.victory_goal,

@@ -6,6 +6,7 @@ from pathlib import Path
 
 # Configuration paths
 CONFIG_FILE = Path(__file__).parent.parent / "config.json"
+DEBUG_LOG_FILE = Path(__file__).parent.parent / "debug.log"
 DEFAULT_LOG_FOLDER = Path.home() / "Documents" / "My Games" / "Sid Meier's Civilization VI" / "Logs"
 LOG_FILENAME = "Lua.log"
 
@@ -79,7 +80,7 @@ RULES:
 1. Maximum 5 sentences. Be specific and actionable.
 2. Focus on the player's stated victory goal.
 3. Prioritize IMMEDIATE DECISIONS first (settlement locations, builders, tech, civic, production, unit moves, threats).
-4. Always think about the best next place to settle, build districts, or fight.
+4. Always think about the best next place to settle, build districts, or fight. Do not suggest healing unless death is very likely in the next turn.
 
 OUTPUT FORMAT:
 - Start with the most urgent action
@@ -87,10 +88,10 @@ OUTPUT FORMAT:
 - **NEVER use grid locations.** Reference tile descriptions and relative locations when giving movement advice"""
 
 DEFAULT_SYSTEM_PROMPT_EXTENDED = """
+Consider the civilization's unique strengths when advising.
 Only base recommendations on provided game data.
 If you must assume something not in the data, label it as [ASSUMPTION] and provide alternatives.
-Consider the civilization's unique strengths when advising.
-Threats take priority - always address war if it seems likely."""
+Always address war if it seems likely."""
 
 # UI Colors matching Civ VI aesthetic
 COLORS = {
@@ -134,18 +135,9 @@ MAP_SYMBOLS = {
     "carrier": "Cr",
     "bomber": "Bm",
     "fighter": "Ft",
-    "missionary": "Ms",
+    "missionary": "Mi",
     "apostle": "Ap",
     "inquisitor": "Iq",
-    "great_general": "GG",
-    "great_admiral": "GA",
-    "great_prophet": "GP",
-    "great_scientist": "GS",
-    "great_engineer": "GE",
-    "great_merchant": "GM",
-    "great_artist": "Ga",
-    "great_musician": "Gm",
-    "great_writer": "Gw",
     "trader": "Tr",
     "spy": "Sy",
     # Terrain/features
@@ -156,17 +148,51 @@ MAP_SYMBOLS = {
     "marsh": "Ms",
     "desert": "..",
     "plains": "--",
-    "grassland": "~~",
+    "grassland": "--",  # Same as plains (map shows both as flat terrain)
     "coast": "::",
-    "ocean": "~~",
+    "ocean": "::",  # Same as coast (map shows both as water)
     "river": "rv",
     # Resources
     "resource": "Rs",
     "strategic": "Sr",
     "luxury": "Lx",
+    # Districts (specific symbols for each type)
+    "city_center": "Cc",
+    "campus": "Cp",
+    "commercial_hub": "CH",
+    "industrial_zone": "IZ",
+    "theater_square": "TS",
+    "holy_site": "HS",
+    "encampment": "En",
+    "harbor": "Hb",
+    "entertainment_complex": "EC",
+    "water_park": "WP",
+    "aqueduct": "Aq",
+    "neighborhood": "Nb",
+    "aerodrome": "Ae",
+    "spaceport": "Sx",  # Not "Sp" (conflicts with Spearman)
+    "government_plaza": "Gz",  # Not "GP" (conflicts with Great Prophet)
+    "diplomatic_quarter": "DQ",
+    "preserve": "Pv",
+    "dam": "Da",
+    "canal": "Cl",
+    # Unique districts (map to base type for display)
+    "hansa": "IZ",  # Germany
+    "royal_navy_dockyard": "Hb",  # England
+    "street_carnival": "EC",  # Brazil
+    "copacabana": "WP",  # Brazil
+    "acropolis": "TS",  # Greece
+    "lavra": "HS",  # Russia
+    "seowon": "Cp",  # Korea
+    "cothon": "Hb",  # Phoenicia
+    "suguba": "CH",  # Mali
+    "thanh": "En",  # Vietnam
+    "ikanda": "En",  # Zulu
+    "bath": "Aq",  # Rome (but provides amenities)
+    "mbanza": "Nb",  # Kongo
+    "oppidum": "IZ",  # Gaul
     # Other
     "improvement": "Im",
-    "district": "Ds",
     "wonder": "Wn",
     "barb_camp": "!B",
     "enemy": "!E",

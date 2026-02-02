@@ -297,6 +297,10 @@ class GameStateEnricher:
             unit_str_clean = clean_game_string_in_text(unit_str)
             unit_str_lower = unit_str_clean.lower()
 
+            # Skip great people - not tactically relevant
+            if "great " in unit_str_lower:
+                continue
+
             # Detect settler units
             if "settler" in unit_str_lower:
                 decisions["has_settler"] = True
@@ -669,6 +673,39 @@ class GameStateEnricher:
         delta["summary"] = " | ".join(changes)
         return delta
 
+    def _get_advanced_research(self, gs: dict, top_n: int = 10) -> tuple:
+        """
+        Get the most advanced (highest cost) completed techs and civics.
+
+        Args:
+            gs: Raw game state
+            top_n: Number of top items to return
+
+        Returns:
+            Tuple of (techs_string, civics_string) - comma-separated lists
+        """
+        # Process completed techs
+        completed_techs = gs.get("completed_techs", [])
+        if completed_techs:
+            # Sort by cost descending (most advanced first)
+            sorted_techs = sorted(completed_techs, key=lambda x: x.get("cost", 0), reverse=True)
+            top_techs = sorted_techs[:top_n]
+            techs_str = ", ".join(t.get("name", "?") for t in top_techs)
+        else:
+            techs_str = "None"
+
+        # Process completed civics
+        completed_civics = gs.get("completed_civics", [])
+        if completed_civics:
+            # Sort by cost descending (most advanced first)
+            sorted_civics = sorted(completed_civics, key=lambda x: x.get("cost", 0), reverse=True)
+            top_civics = sorted_civics[:top_n]
+            civics_str = ", ".join(c.get("name", "?") for c in top_civics)
+        else:
+            civics_str = "None"
+
+        return techs_str, civics_str
+
     def build_prompt(self, enriched: dict, user_question: str = "", force_full_state: bool = False) -> str:
         """
         Build the final prompt for the AI.
@@ -763,6 +800,14 @@ class GameStateEnricher:
 
         sections.append("\n".join(state_lines))
 
+        # 6b. RESEARCH STATUS - Most advanced completed techs/civics
+        adv_techs, adv_civics = self._get_advanced_research(gs)
+        if adv_techs != "None" or adv_civics != "None":
+            research_lines = ["=== RESEARCH STATUS ==="]
+            research_lines.append(f"Completed Techs (Most advanced): {adv_techs}")
+            research_lines.append(f"Completed Civics (Most advanced): {adv_civics}")
+            sections.append("\n".join(research_lines))
+
         # 7. CITIES - Full details in API mode, delta-optimized in clipboard mode
         cities = gs.get("cities", [])
         if cities:
@@ -833,7 +878,8 @@ class GameStateEnricher:
             sections.append("\n".join(city_lines))
 
         # 8. UNITS - Full list in API mode, delta-optimized in clipboard mode
-        units = clean_game_list(gs.get("units", []))
+        # Filter out great people (not tactically relevant)
+        units = [u for u in clean_game_list(gs.get("units", [])) if "great " not in u.lower()]
         if units:
             if force_full_state or is_first or delta["units_changed"]:
                 sections.append(f"=== UNITS ({len(units)}) ===\n  " + " | ".join(units[:15]))

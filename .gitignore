@@ -1,6 +1,9 @@
 # API keys and sensitive configuration
 config.json
 
+# Debug logs
+debug.log
+
 # Python
 __pycache__/
 *.py[cod]

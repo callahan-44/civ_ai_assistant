@@ -22,6 +22,8 @@ local function cleanName(str)
     str = str:gsub("^UNIT_", "")
     str = str:gsub("^CIVILIZATION_", "")
     str = str:gsub("^LEADER_", "")
+    str = str:gsub("^TECH_", "")
+    str = str:gsub("^CIVIC_", "")
     -- Convert to Title Case: "GRASS_HILLS" -> "Grass Hills"
     str = str:gsub("_", " ")
     str = str:lower()
@@ -389,6 +391,38 @@ local function DumpGameState()
             gs.needsCivic = true
         end
     end
+
+    -- Completed Technologies (for AI situational awareness)
+    gs.completed_techs = {}
+    if sTechs and techs then
+        for tech in GameInfo.Technologies() do
+            local sHas, hasTech = pcall(function() return techs:HasTech(tech.Index) end)
+            if sHas and hasTech then
+                table.insert(gs.completed_techs, {
+                    name = cleanName(tech.TechnologyType),
+                    cost = tech.Cost or 0
+                })
+            end
+        end
+    end
+    -- Only include if we have any (nil means empty, saves JSON space)
+    if #gs.completed_techs == 0 then gs.completed_techs = nil end
+
+    -- Completed Civics (for AI situational awareness)
+    gs.completed_civics = {}
+    if sCult and culture then
+        for civic in GameInfo.Civics() do
+            local sHas, hasCivic = pcall(function() return culture:HasCivic(civic.Index) end)
+            if sHas and hasCivic then
+                table.insert(gs.completed_civics, {
+                    name = cleanName(civic.CivicType),
+                    cost = civic.Cost or 0
+                })
+            end
+        end
+    end
+    -- Only include if we have any
+    if #gs.completed_civics == 0 then gs.completed_civics = nil end
 
     -- Faith
     local sRel, religion = pcall(function() return player:GetReligion() end)
