@@ -1061,9 +1061,30 @@ local function DumpGameState()
         if tileCount >= maxTiles then break end
     end
 
-    -- Output the JSON
+    -- Output the JSON (chunked if too long to avoid Lua.log truncation)
     local jsonOutput = ToJSON(gs)
-    print(">>>GAMESTATE>>>" .. jsonOutput .. "<<<END<<<")
+    local maxChunkSize = 3500  -- Safe limit for Civ 6 print()
+
+    if #jsonOutput <= maxChunkSize then
+        -- Short enough for single print
+        print(">>>GAMESTATE>>>" .. jsonOutput .. "<<<END<<<")
+    else
+        -- Split into chunks
+        local numChunks = math.ceil(#jsonOutput / maxChunkSize)
+        for i = 1, numChunks do
+            local startPos = (i - 1) * maxChunkSize + 1
+            local endPos = math.min(i * maxChunkSize, #jsonOutput)
+            local chunk = jsonOutput:sub(startPos, endPos)
+
+            if i == 1 then
+                print(">>>GAMESTATE:1/" .. numChunks .. ">>>" .. chunk)
+            elseif i == numChunks then
+                print(">>>GAMESTATE:" .. i .. "/" .. numChunks .. ">>>" .. chunk .. "<<<END<<<")
+            else
+                print(">>>GAMESTATE:" .. i .. "/" .. numChunks .. ">>>" .. chunk)
+            end
+        end
+    end
 end
 
 -- ============================================================================

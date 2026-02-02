@@ -25,9 +25,59 @@ class LogWatcher:
         self.running = False
         self.thread: Optional[threading.Thread] = None
         self.last_position = 0
-        self.pattern = re.compile(r">>>GAMESTATE>>>(.*?)<<<END<<<", re.DOTALL)
+        # Pattern for simple (non-chunked) format
+        self.pattern_simple = re.compile(r">>>GAMESTATE>>>(.*?)<<<END<<<", re.DOTALL)
+        # Pattern for chunked format: >>>GAMESTATE:N/M>>>...
+        self.pattern_chunk = re.compile(r">>>GAMESTATE:(\d+)/(\d+)>>>(.*?)(?=>>>GAMESTATE:|<<<END<<<|$)", re.DOTALL)
         self.iteration_count = 0
         self.initialized = False
+
+    def _extract_game_states(self, content: str) -> list:
+        """
+        Extract all complete game states from content.
+        Handles both simple and chunked formats.
+        Returns list of JSON strings.
+        """
+        game_states = []
+
+        # First, find simple (non-chunked) game states
+        for match in self.pattern_simple.finditer(content):
+            game_states.append((match.start(), match.group(1).strip()))
+
+        # Now find chunked game states
+        # Look for complete chunk sets that end with <<<END<<<
+        chunk_sets = re.findall(
+            r">>>GAMESTATE:1/(\d+)>>>(.*?)<<<END<<<",
+            content, re.DOTALL
+        )
+
+        for total_chunks_str, chunk_content in chunk_sets:
+            total_chunks = int(total_chunks_str)
+            # Extract the start position for sorting
+            start_match = re.search(r">>>GAMESTATE:1/" + total_chunks_str + ">>>", content)
+            start_pos = start_match.start() if start_match else 0
+
+            # Find all chunks for this set
+            chunks = {}
+            # Re-search within this specific chunk set area
+            chunk_area = content[start_pos:]
+            end_pos = chunk_area.find("<<<END<<<")
+            if end_pos > 0:
+                chunk_area = chunk_area[:end_pos + len("<<<END<<<")]
+
+            for chunk_match in re.finditer(r">>>GAMESTATE:(\d+)/" + total_chunks_str + r">>>(.*?)(?=>>>GAMESTATE:|<<<END<<<|$)", chunk_area, re.DOTALL):
+                chunk_num = int(chunk_match.group(1))
+                chunk_data = chunk_match.group(2)
+                chunks[chunk_num] = chunk_data
+
+            # Reassemble if we have all chunks
+            if len(chunks) == total_chunks:
+                full_json = "".join(chunks[i] for i in range(1, total_chunks + 1))
+                game_states.append((start_pos, full_json.strip()))
+
+        # Sort by position and return just the JSON strings
+        game_states.sort(key=lambda x: x[0])
+        return [gs[1] for gs in game_states]
 
     def start(self):
         """Start watching the log file."""
@@ -49,13 +99,13 @@ class LogWatcher:
                 # Move position to end of file for future reads
                 self.last_position = f.tell()
 
-            # Find ALL game states and only use the LAST one
-            matches = self.pattern.findall(content)
-            if matches:
+            # Find ALL game states (handles both simple and chunked formats)
+            game_state_jsons = self._extract_game_states(content)
+            if game_state_jsons:
                 # Only send the most recent (last) game state
                 try:
-                    game_state = json.loads(matches[-1].strip())
-                    print(f"Found {len(matches)} game state(s) in log, using most recent (turn {game_state.get('turn', '?')})")
+                    game_state = json.loads(game_state_jsons[-1])
+                    print(f"Found {len(game_state_jsons)} game state(s) in log, using most recent (turn {game_state.get('turn', '?')})")
                     self.callback(game_state)
                 except json.JSONDecodeError as e:
                     print(f"JSON parse error on most recent state: {e}")
@@ -109,6 +159,9 @@ class LogWatcher:
 
     def _watch_loop(self):
         """Main loop that tails the log file."""
+        # Buffer to accumulate content for chunk reassembly
+        pending_content = ""
+
         while self.running:
             try:
                 # Periodically check if log needs trimming
@@ -122,6 +175,7 @@ class LogWatcher:
                     file_size = self.log_path.stat().st_size
                     if self.last_position > file_size:
                         self.last_position = 0
+                        pending_content = ""  # Reset buffer on file rotation
 
                     with open(self.log_path, "r", encoding="utf-8", errors="ignore") as f:
                         # Move to last known position
@@ -129,14 +183,26 @@ class LogWatcher:
                         new_content = f.read()
                         self.last_position = f.tell()
 
-                        # Search for game state markers
-                        matches = self.pattern.findall(new_content)
-                        for match in matches:
+                        # Add to pending buffer
+                        pending_content += new_content
+
+                        # Extract complete game states (handles chunked format)
+                        game_state_jsons = self._extract_game_states(pending_content)
+                        for gs_json in game_state_jsons:
                             try:
-                                game_state = json.loads(match.strip())
+                                game_state = json.loads(gs_json)
                                 self.callback(game_state)
                             except json.JSONDecodeError as e:
                                 print(f"JSON parse error: {e}")
+
+                        # Clear processed content from buffer (keep only after last <<<END<<<)
+                        last_end = pending_content.rfind("<<<END<<<")
+                        if last_end >= 0:
+                            pending_content = pending_content[last_end + len("<<<END<<<"):]
+                        # Prevent buffer from growing indefinitely
+                        if len(pending_content) > 50000:
+                            pending_content = pending_content[-10000:]
+
             except Exception as e:
                 print(f"Log watcher error: {e}")
 

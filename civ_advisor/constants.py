@@ -71,7 +71,7 @@ PROVIDERS = [
 # Rate limiting defaults
 DEFAULT_TOKEN_LIMIT = 1000
 DEFAULT_RATE_LIMIT_SECONDS = 60
-DEFAULT_MIN_REQUEST_INTERVAL = 20
+DEFAULT_MIN_REQUEST_INTERVAL = 10
 
 # Default system prompts (split into core and extended)
 DEFAULT_SYSTEM_PROMPT_CORE = """You are an expert Advisor in Civilization VI. You help players win.
