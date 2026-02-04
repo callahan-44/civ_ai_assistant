@@ -36,7 +36,6 @@ def _load_data_file(filepath) -> dict:
             content = f.read()
 
         # Split by section headers
-        import re
         sections = re.split(r'^===\s*(.+?)\s*===$', content, flags=re.MULTILINE)
 
         # sections[0] is before first header (usually empty)
@@ -94,10 +93,11 @@ def get_civs_data() -> dict:
 
 def _load_leaders_file(filepath) -> dict:
     """
-    Load leaders.txt with pipe-delimited format:
-    LEADER_KEY | Name: Display Name | Focus: X | Strat: Strategy text
+    Load leaders.txt with section-based format:
+    === LEADER_KEY ===
+    Content lines...
 
-    Returns dict mapping leader keys (lowercase) to full line content.
+    Returns dict mapping leader keys (lowercase) to content strings.
     """
     data = {}
     if not filepath.exists():
@@ -105,16 +105,20 @@ def _load_leaders_file(filepath) -> dict:
 
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith('#'):
-                    continue
-                # Split on first pipe to get leader key
-                parts = line.split('|', 1)
-                if len(parts) >= 2:
-                    leader_key = parts[0].strip().lower()
-                    # Store the full line content (everything after the key)
-                    data[leader_key] = parts[1].strip()
+            content = f.read()
+
+        # Split by section headers (same format as civs_summary.txt)
+        sections = re.split(r'^===\s*(.+?)\s*===$', content, flags=re.MULTILINE)
+
+        # sections[0] is before first header (usually comments/empty)
+        # sections[1] is first header name, sections[2] is first content, etc.
+        for i in range(1, len(sections), 2):
+            if i + 1 < len(sections):
+                header = sections[i].strip()
+                body = sections[i + 1].strip()
+                # Normalize key: "ELEANOR_FRANCE" -> "eleanor_france"
+                key = header.lower().replace(" ", "_")
+                data[key] = body
     except Exception as e:
         print(f"Error loading leaders file {filepath}: {e}")
 
@@ -165,6 +169,18 @@ ERA_NAMES = {
     8: "Future",
 }
 
+# Difficulty level mapping (Civ VI difficulty indices)
+DIFFICULTY_NAMES = {
+    0: "Settler",
+    1: "Chieftain",
+    2: "Warlord",
+    3: "Prince",
+    4: "King",
+    5: "Emperor",
+    6: "Immortal",
+    7: "Deity",
+}
+
 
 def get_era_name(era_value) -> str:
     """Convert era index to readable name."""
@@ -176,6 +192,18 @@ def get_era_name(era_value) -> str:
         # Already a string, clean it
         return clean_game_string(era_value) or era_value
     return str(era_value)
+
+
+def get_difficulty_name(difficulty_value) -> str:
+    """Convert difficulty index to readable name."""
+    if difficulty_value is None:
+        return "?"
+    if isinstance(difficulty_value, int):
+        return DIFFICULTY_NAMES.get(difficulty_value, f"Difficulty {difficulty_value}")
+    if isinstance(difficulty_value, str):
+        # Already a string, clean it
+        return clean_game_string(difficulty_value) or difficulty_value
+    return str(difficulty_value)
 
 
 # Prefixes to strip from verbose Civ VI strings
@@ -279,7 +307,6 @@ class GameStateEnricher:
         - Formatted numbers
         """
         current_turn = game_state.get("turn", 0)
-        is_new_turn = current_turn != self.previous_turn
 
         # Compute what changed
         delta_info = self._compute_full_delta(game_state)
@@ -296,7 +323,7 @@ class GameStateEnricher:
         }
 
         # Cache for next turn delta
-        if is_new_turn:
+        if current_turn != self.previous_turn:
             self.previous_state = copy.deepcopy(game_state)
             self.previous_turn = current_turn
             self.is_first_turn = False
@@ -305,6 +332,8 @@ class GameStateEnricher:
 
     def _extract_decisions(self, gs: dict) -> dict:
         """Extract immediate decisions needed."""
+        current_turn = gs.get("turn", 0)
+
         decisions = {
             "needs_tech": gs.get("needsTech", False),
             "needs_civic": gs.get("needsCivic", False),
@@ -314,6 +343,9 @@ class GameStateEnricher:
             "threats_nearby": [],
             "has_settler": False,
             "settler_location": None,
+            "at_war": [],  # List of (civ_name, turns_ago) tuples
+            "denounced_by": [],  # List of (civ_name, turns_ago) tuples
+            "denounced": [],  # List of (civ_name, turns_ago) tuples - civs we denounced
         }
 
         # Find cities needing production
@@ -347,6 +379,33 @@ class GameStateEnricher:
 
         # Extract threats
         decisions["threats_nearby"] = clean_game_list(gs.get("threats", []))
+
+        # Extract war and denouncement status from diplomacy
+        for entry in gs.get("diplo", []):
+            if isinstance(entry, dict):
+                civ = entry.get("civ", "?")
+                status = entry.get("status", "").lower()
+
+                # Check for war status
+                if "war" in status:
+                    war_turn = entry.get("war_turn")
+                    if war_turn is not None and current_turn > 0:
+                        turns_ago = current_turn - war_turn
+                        decisions["at_war"].append((civ, turns_ago))
+                    else:
+                        decisions["at_war"].append((civ, None))
+
+                # Check for denouncement (they denounced us)
+                denounced_turn = entry.get("denounced_turn")
+                if denounced_turn is not None and current_turn > 0:
+                    turns_ago = current_turn - denounced_turn
+                    decisions["denounced_by"].append((civ, turns_ago))
+
+                # Check for our denouncement (we denounced them)
+                we_denounced_turn = entry.get("we_denounced_turn")
+                if we_denounced_turn is not None and current_turn > 0:
+                    turns_ago = current_turn - we_denounced_turn
+                    decisions["denounced"].append((civ, turns_ago))
 
         return decisions
 
@@ -581,8 +640,6 @@ class GameStateEnricher:
             "trade_changed": False,
             "new_cities": [],
             "lost_cities": [],
-            "new_units": [],
-            "lost_units": [],
             "diplo_changes": [],
         }
 
@@ -716,7 +773,7 @@ class GameStateEnricher:
         delta["summary"] = " | ".join(changes)
         return delta
 
-    def _get_advanced_research(self, gs: dict, top_n: int = 10) -> tuple:
+    def _get_advanced_research(self, gs: dict, top_n: int = 20) -> tuple:
         """
         Get the most advanced (highest cost) completed techs and civics.
 
@@ -749,7 +806,7 @@ class GameStateEnricher:
 
         return techs_str, civics_str
 
-    def build_prompt(self, enriched: dict, user_question: str = "", force_full_state: bool = False,
+    def build_prompt(self, enriched: dict, user_question: str = "",
                      skip_closest_tiles: int = 0) -> str:
         """
         Build the final prompt for the AI.
@@ -757,31 +814,52 @@ class GameStateEnricher:
         Args:
             enriched: Enriched game state from enrich()
             user_question: Optional player question
-            force_full_state: If True (API mode), always send full state and civ context.
-                             If False (Clipboard mode), use delta tracking to save tokens.
             skip_closest_tiles: Number of closest tiles to skip in tile details (for context trimming)
 
         Prompt Structure:
             - Player Question (if any) - HIGH PRIORITY at top
-            - Immediate Decisions/Alerts
-            - Civ/Leader Strategy (always if force_full_state, else only first turn)
+            - Victory Goal - Strategic context
+            - Immediate Decisions/Alerts (including war/denouncement status)
+            - Civ/Leader Strategy
             - Full Game State
         """
         sections = []
         gs = enriched["raw"]
-        delta = enriched["delta"]
-        is_first = enriched["is_first_turn"]
-
-        # Determine if we should show full data or use delta optimization
-        show_full = force_full_state or is_first
 
         # 0. PLAYER QUESTION - Highest priority, at the very top
         if user_question:
             sections.append(f"=== PLAYER QUESTION (PRIORITY) ===\n{user_question}")
 
-        # 1. IMMEDIATE DECISIONS/ALERTS
+        # 1. VICTORY GOAL - Strategic context at top
+        if enriched["victory_goal"]:
+            sections.append(f"=== VICTORY GOAL: {enriched['victory_goal'].upper()} ===")
+
+        # 2. IMMEDIATE DECISIONS/ALERTS
         decisions = enriched["decisions"]
         decision_lines = ["=== IMMEDIATE DECISIONS REQUIRED ==="]
+
+        # WAR STATUS - Critical alert
+        if decisions["at_war"]:
+            for civ, turns_ago in decisions["at_war"]:
+                if turns_ago is not None:
+                    decision_lines.append(f"*** AT WAR with {civ} (declared {turns_ago} turns ago) ***")
+                else:
+                    decision_lines.append(f"*** AT WAR with {civ} ***")
+
+        # DENOUNCEMENT STATUS - Important diplomatic alert
+        if decisions["denounced_by"]:
+            for civ, turns_ago in decisions["denounced_by"]:
+                if turns_ago is not None:
+                    decision_lines.append(f"DENOUNCED by {civ} ({turns_ago} turns ago) - War may be imminent!")
+                else:
+                    decision_lines.append(f"DENOUNCED by {civ} - War may be imminent!")
+
+        if decisions["denounced"]:
+            for civ, turns_ago in decisions["denounced"]:
+                if turns_ago is not None:
+                    decision_lines.append(f"You DENOUNCED {civ} ({turns_ago} turns ago)")
+                else:
+                    decision_lines.append(f"You DENOUNCED {civ}")
 
         # HIGHEST PRIORITY: Settler placement
         if decisions["has_settler"]:
@@ -808,15 +886,9 @@ class GameStateEnricher:
 
         sections.append("\n".join(decision_lines))
 
-        # 2. CIV/LEADER STRATEGY CONTEXT
-        # API mode: Always include (AI has no memory)
-        # Clipboard mode: Only on first turn (web UI maintains context)
-        if enriched["civ_context"] and (force_full_state or is_first):
+        # 3. CIV/LEADER STRATEGY CONTEXT
+        if enriched["civ_context"]:
             sections.append(enriched["civ_context"])
-
-        # 3. Changes since last turn (only for clipboard/delta mode)
-        if not force_full_state:
-            sections.append(f"=== CHANGES SINCE LAST TURN ===\n{enriched['changes_summary']}")
 
         # 4. Mini-map (with Fog Trimmer)
         sections.append(f"=== TACTICAL VIEW ===\n{enriched['mini_map']}")
@@ -826,12 +898,9 @@ class GameStateEnricher:
         if tile_details:
             sections.append(tile_details)
 
-        # 6. Current state summary - Always include civ name in API mode
+        # 6. Current state summary
         state_lines = ["=== CURRENT STATE ==="]
-        if show_full:
-            state_lines.append(f"Turn {gs.get('turn', '?')} | Era: {get_era_name(gs.get('era'))} | Civ: {clean_game_string(gs.get('civ', '?'))}")
-        else:
-            state_lines.append(f"Turn {gs.get('turn', '?')} | Era: {get_era_name(gs.get('era'))}")
+        state_lines.append(f"Turn {gs.get('turn', '?')} | Era: {get_era_name(gs.get('era'))} | Difficulty: {get_difficulty_name(gs.get('difficulty'))} | Civ: {clean_game_string(gs.get('civ', '?'))}")
 
         state_lines.append(f"Gold: {format_number(gs.get('gold', 0))} ({format_number(gs.get('gpt', 0))}/turn)")
         state_lines.append(f"Science: {format_number(gs.get('sci', 0))}/turn | Culture: {format_number(gs.get('cul', 0))}/turn")
@@ -845,7 +914,7 @@ class GameStateEnricher:
 
         sections.append("\n".join(state_lines))
 
-        # 6b. RESEARCH STATUS - Most advanced completed techs/civics
+        # 6b. RESEARCH STATUS - Most advanced completed techs/civics (top 20)
         adv_techs, adv_civics = self._get_advanced_research(gs)
         if adv_techs != "None" or adv_civics != "None":
             research_lines = ["=== RESEARCH STATUS ==="]
@@ -853,7 +922,7 @@ class GameStateEnricher:
             research_lines.append(f"Completed Civics (Most advanced): {adv_civics}")
             sections.append("\n".join(research_lines))
 
-        # 7. CITIES - Full details in API mode, delta-optimized in clipboard mode
+        # 7. CITIES - Full details
         cities = gs.get("cities", [])
         if cities:
             # Get capital coordinates for relative position display
@@ -874,95 +943,86 @@ class GameStateEnricher:
                 grow = city.get("grow", "?")
                 needs_production = (bld == "None" or bld == "" or bld is None)
 
-                # Basic city line - always shown
+                # Basic city line
                 if needs_production:
                     city_lines.append(f"  {name} (pop {pop}): *** NEEDS PRODUCTION *** | Growth in {grow}t")
                 else:
                     city_lines.append(f"  {name} (pop {pop}): Building {bld} ({turns}t) | Growth in {grow}t")
 
-                # Show full details: always in API mode, or when needed in clipboard mode
-                show_city_details = force_full_state or needs_production or is_first or delta["cities_changed"]
+                # Show city location relative to capital
+                city_xy = city.get("xy", "")
+                if city_xy and city_xy != capital_xy:
+                    xy_parts = city_xy.split(",")
+                    if len(xy_parts) == 2:
+                        cx, cy = int(xy_parts[0]), int(xy_parts[1])
+                        rel_x, rel_y = cx - cap_x, cy - cap_y
+                        city_lines.append(f"    Location: [{rel_x:+d},{rel_y:+d}] from capital")
 
-                if show_city_details:
-                    # Show city location relative to capital
-                    city_xy = city.get("xy", "")
-                    if city_xy and city_xy != capital_xy:
-                        xy_parts = city_xy.split(",")
-                        if len(xy_parts) == 2:
-                            cx, cy = int(xy_parts[0]), int(xy_parts[1])
-                            rel_x, rel_y = cx - cap_x, cy - cap_y
-                            city_lines.append(f"    Location: [{rel_x:+d},{rel_y:+d}] from capital")
+                # Show districts if present
+                districts = city.get("districts", [])
+                if districts:
+                    district_str = ", ".join(clean_game_list(districts))
+                    city_lines.append(f"    Districts: {district_str}")
 
-                    # Show districts if present
-                    districts = city.get("districts", [])
-                    if districts:
-                        district_str = ", ".join(clean_game_list(districts))
-                        city_lines.append(f"    Districts: {district_str}")
+                # Show buildings if present
+                buildings = city.get("buildings", [])
+                if buildings:
+                    building_str = ", ".join(clean_game_list(buildings))
+                    city_lines.append(f"    Buildings: {building_str}")
 
-                    # Show buildings if present
-                    buildings = city.get("buildings", [])
-                    if buildings:
-                        building_str = ", ".join(clean_game_list(buildings))
-                        city_lines.append(f"    Buildings: {building_str}")
-
-                    # Show wonders with their precise locations
-                    wonders = city.get("wonders", [])
-                    if wonders:
-                        wonder_lines = []
-                        for wonder_str in wonders:
-                            match = re.match(r"(.+?)\s+(\d+),(\d+)$", wonder_str)
-                            if match:
-                                wonder_name = clean_game_string(match.group(1))
-                                wx, wy = int(match.group(2)), int(match.group(3))
-                                rel_x, rel_y = wx - cap_x, wy - cap_y
-                                wonder_lines.append(f"{wonder_name} [{rel_x:+d},{rel_y:+d}]")
-                            else:
-                                wonder_lines.append(clean_game_string(wonder_str))
-                        city_lines.append(f"    Wonders: {', '.join(wonder_lines)}")
+                # Show wonders with their precise locations
+                wonders = city.get("wonders", [])
+                if wonders:
+                    wonder_lines = []
+                    for wonder_str in wonders:
+                        match = re.match(r"(.+?)\s+(\d+),(\d+)$", wonder_str)
+                        if match:
+                            wonder_name = clean_game_string(match.group(1))
+                            wx, wy = int(match.group(2)), int(match.group(3))
+                            rel_x, rel_y = wx - cap_x, wy - cap_y
+                            wonder_lines.append(f"{wonder_name} [{rel_x:+d},{rel_y:+d}]")
+                        else:
+                            wonder_lines.append(clean_game_string(wonder_str))
+                    city_lines.append(f"    Wonders: {', '.join(wonder_lines)}")
 
             sections.append("\n".join(city_lines))
 
-        # 8. UNITS - Full list in API mode, delta-optimized in clipboard mode
-        # Filter out great people (not tactically relevant)
+        # 8. UNITS - Full list (filter out great people)
         units = [u for u in clean_game_list(gs.get("units", [])) if "great " not in u.lower()]
         if units:
-            if force_full_state or is_first or delta["units_changed"]:
-                sections.append(f"=== UNITS ({len(units)}) ===\n  " + " | ".join(units[:15]))
-                if len(units) > 15:
-                    sections[-1] += f"\n  ... and {len(units) - 15} more"
-            elif not force_full_state:
-                sections.append(f"=== UNITS ({len(units)}) === [unchanged]")
+            sections.append(f"=== UNITS ({len(units)}) ===\n  " + " | ".join(units[:15]))
+            if len(units) > 15:
+                sections[-1] += f"\n  ... and {len(units) - 15} more"
 
         # 9. THREATS - Always send if present (critical info)
         threats = clean_game_list(gs.get("threats", []))
         if threats:
             sections.append(f"=== THREATS ({len(threats)}) ===\n  " + "\n  ".join(threats))
 
-        # 10. DIPLOMACY - Full in API mode, delta in clipboard mode
+        # 10. DIPLOMACY - Full details
         diplo = gs.get("diplo", [])
         if diplo:
-            if force_full_state or is_first or delta["diplo_changed"]:
-                diplo_lines = []
-                for entry in diplo:
-                    if isinstance(entry, dict):
-                        civ = entry.get("civ", "?")
-                        leader = entry.get("leader", "").replace("LEADER_", "").replace("_", " ").title()
-                        status = entry.get("status", "?")
-                        parts = [f"{civ} ({leader}): {status}"]
+            diplo_lines = []
+            for entry in diplo:
+                if isinstance(entry, dict):
+                    civ = entry.get("civ", "?")
+                    leader = entry.get("leader", "").replace("LEADER_", "").replace("_", " ").title()
+                    status = entry.get("status", "?")
+                    parts = [f"{civ} ({leader}): {status}"]
 
-                        stats = []
-                        if "score" in entry:
-                            stats.append(f"Score:{entry['score']}")
-                        if "military" in entry:
-                            stats.append(f"Mil:{entry['military']}")
-                        if "science_pt" in entry:
-                            stats.append(f"Sci/t:{entry['science_pt']}")
-                        if "culture_pt" in entry:
-                            stats.append(f"Cul/t:{entry['culture_pt']}")
-                        if "tourism" in entry:
-                            stats.append(f"Tourism:{entry['tourism']}")
-                        if "gold" in entry:
-                            stats.append(f"Gold:{entry['gold']}")
+                    stats = []
+                    if "score" in entry:
+                        stats.append(f"Score:{entry['score']}")
+                    if "military" in entry:
+                        stats.append(f"Mil:{entry['military']}")
+                    if "science_pt" in entry:
+                        stats.append(f"Sci/t:{entry['science_pt']}")
+                    if "culture_pt" in entry:
+                        stats.append(f"Cul/t:{entry['culture_pt']}")
+                    if "tourism" in entry:
+                        stats.append(f"Tourism:{entry['tourism']}")
+                    if "gold" in entry:
+                        stats.append(f"Gold:{entry['gold']}")
 
                         if stats:
                             parts.append(" | ".join(stats))
@@ -970,41 +1030,35 @@ class GameStateEnricher:
                     else:
                         diplo_lines.append(f"  {entry}")
 
-                sections.append(f"=== DIPLOMACY ({len(diplo)} civs) ===\n" + "\n".join(diplo_lines))
-            elif delta.get("diplo_changes"):
-                sections.append(f"=== DIPLOMACY CHANGES ===\n  " + " | ".join(clean_game_list(delta["diplo_changes"])))
+            sections.append(f"=== DIPLOMACY ({len(diplo)} civs) ===\n" + "\n".join(diplo_lines))
 
-        # 11. FOREIGN CITIES - Full in API mode, first turn only in clipboard mode
+        # 11. FOREIGN CITIES
         foreign_cities = clean_game_list(gs.get("foreign_cities", []))
-        if foreign_cities and (force_full_state or is_first):
+        if foreign_cities:
             sections.append(f"=== FOREIGN CITIES ({len(foreign_cities)}) ===\n  " + "\n  ".join(foreign_cities[:20]))
             if len(foreign_cities) > 20:
                 sections[-1] += f"\n  ... and {len(foreign_cities) - 20} more"
 
-        # 12. FOREIGN TILES - Full in API mode, first turn only in clipboard mode
+        # 12. FOREIGN TILES
         foreign_tiles = clean_game_list(gs.get("foreign_tiles", []))
-        if foreign_tiles and (force_full_state or is_first):
+        if foreign_tiles:
             sections.append(f"=== FOREIGN TERRITORY ({len(foreign_tiles)} notable tiles) ===\n  " + "\n  ".join(foreign_tiles[:30]))
             if len(foreign_tiles) > 30:
                 sections[-1] += f"\n  ... and {len(foreign_tiles) - 30} more"
 
-        # 13. CITY STATES - Full in API mode, delta in clipboard mode
+        # 13. CITY STATES
         cs = clean_game_list(gs.get("cs", []))
-        if cs and (force_full_state or is_first or delta["cs_changed"]):
+        if cs:
             sections.append(f"=== CITY STATES ===\n  " + " | ".join(cs))
 
-        # 14. TRADE ROUTES - Full in API mode, delta in clipboard mode
+        # 14. TRADE ROUTES
         trade = clean_game_list(gs.get("trade", []))
-        if trade and (force_full_state or is_first or delta["trade_changed"]):
+        if trade:
             sections.append(f"=== TRADE ROUTES ===\n  " + " | ".join(trade))
-
-        # 15. VICTORY GOAL
-        if enriched["victory_goal"]:
-            sections.append(f"=== VICTORY GOAL: {enriched['victory_goal'].upper()} ===")
 
         return "\n\n".join(sections)
 
-    def build_prompt_with_limit(self, enriched: dict, user_question: str, force_full_state: bool,
+    def build_prompt_with_limit(self, enriched: dict, user_question: str,
                                 system_prompt: str, max_tokens: int) -> tuple[str, int]:
         """
         Build prompt with intelligent context trimming to fit within token limit.
@@ -1015,7 +1069,6 @@ class GameStateEnricher:
         Args:
             enriched: Enriched game state from enrich()
             user_question: Optional player question
-            force_full_state: If True (API mode), always send full state
             system_prompt: The system prompt (included in token count)
             max_tokens: Maximum tokens allowed
 
@@ -1032,7 +1085,7 @@ class GameStateEnricher:
         max_skip = 100  # Safety limit to prevent infinite loop
 
         while skip_closest < max_skip:
-            prompt = self.build_prompt(enriched, user_question, force_full_state,
+            prompt = self.build_prompt(enriched, user_question,
                                        skip_closest_tiles=skip_closest)
 
             total_tokens = estimate_tokens(prompt) + estimate_tokens(system_prompt)
@@ -1044,6 +1097,6 @@ class GameStateEnricher:
             skip_closest += 5
 
         # Fallback: return the most trimmed version we have
-        prompt = self.build_prompt(enriched, user_question, force_full_state,
+        prompt = self.build_prompt(enriched, user_question,
                                    skip_closest_tiles=max_skip)
         return prompt, max_skip

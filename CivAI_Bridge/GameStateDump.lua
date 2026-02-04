@@ -339,6 +339,10 @@ local function DumpGameState()
     local s2, era = pcall(function() return Game.GetEras():GetCurrentEra() end)
     gs.era = s2 and era or 0
 
+    -- Difficulty level (0=Settler, 1=Chieftain, 2=Warlord, 3=Prince, 4=King, 5=Emperor, 6=Immortal, 7=Deity)
+    local sDiff, difficulty = pcall(function() return GameConfiguration.GetHandicapType() end)
+    gs.difficulty = sDiff and difficulty or nil
+
     gs.civ = GetCivName(localPlayerID)
 
     -- Leader (e.g., "LEADER_HAMMURABI", "LEADER_T_ROOSEVELT_ROUGHRIDER")

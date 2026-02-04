@@ -93,10 +93,10 @@ python -m civ_advisor.main
    ```
 
 4. **First launch:**
-   - Select your victory goal from the startup dialog
    - Click the gear icon to open Settings
    - Choose your AI provider and enter the required API key
    - Verify the Logs folder path matches your Civ VI installation
+   - Select your victory goal from the dropdown (or choose "Custom Goal" to enter your own)
 
 ---
 
@@ -130,9 +130,11 @@ The advisor supports multiple AI providers. Configure them in Settings > Model S
 For users with paid web subscriptions (ChatGPT Plus, Claude Pro, Gemini Advanced):
 
 1. Select "Clipboard (Manual)" as your provider
-2. Click "Ask Advisor" - the full prompt is copied to your clipboard
+2. Click "Ask Advisor" - the complete prompt (system instructions + game state) is copied to your clipboard
 3. Paste into your preferred AI chat interface
 4. Copy the response back manually
+
+Note: Each clipboard request includes the full system prompt and complete game state for consistent advice quality.
 
 ---
 
@@ -148,8 +150,10 @@ For users with paid web subscriptions (ChatGPT Plus, Claude Pro, Gemini Advanced
 ### Features
 
 - **Auto-detect game state** - Monitors Civ VI's Lua.log in real-time
-- **Victory-focused advice** - Tailored recommendations for your chosen victory type
+- **Victory-focused advice** - Tailored recommendations for your chosen victory type (including custom goals)
+- **War & diplomacy alerts** - Immediate notifications when at war or denounced, with turn counts
 - **Capital-centered mini-map** - Tactical view with your capital at (0,0)
+- **Research tracking** - Shows your top 20 most advanced completed techs and civics
 - **Fog trimmer** - Reduces token usage by trimming unexplored areas
 - **Intelligent context management** - Auto-trims tile data when exceeding token limits
 - **Custom questions** - Ask specific questions about your situation
@@ -211,9 +215,9 @@ civ_advisor/
    - Cleans verbose strings (BUILDING_MONUMENT → Monument)
    - Generates capital-centered ASCII mini-map
    - Applies fog trimmer algorithm
-   - Computes delta from previous turn
+   - Extracts war/denouncement status with turn tracking
    - Adds civilization-specific strategy context
-3. `AIAdvisor` sends enriched prompt to selected provider
+3. `AIAdvisor` sends full system prompt + enriched game state to selected provider
 4. Response displayed in overlay
 
 ### Mini-Map Coordinate System

@@ -1,12 +1,11 @@
 """
 Dialog windows for the Civ VI AI Advisor.
-Includes VictoryGoalDialog, SettingsDialog, and DebugWindow.
+Includes SettingsDialog and DebugWindow.
 """
 
-import threading
 import tkinter as tk
 from tkinter import ttk
-from typing import Optional, Callable
+from typing import Callable
 
 from .config import Config
 from .constants import (
@@ -16,7 +15,6 @@ from .constants import (
     OPENAI_MODELS,
     OLLAMA_MODELS,
     PROVIDERS,
-    VICTORY_GOALS,
     DEFAULT_TOKEN_LIMIT,
     DEFAULT_MIN_REQUEST_INTERVAL,
     DEFAULT_SYSTEM_PROMPT_CORE,
@@ -24,110 +22,6 @@ from .constants import (
     NO_SYSTEM_PROMPT_MODELS,
     MODEL_CONTEXT_WINDOWS,
 )
-
-
-class VictoryGoalDialog:
-    """Dialog to select victory goal on startup."""
-
-    def __init__(self, parent: tk.Tk, config: Config):
-        self.config = config
-        self.result: Optional[str] = None
-
-        self.dialog = tk.Toplevel(parent)
-        self.dialog.title("Select Victory Goal")
-        self.dialog.configure(bg=COLORS["bg"])
-        self.dialog.geometry("400x380")
-        self.dialog.resizable(False, False)
-        self.dialog.grab_set()
-        self.dialog.attributes("-topmost", True)
-
-        self._create_widgets()
-        self._center_window(parent)
-
-        parent.wait_window(self.dialog)
-
-    def _center_window(self, parent):
-        """Center dialog on screen."""
-        self.dialog.update_idletasks()
-        screen_width = self.dialog.winfo_screenwidth()
-        screen_height = self.dialog.winfo_screenheight()
-        x = (screen_width // 2) - (self.dialog.winfo_width() // 2)
-        y = (screen_height // 2) - (self.dialog.winfo_height() // 2)
-        self.dialog.geometry(f"+{x}+{y}")
-
-    def _create_widgets(self):
-        """Create dialog widgets."""
-        main_frame = tk.Frame(self.dialog, bg=COLORS["bg"], padx=20, pady=20)
-        main_frame.pack(fill=tk.BOTH, expand=True)
-
-        tk.Label(
-            main_frame,
-            text="Choose Your Victory Goal",
-            fg=COLORS["accent"],
-            bg=COLORS["bg"],
-            font=("Segoe UI", 14, "bold"),
-        ).pack(pady=(0, 15))
-
-        tk.Label(
-            main_frame,
-            text="The AI Advisor will tailor recommendations\nto help you achieve this victory type.",
-            fg=COLORS["text_secondary"],
-            bg=COLORS["bg"],
-            font=("Segoe UI", 9),
-            justify=tk.CENTER,
-        ).pack(pady=(0, 15))
-
-        self.goal_var = tk.StringVar(value=self.config.victory_goal)
-
-        for goal_name, description in VICTORY_GOALS:
-            frame = tk.Frame(main_frame, bg=COLORS["bg"])
-            frame.pack(fill=tk.X, pady=2)
-
-            rb = tk.Radiobutton(
-                frame,
-                text=goal_name,
-                variable=self.goal_var,
-                value=goal_name,
-                fg=COLORS["text"],
-                bg=COLORS["bg"],
-                selectcolor=COLORS["bg_secondary"],
-                activebackground=COLORS["bg"],
-                activeforeground=COLORS["accent"],
-                font=("Segoe UI", 10, "bold"),
-                anchor="w",
-            )
-            rb.pack(side=tk.LEFT)
-
-            desc_text = f"- {description[:45]}..." if len(description) > 45 else f"- {description}"
-            tk.Label(
-                frame,
-                text=desc_text,
-                fg=COLORS["text_secondary"],
-                bg=COLORS["bg"],
-                font=("Segoe UI", 8),
-                anchor="w",
-            ).pack(side=tk.LEFT, padx=(5, 0))
-
-        start_btn = tk.Button(
-            main_frame,
-            text="Start Advisor",
-            command=self._on_start,
-            bg=COLORS["accent"],
-            fg=COLORS["bg"],
-            font=("Segoe UI", 11, "bold"),
-            relief=tk.FLAT,
-            padx=30,
-            pady=8,
-            cursor="hand2",
-        )
-        start_btn.pack(pady=(20, 0))
-
-    def _on_start(self):
-        """Handle start button click."""
-        self.result = self.goal_var.get()
-        self.config.victory_goal = self.result
-        self.config.save()
-        self.dialog.destroy()
 
 
 class SettingsDialog:
@@ -545,7 +439,7 @@ class SettingsDialog:
 
         tk.Label(
             interface_frame,
-            text="Extended (sent on first turn only):",
+            text="Extended (always sent):",
             fg=COLORS["text"],
             bg=COLORS["bg"],
         ).pack(anchor="w")

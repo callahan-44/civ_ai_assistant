@@ -46,6 +46,7 @@ class CivOverlay:
         self.root.geometry("380x500")
         self.root.minsize(300, 400)
         self.root.resizable(True, True)
+        self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
     def _create_widgets(self):
         """Create all UI widgets."""

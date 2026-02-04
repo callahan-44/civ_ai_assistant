@@ -5,9 +5,8 @@ Pure logic - no UI dependencies.
 """
 
 import time
-import threading
 from datetime import datetime
-from typing import Optional, Callable, Any
+from typing import Callable, Any
 
 from .config import Config
 from .game_state import GameStateEnricher
@@ -52,51 +51,22 @@ class AIAdvisor:
         self.config = config
         self.enricher = GameStateEnricher()
         self.last_request_time: float = 0
-        self._extended_prompt_sent: bool = False
         self._last_used_model: str = ""
         self._last_token_estimate: int = 0  # Track tokens for display
         self._last_tiles_trimmed: int = 0  # Track tiles trimmed for context management
 
-    def _build_system_prompt(self, is_first_turn: bool, force_full: bool = False) -> str:
+    def _build_system_prompt(self) -> str:
         """
-        Build system prompt based on mode.
-
-        Args:
-            is_first_turn: Whether this is the first turn of the session
-            force_full: If True (API mode), always send full prompt (Core + Extended).
-                       If False (Clipboard mode), only send extended on first turn.
+        Build full system prompt (Core + Extended).
 
         Returns:
-            str: The system prompt to use
+            str: The complete system prompt
         """
-        prompt = self.config.system_prompt_core
-
-        if force_full:
-            # API Mode: Always send full system prompt (AI has no memory)
-            prompt += "\n\n" + self.config.system_prompt_extended
-        else:
-            # Clipboard Mode: Only send extended on first turn (web UI maintains context)
-            if is_first_turn and not self._extended_prompt_sent:
-                prompt += "\n\n" + self.config.system_prompt_extended
-                self._extended_prompt_sent = True
-
-        return prompt
+        return self.config.system_prompt_core + "\n\n" + self.config.system_prompt_extended
 
     def _estimate_tokens(self, text: str) -> int:
         """Rough token estimation: ~4 chars per token for English."""
         return len(text) // 4
-
-    def _truncate_to_tokens(self, text: str, max_tokens: int) -> str:
-        """Truncate text to approximately max_tokens."""
-        max_chars = max_tokens * 4
-        if len(text) <= max_chars:
-            return text
-
-        truncated = text[:max_chars - 50]
-        last_newline = truncated.rfind("\n")
-        if last_newline > max_chars // 2:
-            truncated = truncated[:last_newline]
-        return truncated + "\n\n[... TRUNCATED for rate limiting ...]"
 
     def _log_debug(self, provider: str, model: str, system_prompt: str, user_prompt: str, response: str):
         """Log prompt and response to debug.log if debug logging is enabled."""
@@ -132,11 +102,7 @@ class AIAdvisor:
         """
         Get AI advice for the current game state.
 
-        Two modes:
-        - API Mode (Google, OpenAI, Anthropic, Ollama): Stateless. Always sends full
-          system prompt and full game state. AI has no memory between requests.
-        - Clipboard Mode: Stateful. Web UI maintains context. Uses delta tracking
-          and only sends system prompt on first turn to save tokens.
+        All modes send full system prompt and full game state every request.
 
         Args:
             game_state: Raw game state from Lua
@@ -151,9 +117,7 @@ class AIAdvisor:
         provider = self.config.selected_provider
         api_key = self.config.get_active_key()
 
-        # Determine mode: clipboard is stateful, everything else is stateless
         is_clipboard_mode = (provider == "clipboard")
-        force_full_state = not is_clipboard_mode  # API mode = full state every time
 
         # Clipboard mode doesn't need API key validation
         if not is_clipboard_mode and not api_key and not self.config.debug_mode:
@@ -169,24 +133,19 @@ class AIAdvisor:
 
         # Enrich the game state
         enriched = self.enricher.enrich(game_state, victory_goal)
-        is_first_turn = enriched.get("is_first_turn", False)
 
-        # Build system prompt with appropriate mode
-        # API Mode: Always send full system prompt (Core + Extended)
-        # Clipboard Mode: Only send extended on first turn
-        system_prompt = self._build_system_prompt(is_first_turn, force_full=force_full_state)
+        # Build full system prompt (always includes Core + Extended)
+        system_prompt = self._build_system_prompt()
 
-        # Build prompt with appropriate mode and intelligent context trimming
-        # API Mode: force_full_state=True (send everything, AI has no memory)
-        # Clipboard Mode: force_full_state=False (use deltas, web UI maintains context)
+        # Build prompt with full game state
         self._last_tiles_trimmed = 0
         if is_clipboard_mode:
             # Clipboard mode: no token limit enforcement
-            prompt = self.enricher.build_prompt(enriched, user_question, force_full_state=force_full_state)
+            prompt = self.enricher.build_prompt(enriched, user_question)
         else:
             # API mode: use intelligent context trimming to fit token limit
             prompt, self._last_tiles_trimmed = self.enricher.build_prompt_with_limit(
-                enriched, user_question, force_full_state,
+                enriched, user_question,
                 system_prompt, self.config.token_limit
             )
 
@@ -204,7 +163,7 @@ class AIAdvisor:
 
         # Clipboard mode - copy to clipboard and return message
         if is_clipboard_mode:
-            return self._handle_clipboard_mode(clipboard_copy_func, system_prompt, prompt, is_first_turn)
+            return self._handle_clipboard_mode(clipboard_copy_func, system_prompt, prompt)
 
         # Debug mode - return debug info instead of calling API
         if self.config.debug_mode:
@@ -292,45 +251,30 @@ class AIAdvisor:
             return ""
 
     def _handle_clipboard_mode(self, clipboard_copy_func: Callable[[str], bool],
-                               system_prompt: str, user_prompt: str,
-                               is_first_turn: bool = True) -> str:
+                               system_prompt: str, user_prompt: str) -> str:
         """
-        Handle clipboard mode - copy prompt to clipboard.
+        Handle clipboard mode - copy full prompt to clipboard.
 
-        In clipboard/stateful mode:
-        - First turn: Include system prompt (web UI will remember it)
-        - Subsequent turns: Only include game state delta (saves tokens)
+        Always includes full system instructions and complete game state.
         """
         system_tokens = self._estimate_tokens(system_prompt)
         prompt_tokens = self._estimate_tokens(user_prompt)
+        total_tokens = system_tokens + prompt_tokens
 
-        if is_first_turn:
-            # First turn: Include full system instructions
-            full_prompt = f"""=== SYSTEM INSTRUCTIONS ===
+        full_prompt = f"""=== SYSTEM INSTRUCTIONS ===
 {system_prompt}
 
 === GAME STATE & QUESTION ===
 {user_prompt}"""
-            total_tokens = system_tokens + prompt_tokens
-        else:
-            # Subsequent turns: Just the game state delta (web UI maintains context)
-            full_prompt = f"""=== GAME STATE UPDATE ===
-{user_prompt}"""
-            total_tokens = prompt_tokens
 
         if clipboard_copy_func:
             success = clipboard_copy_func(full_prompt)
             if not success:
                 return "Failed to copy to clipboard."
 
-        if is_first_turn:
-            return (f"Prompt copied to clipboard!\n\n"
-                    f"Paste into your browser (ChatGPT/Claude/Gemini) to get advice.\n\n"
-                    f"~{total_tokens} tokens (System: {system_tokens} + Game State: {prompt_tokens})")
-        else:
-            return (f"Game state update copied to clipboard!\n\n"
-                    f"Paste into your existing chat to continue.\n\n"
-                    f"~{total_tokens} tokens (delta only, system prompt already in chat)")
+        return (f"Prompt copied to clipboard!\n\n"
+                f"Paste into your browser (ChatGPT/Claude/Gemini) to get advice.\n\n"
+                f"~{total_tokens} tokens (System: {system_tokens} + Game State: {prompt_tokens})")
 
     def _call_anthropic_with_system(self, api_key: str, context: str, system_prompt: str) -> str:
         """Call Claude API with explicit system prompt."""
